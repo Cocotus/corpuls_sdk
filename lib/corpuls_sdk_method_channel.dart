@@ -14,4 +14,10 @@ class MethodChannelCorpulsSdk extends CorpulsSdkPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+
+  @override
+  Future<List<String>?> scanForDevices() async {
+    final devices = await methodChannel.invokeListMethod<String>('scanForDevices');
+    return devices;
+  }
 }

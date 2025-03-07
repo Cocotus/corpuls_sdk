@@ -6,12 +6,16 @@ public class CorpulsSdkPlugin: NSObject, FlutterPlugin {
     let channel = FlutterMethodChannel(name: "corpuls_sdk", binaryMessenger: registrar.messenger())
     let instance = CorpulsSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
+    CorpulsManager.shared.initialize(channel: channel)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "getPlatformVersion":
       result("iOS " + UIDevice.current.systemVersion)
+      CarddataManager.shared.sendLog("getPlatformVersion called: \(platformVersion)")
+    case "connectToDevice":
+      CorpulsManager.shared.connectToDevice(result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

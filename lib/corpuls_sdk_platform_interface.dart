@@ -23,7 +23,6 @@ abstract class CorpulsSdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  Future<String?> getPlatformVersion();
+  Future<List<String>?> scanForDevices();
 }
