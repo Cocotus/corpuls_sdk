@@ -1,0 +1,86 @@
+//
+//  MissionIdViewController.swift
+//  BluetoothApp
+//
+//  Created by Fabian Rottensteiner on 29.07.24.
+//
+
+import UIKit
+import CorpulsKit
+
+class MissionIdViewController: UIViewController {
+    private let ble = CorpulsBLE.shared
+
+    private lazy var fullMissionIdLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.numberOfLines = 0
+
+        return label
+    }()
+
+    private lazy var shortMissionIdLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.numberOfLines = 0
+
+        return label
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = .black
+        title = "Mission ID"
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh,
+                                                            target: self,
+                                                            action: #selector(didTapRefresh))
+
+        setupSubviews()
+        fetchMissionId()
+    }
+
+    private func setupSubviews() {
+        [fullMissionIdLabel, shortMissionIdLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
+
+        NSLayoutConstraint.activate([
+            fullMissionIdLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            fullMissionIdLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            fullMissionIdLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+
+            shortMissionIdLabel.leadingAnchor.constraint(equalTo: fullMissionIdLabel.leadingAnchor),
+            shortMissionIdLabel.trailingAnchor.constraint(equalTo: fullMissionIdLabel.trailingAnchor),
+            shortMissionIdLabel.topAnchor.constraint(equalTo: fullMissionIdLabel.bottomAnchor, constant: 30),
+            shortMissionIdLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+        ])
+    }
+
+    private func fetchMissionId() {
+        fullMissionIdLabel.text = ""
+        shortMissionIdLabel.text = ""
+
+        Task {
+            do {
+                let shortID = try await ble.requestMissionId(length: .short)
+                let fullID = try await ble.requestMissionId(length: .full)
+
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+
+                    fullMissionIdLabel.text = "Full mission ID:\n\(fullID)"
+                    shortMissionIdLabel.text = "Short mission ID:\n\(shortID)"
+                }
+            } catch {
+                presentError(error)
+            }
+        }
+    }
+
+    @objc private func didTapRefresh() {
+        fetchMissionId()
+    }
+}

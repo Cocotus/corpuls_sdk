@@ -1,0 +1,981 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0 effective-5.10 (swiftlang-6.0.0.9.10 clang-1600.0.26.2)
+// swift-module-flags: -target arm64-apple-ios15.2-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name CorpulsKit
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import CoreBluetooth
+@_exported import CorpulsKit
+import DeveloperToolsSupport
+import Foundation
+import OSLog
+import PDFKit
+import QuartzCore
+import Swift
+import SwiftUI
+import UIKit
+import UserNotifications
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os.log
+import os
+extension Swift.String {
+  public var normalizedVersion: Swift.String? {
+    get
+  }
+}
+extension Foundation.NumberFormatter {
+  public static func formatter(for digits: Swift.Int) -> Foundation.NumberFormatter
+}
+@_inheritsConvenienceInitializers public class TrendVitalParameter : CorpulsKit.VitalParameter {
+  public var hasLowConfidenceSpO2: Swift.Bool {
+    get
+  }
+  required public init(from decoder: any Swift.Decoder) throws
+  override public var text: Swift.String {
+    get
+  }
+  @objc deinit
+}
+public enum CharacteristicValue : Swift.Equatable {
+  public static func == (lhs: CorpulsKit.CharacteristicValue, rhs: CorpulsKit.CharacteristicValue) -> Swift.Bool
+  case deviceName(value: Swift.String)
+  case appearance(value: Swift.UInt8)
+  case manufacturerName(value: Swift.String)
+  case modelNumber(value: Swift.String)
+  case serialNumber(value: Swift.String)
+  case firmwareRevision(value: Swift.UInt32)
+  case softwareRevision(value: Swift.String)
+  case currentDisplayTime(value: Swift.String)
+  case vitalParameters(value: CorpulsKit.VitalParameterList)
+  case patientId(value: Swift.String)
+  case patientData(firstname: Swift.String, lastname: Swift.String, age: CorpulsKit.Age, sex: CorpulsKit.Sex, race: CorpulsKit.Race, weight: Swift.UInt, height: Swift.UInt, symptomOnset: Swift.String)
+  case patientAddress(street: Swift.String, postalCode: Swift.String, city: Swift.String)
+  case caseNumber(value: Swift.String)
+  case insuranceData(insuranceName: Swift.String, insuranceNumber: Swift.String, policyNumber: Swift.String, insuranceStatus: Swift.String, cardNumber: Swift.String)
+  case medicalTeam(names: [Swift.String])
+  case organisationData(emsLocation: Swift.String, organisationNumber: Swift.String, organisationName: Swift.String)
+  case contactInfos(callbackNumber: Swift.String, radioId: Swift.String, transportType: Swift.String)
+  case deviceId(value: Swift.String)
+  case availableDECGs(indices: [CorpulsKit.DECGIndex])
+  case requestDECG(value: Swift.UInt)
+  case decgData(value: Foundation.Data)
+  case vitalParameterTrendConfiguration(value: [Swift.String : Swift.String])
+  case vitalParameterTrend(value: CorpulsKit.VitalParameterTrend)
+  case commonConfig(value: [Swift.String : Any])
+  case eventData(eventData: CorpulsKit.EventData)
+  case missionId(value: Swift.String)
+  public var characteristic: CorpulsKit.Characteristic {
+    get
+  }
+  public var placeholders: [Swift.String] {
+    get
+  }
+  public var uuid: CoreBluetooth.CBUUID {
+    get
+  }
+  public var output: Swift.String {
+    get
+  }
+  public var input: Swift.String {
+    get
+  }
+}
+public enum DECGSpeed : Swift.Float {
+  case narrow
+  case wide
+  public init?(rawValue: Swift.Float)
+  public typealias RawValue = Swift.Float
+  public var rawValue: Swift.Float {
+    get
+  }
+}
+public struct Settings {
+  public let performDeviceIdentification: Swift.Bool
+  public let decgSpeed: CorpulsKit.DECGSpeed
+  public static let `default`: CorpulsKit.Settings
+  public init(performDeviceIdentification: Swift.Bool, decgSpeed: CorpulsKit.DECGSpeed)
+}
+public enum Characteristic : Swift.String, Swift.CaseIterable {
+  case deviceName
+  case appearance
+  case manufacturerName
+  case modelNumber
+  case serialNumber
+  case firmwareRevision
+  case softwareRevision
+  case currentDisplayTime
+  case vitalParameters
+  case patientId
+  case patientData
+  case patientAddress
+  case caseNumber
+  case insuranceData
+  case medicalTeam
+  case organisationData
+  case contactInfos
+  case deviceId
+  case availableDECGs
+  case requestDECG
+  case decgData
+  case trendConfig
+  case trendData
+  case commonConfig
+  case commonData
+  public var uuid: CoreBluetooth.CBUUID {
+    get
+  }
+  public var service: CorpulsKit.Service {
+    get
+  }
+  public var name: Swift.String {
+    get
+  }
+  public var image: UIKit.UIImage? {
+    get
+  }
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [CorpulsKit.Characteristic]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [CorpulsKit.Characteristic] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public class VitalParameterTrend : Swift.Codable {
+  final public let missionCreationDate: Foundation.Date
+  public var entries: [CorpulsKit.VitalParameterTrendEntry] {
+    get
+  }
+  public var nibpValues: [CorpulsKit.NIBPValue] {
+    get
+  }
+  public var formattedNibpString: Foundation.NSString {
+    get
+  }
+  public var mostRecentEntryDate: Foundation.Date {
+    get
+  }
+  required public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  public func entries(for type: CorpulsKit.VitalParameterType) -> [CorpulsKit.VitalParameterTrendEntry]
+  public func parameters(for type: CorpulsKit.VitalParameterType) -> [CorpulsKit.TrendVitalParameter]
+  public func values(for type: CorpulsKit.VitalParameterType) -> [Swift.Double]
+  public func encodeData(offset mostRecentEntryDate: Foundation.Date = .distantPast) throws -> CorpulsKit.VitalParameterTrendData
+  public func unit(for type: CorpulsKit.VitalParameterType) -> CorpulsKit.VitalParameterUnit?
+  @objc deinit
+}
+extension Swift.Double {
+  public static let defaultSyncTimeout: Swift.Double
+  public static let rateLimit: Swift.Double
+}
+public enum BloodPressureType : Swift.String {
+  case NIBP
+  case P1
+  case P2
+  case P3
+  case P4
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public typealias VitalParameterList = CorpulsKit.ParameterList<CorpulsKit.VitalParameter>
+public class ParameterList<T> : Swift.Codable where T : CorpulsKit.VitalParameter {
+  final public let nibpTimestamp: Swift.Int?
+  final public let parameters: [T]
+  public init()
+  public init(parameters: [T])
+  required public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  public func containsParameter(for type: CorpulsKit.VitalParameterType) -> Swift.Bool
+  public func parameter(for type: CorpulsKit.VitalParameterType) -> CorpulsKit.VitalParameter?
+  public func formattedBloodPressure(for type: CorpulsKit.BloodPressureType) -> Swift.String
+  @objc deinit
+}
+public struct CharacteristicValueFactory {
+  public let characteristic: CorpulsKit.Characteristic
+  public let string: Swift.String
+  public let data: Foundation.Data
+  public init(characteristic: CorpulsKit.Characteristic, string: Swift.String)
+  public init(characteristic: CorpulsKit.Characteristic, data: Foundation.Data)
+  public func createValue() -> CorpulsKit.CharacteristicValue?
+}
+public enum Age {
+  case birthdate(_: Foundation.Date)
+  case years(_: Swift.UInt)
+  case unknown
+}
+public struct VitalParameterTrendData {
+  public let jsonData: Foundation.Data
+  public let mostRecentEntryDate: Foundation.Date
+  public var jsonString: Swift.String? {
+    get
+  }
+  public func writeToFileSystem(destination: Foundation.URL? = nil) throws
+}
+extension CorpulsKit.VitalParameterTrendData : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension Foundation.DateFormatter {
+  public static let birthdate: Foundation.DateFormatter
+  public static let iso: Foundation.DateFormatter
+  public static let shortTime: Foundation.DateFormatter
+  public static let filename: Foundation.DateFormatter
+  public static let local: Foundation.DateFormatter
+  public static let reportMissionDate: Foundation.DateFormatter
+  public static let reportBirthdate: Foundation.DateFormatter
+}
+public struct DECGIndex : Swift.Codable {
+  public let index: Swift.UInt
+  public let date: Foundation.Date
+  public static func decode(from data: Foundation.Data) throws -> [CorpulsKit.DECGIndex]
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension CorpulsKit.DECGIndex : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public enum PatientValue {
+  case firstname(_: Swift.String)
+  case lastname(_: Swift.String)
+  case age(_: CorpulsKit.Age)
+  case sex(_: CorpulsKit.Sex)
+  case race(_: CorpulsKit.Race)
+  case weight(_: Swift.UInt)
+  case height(_: Swift.UInt)
+  case symptomOnset(_: Swift.String)
+}
+public enum NIBPQualityIndicator : Swift.Int {
+  case poor
+  case marginal
+  case fair
+  case excellent
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct NIBPValue {
+}
+extension CorpulsKit.NIBPValue : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension CorpulsKit.NIBPValue : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public enum VitalParameterType : Swift.Int, Swift.Comparable, Swift.Equatable, Swift.CaseIterable {
+  public static var allCases: [CorpulsKit.VitalParameterType]
+  case HR_DEFI
+  case HR_DISPLAY
+  case PP
+  case SPO2
+  case SPO2_PI
+  case NIBP_SYS
+  case NIBP_DIA
+  case NIBP_MAD
+  case IBP_P1_SYS
+  case IBP_P1_DIA
+  case IBP_P1_MAD
+  case IBP_P2_SYS
+  case IBP_P2_DIA
+  case IBP_P2_MAD
+  case IBP_P3_SYS
+  case IBP_P3_DIA
+  case IBP_P3_MAD
+  case IBP_P4_SYS
+  case IBP_P4_DIA
+  case IBP_P4_MAD
+  case CO2_ENS
+  @available(*, deprecated, message: "field is not in use and will be removed in a future release.")
+  case CO2_INS
+  case CO2_RR
+  case TEMP1
+  case TEMP2
+  case SPCO
+  case SPHB
+  case SPMET
+  case CPR_RATE
+  case NIBP_QI
+  public static func < (lhs: CorpulsKit.VitalParameterType, rhs: CorpulsKit.VitalParameterType) -> Swift.Bool
+  public var string: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [CorpulsKit.VitalParameterType]
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum VitalParameterUnit : Swift.Int {
+  case PER_MIN
+  case PERCENT
+  case MMHG
+  case CELSIUS
+  case G_PER_DL
+  case STARS
+  public var string: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public class VitalParameter : Swift.Codable {
+  final public let type: CorpulsKit.VitalParameterType
+  final public let value: Swift.Double
+  final public let unit: CorpulsKit.VitalParameterUnit
+  required public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var typeString: Swift.String {
+    get
+  }
+  public var valueText: Swift.String {
+    get
+  }
+  public var text: Swift.String {
+    get
+  }
+  public var fractionalDigitCount: Swift.Int {
+    get
+  }
+  @objc deinit
+}
+extension CorpulsKit.VitalParameter : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public enum Service : Swift.String, Swift.CaseIterable {
+  case genericAccess
+  case deviceInformation
+  case parameters
+  public var uuid: CoreBluetooth.CBUUID {
+    get
+  }
+  public var characteristics: [CorpulsKit.Characteristic] {
+    get
+  }
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [CorpulsKit.Service]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [CorpulsKit.Service] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum Race : Swift.String, Swift.CaseIterable {
+  case none
+  case african
+  case caucasian
+  case pacific
+  case asian
+  case indian
+  case unknown
+  public var string: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [CorpulsKit.Race]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [CorpulsKit.Race] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension CoreFoundation.CGFloat {
+  public func millimetresToPoints() -> CoreFoundation.CGFloat
+  public func pointsToMillimetres() -> CoreFoundation.CGFloat
+}
+extension Swift.Double {
+  public func millimetresToPoints() -> CoreFoundation.CGFloat
+  public func pointsToMillimetres() -> CoreFoundation.CGFloat
+}
+extension Swift.Int {
+  public func millimetresToPoints() -> CoreFoundation.CGFloat
+  public func pointsToMillimetres() -> CoreFoundation.CGFloat
+}
+extension Foundation.NSNotification.Name {
+  public static let didReceiveNotification: Foundation.NSNotification.Name
+}
+public enum DECGQuery {
+  case latest
+  case earliest
+  case index(_: Swift.UInt)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class CorpulsBLE : ObjectiveC.NSObject {
+  public static let shared: CorpulsKit.CorpulsBLE
+  final public var settings: CorpulsKit.Settings
+  final public var isEnabled: Swift.Bool {
+    get
+  }
+  final public var isScanning: Swift.Bool {
+    get
+  }
+  final public var isSyncing: Swift.Bool {
+    get
+  }
+  final public var isConnected: Swift.Bool {
+    get
+  }
+  final public var isPaired: Swift.Bool {
+    get
+  }
+  final public var frameworkVersion: Swift.String {
+    get
+  }
+  final public var frameworkBuild: Swift.String {
+    get
+  }
+  final public var didUpdateSystemState: ((Swift.String) -> Swift.Void)?
+  final public var didUpdateConnectionState: ((Swift.Bool) -> Swift.Void)?
+  final public var didUpdateAvailability: ((Swift.Bool) -> Swift.Void)?
+  final public var didReceiveNotification: ((Swift.String, CorpulsKit.Characteristic) -> Swift.Void)?
+  final public func setup(completion: ((Swift.Bool) -> Swift.Void)? = nil)
+  @available(*, deprecated, renamed: "scan(timeout:completion:)")
+  final public func scan(completion: @escaping (Swift.Result<CoreBluetooth.CBPeripheral, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func scan(timeout: Foundation.TimeInterval = .defaultSyncTimeout, completion: @escaping (Swift.Result<[CorpulsKit.CorpulsPeripheral], CorpulsKit.SyncError>) -> Swift.Void)
+  final public func scan(timeout: Foundation.TimeInterval = .defaultSyncTimeout) async throws -> [CorpulsKit.CorpulsPeripheral]
+  final public func scan(timeout: Foundation.TimeInterval = .defaultSyncTimeout, deviceIdentifier: Swift.String, completion: @escaping (Swift.Result<CorpulsKit.CorpulsPeripheral, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func scan(timeout: Foundation.TimeInterval = .defaultSyncTimeout, deviceIdentifier: Swift.String) async throws -> CorpulsKit.CorpulsPeripheral
+  final public func scan(timeout: Foundation.TimeInterval = .defaultSyncTimeout, peerIdentifier: Foundation.UUID, completion: @escaping (Swift.Result<CorpulsKit.CorpulsPeripheral, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func scan(timeout: Foundation.TimeInterval = .defaultSyncTimeout, peerIdentifier: Foundation.UUID) async throws -> CorpulsKit.CorpulsPeripheral
+  @available(*, deprecated, message: "parameter type has changed from 'CBPeripheral' to 'CorpulsPeripheral'. You can retrieve it by scanning for devices first.")
+  final public func connect(to peripheral: CoreBluetooth.CBPeripheral, completion: @escaping (Swift.Result<Swift.Void, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func connect(to corpulsPeripheral: CorpulsKit.CorpulsPeripheral, completion: @escaping (Swift.Result<Swift.Void, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func connect(to corpulsPeripheral: CorpulsKit.CorpulsPeripheral) async throws
+  final public func requestCharacteristic(_ characteristic: CorpulsKit.Characteristic, completion: @escaping (Swift.Result<CorpulsKit.CharacteristicValue, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestCharacteristic(_ characteristic: CorpulsKit.Characteristic) async throws -> CorpulsKit.CharacteristicValue
+  final public func requestVitalParameters(_ completion: @escaping (Swift.Result<CorpulsKit.VitalParameterList, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestVitalParameters() async throws -> CorpulsKit.VitalParameterList
+  final public func requestVitalParameterTrend(completion: @escaping (Swift.Result<CorpulsKit.VitalParameterTrend, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestVitalParameterTrend() async throws -> CorpulsKit.VitalParameterTrend
+  final public func requestDECG(by query: CorpulsKit.DECGQuery, progress: @escaping ((Swift.Double) -> Swift.Void), completion: @escaping (Swift.Result<Foundation.Data, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestDECG(by query: CorpulsKit.DECGQuery, progress: @escaping ((Swift.Double) -> Swift.Void)) async throws -> Foundation.Data
+  final public func requestDECGWithMetadata(by query: CorpulsKit.DECGQuery, progress: @escaping ((Swift.Double) -> Swift.Void), completion: @escaping (Swift.Result<Foundation.Data, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestDECGWithMetadata(by query: CorpulsKit.DECGQuery, progress: @escaping ((Swift.Double) -> Swift.Void)) async throws -> Foundation.Data
+  final public func requestDECGMetadata(completion: @escaping (Swift.Result<[Swift.String : Any], CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestDECGMetadata() async throws -> [Swift.String : Any]
+  final public func requestEvents(missionStartOffset: Swift.UInt = 0, filter: ((CorpulsKit.EventData.Event) -> Swift.Bool)? = nil, completion: @escaping (Swift.Result<CorpulsKit.EventData, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestEvents(missionStartOffset: Swift.UInt = 0, filter: ((CorpulsKit.EventData.Event) -> Swift.Bool)? = nil) async throws -> CorpulsKit.EventData
+  final public func requestMissionId(length: CorpulsKit.MissionIdLength = .full, completion: @escaping (Swift.Result<Swift.String, CorpulsKit.SyncError>) -> Swift.Void)
+  final public func requestMissionId(length: CorpulsKit.MissionIdLength = .full) async throws -> Swift.String
+  final public func writeValue(_ value: CorpulsKit.CharacteristicValue, completion: @escaping ((Swift.Result<Swift.Void, CorpulsKit.SyncError>) -> Swift.Void))
+  final public func writeValue(_ value: CorpulsKit.CharacteristicValue) async throws
+  final public func writePatientValue(_ patientValue: CorpulsKit.PatientValue, completion: @escaping ((Swift.Result<Swift.Void, CorpulsKit.SyncError>) -> Swift.Void))
+  final public func writePatientValue(_ patientValue: CorpulsKit.PatientValue) async throws
+  @available(*, deprecated, renamed: "stopScan()")
+  final public func stopSync()
+  final public func stopScan()
+  final public func disconnect(completion: (() -> Swift.Void)? = nil)
+  final public func disconnect() async
+  final public func subscribe(for characteristic: CorpulsKit.Characteristic, completion: @escaping ((Swift.Result<Swift.Void, CorpulsKit.SyncError>) -> Swift.Void))
+  final public func subscribe(for characteristic: CorpulsKit.Characteristic) async throws
+  final public func unsubscribe(for characteristic: CorpulsKit.Characteristic, completion: @escaping ((Swift.Result<Swift.Void, CorpulsKit.SyncError>) -> Swift.Void))
+  final public func unsubscribe(for characteristic: CorpulsKit.Characteristic) async throws
+  final public func isCharacteristicSubscribed(_ characteristic: CorpulsKit.Characteristic) -> Swift.Bool
+  final public func providesService(for characteristic: CorpulsKit.Characteristic) -> Swift.Bool
+  @objc deinit
+}
+extension CorpulsKit.CorpulsBLE : CoreBluetooth.CBCentralManagerDelegate {
+  @objc final public func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
+}
+extension CorpulsKit.CorpulsBLE : CoreBluetooth.CBPeripheralDelegate {
+  @objc final public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: (any Swift.Error)?)
+  @objc final public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: (any Swift.Error)?)
+  @objc final public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
+  @objc final public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
+  @objc final public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateNotificationStateFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
+}
+public enum ValueLimit {
+  case characters(_: Swift.Int)
+  case bytes(_: Swift.Int)
+  case unrestricted
+}
+public struct ValueComponent {
+}
+public struct CorpulsPeripheral {
+  public let peripheral: CoreBluetooth.CBPeripheral
+  public let rssi: Foundation.NSNumber
+  public let discoveryDate: Foundation.Date
+  public let advertisementData: [Swift.String : Any]
+  public var deviceIdentifier: Swift.String {
+    get
+  }
+  public var id: Foundation.UUID {
+    get
+  }
+  public var name: Swift.String {
+    get
+  }
+  public var formattedRSSI: Swift.String {
+    get
+  }
+  public var formattedDiscoveryDate: Swift.String {
+    get
+  }
+}
+extension CorpulsKit.CorpulsPeripheral : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension CorpulsKit.CorpulsPeripheral : Swift.Equatable {
+  public static func == (lhs: CorpulsKit.CorpulsPeripheral, rhs: CorpulsKit.CorpulsPeripheral) -> Swift.Bool
+}
+public struct EventData : Swift.Decodable {
+  public var events: [CorpulsKit.EventData.Event] {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+  public struct Event : Swift.Equatable {
+    public let identifier: CorpulsKit.EventIdentifier
+    public let missionStartOffset: Swift.UInt
+    public let parameters: [Swift.Int]
+    public static func == (a: CorpulsKit.EventData.Event, b: CorpulsKit.EventData.Event) -> Swift.Bool
+  }
+}
+public enum MissionIdLength {
+  case full
+  case short
+  public static func == (a: CorpulsKit.MissionIdLength, b: CorpulsKit.MissionIdLength) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Foundation.Date {
+  public var yearsFromNow: Swift.Int {
+    get
+  }
+  public var milliseconds: Swift.Int {
+    get
+  }
+}
+public enum Sex : Swift.String, Swift.CaseIterable {
+  case male
+  case female
+  case unknown
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [CorpulsKit.Sex]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [CorpulsKit.Sex] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class VitalParameterTrendEntry : CorpulsKit.ParameterList<CorpulsKit.TrendVitalParameter> {
+  final public let missionStartOffset: Swift.UInt
+  public var entryDate: Foundation.Date {
+    get
+  }
+  public var entryMinute: Swift.UInt {
+    get
+  }
+  public var nibpValue: CorpulsKit.NIBPValue? {
+    get
+    set
+  }
+  public var hasNibpValue: Swift.Bool {
+    get
+  }
+  required public init(from decoder: any Swift.Decoder) throws
+  override public func encode(to encoder: any Swift.Encoder) throws
+  @objc deinit
+}
+public enum EventType : Swift.String, Swift.Equatable, Swift.CaseIterable {
+  case info
+  case warning
+  case error
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [CorpulsKit.EventType]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [CorpulsKit.EventType] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum EventGroup : Swift.Int, Swift.Equatable, Swift.CaseIterable {
+  case EDC
+  case SNDREC
+  case OPER
+  case PIF
+  case ALM
+  case CO2
+  case PAC
+  case NIBP
+  case INPUT
+  case IBP
+  case CLK
+  case MON
+  case SYS
+  case CM
+  case LAN
+  case ECG
+  case ERR
+  case INBOX
+  case CPR
+  case HC
+  case PRN
+  case RDEP
+  case SPO2
+  case DEFI
+  case GSM
+  case GUI
+  case LOAD
+  case NET
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [CorpulsKit.EventGroup]
+  public typealias RawValue = Swift.Int
+  nonisolated public static var allCases: [CorpulsKit.EventGroup] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum EventIdentifier : Swift.Int, Swift.Equatable, Swift.CaseIterable {
+  case EVT_HC_KVK_SERVICE
+  case EVT_ECG_DECG_SAVED
+  case EVT_ECG_HES_SAVED
+  case EVT_ECG_DECG_NOT_SAVED
+  case EVT_ECG_LIBECG_VERSION
+  case EVT_ECG_20HZ_FILTER
+  case EVT_ECG_GRI_SAVED
+  case EVT_ECG_EXCEPTION
+  case EVT_GUI_PAR_INT_EVT
+  case EVT_GUI_PAR_DATA_EVT
+  case EVT_CM_CREATE_CONNECTION
+  case EVT_CM_DESTROY_CONNECTION
+  case EVT_CM_CONNECTING_BACKEND
+  case EVT_CM_ACTIVATING_BACKEND
+  case EVT_CM_DISCONNECTING_BACKEND
+  case EVT_CM_CONNECTING_SERVICE
+  case EVT_CM_DISCONNECTING_SERVICE
+  case EVT_CO2_HYPERBARIC_VALUE
+  case EVT_PIF_INFO
+  case EVT_INPUT_LOCK_KEYS
+  case EVT_INPUT_KEYEVT
+  case EVT_INPUT_PADDLE_KEYEVT
+  case EVT_ERR_MODULE_PANIC
+  case EVT_OPER_MISSION_START
+  case EVT_OPER_MISSION_END
+  case EVT_OPER_DATA_REC_START
+  case EVT_OPER_DATA_REC_STOP
+  case EVT_OPER_FORMAT_CF
+  case EVT_OPER_PATDATA_WRITE
+  case EVT_OPER_MANUAL_EVT_SET
+  case EVT_OPER_MANUAL_EVT_CANCEL_LAST
+  case EVT_NIBP_RESULT
+  case EVT_NIBP_END
+  case EVT_NIBP_END2
+  case EVT_NIBP_RWAVE_GATING_CHANGED
+  case EVT_IBP_CALIB_STARTED
+  case EVT_NET_CONNECTION
+  case EVT_SPO2_SENSOR_TYPE
+  case EVT_SPO2_UPGRADE
+  case EVT_SPO2_MODULE_INFO
+  case EVT_SPO2_FAILURE
+  case EVT_SPO2_LOW_CONFIDENCE
+  case EVT_PR_LOW_CONFIDENCE
+  case EVT_PI_LOW_CONFIDENCE
+  case EVT_SPCO_LOW_CONFIDENCE
+  case EVT_SPMET_LOW_CONFIDENCE
+  case EVT_SPHB_LOW_CONFIDENCE
+  case EVT_INBOX_MESSAGE_START
+  case EVT_INBOX_MESSAGE_RECEIVED
+  case EVT_INBOX_MESSAGE_SHOWN
+  case EVT_INBOX_MESSAGE_PRINTED
+  case EVT_PRN_RTCV
+  case EVT_PRN_DECG
+  case EVT_PRN_PROT
+  case EVT_PRN_POST_SHOCK
+  case EVT_PRN_SCREEN_COPY
+  case EVT_POWER
+  case EVT_MECH_NET
+  case EVT_PAIRING
+  case EVT_USER_LOGIN
+  case EVT_BATT_VOLTAGE
+  case EVT_ADHOC_CONN
+  case EVT_SW_CONFLICT
+  case EVT_HW_CONFLICT
+  case EVT_AUTO_POW_DOWN
+  case EVT_BATT_POW_DOWN
+  case EVT_DEMO_MODE
+  case EVT_FEATURE_LOGIN
+  case EVT_SYS_MODE_CHANGE
+  case EVT_BATT_DEVICE_INFO
+  case EVT_SENSOR_STATE
+  case EVT_LAN_WLAN_DETECTED
+  case EVT_LAN_WLAN_SEARCHING
+  case EVT_LAN_WLAN_CONNECTED
+  case EVT_LAN_WLAN_DISCONNECTED
+  case EVT_LAN_GOT_IP
+  case EVT_LAN_WLAN_SEARCHING_TMO
+  case EVT_LAN_DHCP_TMO
+  case EVT_LAN_CONFIGURATION_ERROR
+  case EVT_LAN_WLAN_HW_PROBLEM
+  case EVT_CLK_TIMEDATE_CHANGED
+  case EVT_CLK_USER_TZ_CHANGED
+  case EVT_EDCOMM_BT_CONN_UNKNOWN
+  case EVT_EDCOMM_BT_DISCONN_UNKNOWN
+  case EVT_EDCOMM_BT_CONN_CORPULS1
+  case EVT_EDCOMM_BT_DISCONN_CORPULS1
+  case EVT_EDCOMM_BT_CONN_CPR
+  case EVT_EDCOMM_BT_DISCONN_CPR
+  case EVT_EDCOMM_BT_CONN_VENTILATOR
+  case EVT_EDCOMM_BT_DISCONN_VENTILATOR
+  case EVT_EDCOMM_BT_CONN_INPUT
+  case EVT_EDCOMM_BT_DISCONN_INPUT
+  case EVT_EDCOMM_BT_CONN_BGA
+  case EVT_EDCOMM_BT_DISCONN_BGA
+  case EVT_EDCOMM_VENTILATOR_REC_START
+  case EVT_EDCOMM_VENTILATOR_REC_STOP
+  case EVT_EDCOMM_BT_CONN_FALED
+  case EVT_EDCOMM_BT_CONN_NEW
+  case EVT_EDCOMM_BT_CONN_WHO
+  case EVT_EDCOMM_BT_CONN_DEVID
+  case EVT_EDCOMM_BT_CONN_MISSIONID
+  case EVT_EDCOMM_BT_CONN_MISSIONUID
+  case EVT_PAC_MODE_SEL
+  case EVT_PAC_FREQ_SEL
+  case EVT_PAC_INTENS_SEL
+  case EVT_PAC_PAUSE
+  case EVT_PAC_OFF
+  case EVT_PAC_MODE_ACTIVE
+  case EVT_LOAD_PROCESS_TERMINATED
+  case EVT_ALM_TECH_START
+  case EVT_ALM_TECH_END
+  case EVT_ALM_TECH_CONF
+  case EVT_ALM_PHYS_START
+  case EVT_ALM_PHYS_END
+  case EVT_ALM_PHYS_CONF
+  case EVT_ALM_START_SUSP
+  case EVT_ALM_STOP_SUSP
+  case EVT_MON_MANUAL_EVT
+  case EVT_MON_IBP_ALIAS
+  case EVT_SOUND_RECORDING_STARTED
+  case EVT_CPR_GOOD_COMP
+  case EVT_CPR_PUSH_HARDER
+  case EVT_CPR_DEPTH_CHANGE_CM
+  case EVT_CPR_UNIT_CHANGE_CM
+  case EVT_CPR_DEPTH_CHANGE_IN
+  case EVT_CPR_UNIT_CHANGE_IN
+  case EVT_CPR_STATISTICS
+  case EVT_CPR_SELFTEST_SUCCESS
+  case EVT_CPR_SELFTEST_FAILURE
+  case EVT_CPR_FULLY_RELEASE
+  case EVT_RDEP_SERVER_CONNECTION_REQUEST_ID
+  case EVT_RDEP_SERVER_NOT_FOUND
+  case EVT_RDEP_SERVER_ACCESS_DENIED
+  case EVT_RDEP_SERVER_CONNECTION_ERROR
+  case EVT_RDEP_DECG_ERROR
+  case EVT_RDEP_DECG_STARTED
+  case EVT_RDEP_DECG_FINISHED
+  case EVT_RDEP_DISCONNECT
+  case EVT_RDEP_GOT_CEB_VALUE
+  case EVT_RDEP_GOT_22C_ECG
+  case EVT_RDEP_SERVER_FOUND
+  case EVT_DEFI_MODE
+  case EVT_DEFI_ANALYSIS_STARTED
+  case EVT_DEFI_ANALYSIS_RESULT
+  case EVT_DEFI_SHOCK_RELEASED
+  case EVT_DEFI_BIM_ALARM
+  case EVT_DEFI_SYND_ALARM
+  case EVT_DEFI_PIF_ERROR
+  case EVT_DEFI_CABLE_TYPE
+  case EVT_DEFI_PIF_TEMP
+  case EVT_DEFI_SHOCK_ABORTED
+  case EVT_DEFI_COMMON_INFO
+  case EVT_DEFI_SYND_CLK_ERR
+  case EVT_DEFI_VT_VF_ALARM_CHANGED
+  case EVT_DEFI_METRONOME
+  case EVT_DEFI_BIM_SYND_SETTING
+  case EVT_DEFI_START_CHARGING
+  case EVT_DEFI_GETTING_READY
+  case EVT_DEFI_STOP_CHARGING
+  case EVT_DEFI_LEAVE_READY
+  case EVT_DEFI_HV_CAPACITOR
+  case EVT_DEFI_MANUAL_DISCHARGE
+  case EVT_GSMBACKEND_MODEM_FOUND
+  case EVT_GSMBACKEND_IP_CONNECTION
+  case EVT_GSMBACKEND_INITED
+  case EVT_GSMBACKEND_GOT_LINK
+  case EVT_GSMBACKEND_IP_CONNECT
+  case EVT_GSMBACKEND_DISCONNECTING
+  case EVT_GSMBACKEND_MODEM_DISABLED
+  case EVT_GSMBACKEND_MODEM_ERROR
+  case EVT_GSMBACKEND_SIM_NO_PIN
+  case EVT_GSMBACKEND_SIM_NO_CARD
+  case EVT_GSMBACKEND_SIM_WRONG_PIN
+  case EVT_GSMBACKEND_SIM_LOCKED
+  case EVT_GSMBACKEND_SIM_ERROR
+  case EVT_GSMBACKEND_GPRS_ERROR
+  case EVT_GSMBACKEND_APN_AUTH_ERROR
+  case EVT_GSMBACKEND_GPRS_NO_APN
+  case EVT_GSMBACKEND_GSM_NO_LINK
+  public var id: Swift.Int {
+    get
+  }
+  public var type: CorpulsKit.EventType {
+    get
+  }
+  public var group: CorpulsKit.EventGroup? {
+    get
+  }
+  public var name: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [CorpulsKit.EventIdentifier]
+  public typealias RawValue = Swift.Int
+  nonisolated public static var allCases: [CorpulsKit.EventIdentifier] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum SyncError : Foundation.LocalizedError {
+  case bluetoothDisabled
+  case pairingFailure
+  case unexpectedState(description: Swift.String)
+  case missingService
+  case missingCharacteristic
+  case emptyValueForCharacteristic
+  case unknownSoftwareRevision
+  case couldNotPrepareData
+  case failedToPrepareDataForWriting(characteristic: CorpulsKit.Characteristic)
+  case invalidValueFormatForCharacteristic
+  case invalidIndexForCharacteristic
+  case componentLengthExceeded(characteristic: CorpulsKit.Characteristic, component: Swift.String, limit: CorpulsKit.ValueLimit, actual: CorpulsKit.ValueLimit)
+  case characteristicLengthExceeded(characteristic: CorpulsKit.Characteristic, limit: CorpulsKit.ValueLimit, actual: CorpulsKit.ValueLimit)
+  case jsonParsing
+  case emptyJson
+  case fileWrite
+  case timeout
+  case notImplemented
+  case notificationFailure(characteristic: CorpulsKit.Characteristic)
+  case writeFailure(characteristic: CorpulsKit.Characteristic, error: any Swift.Error)
+  case writeTransferLengthExceeded(characteristic: CorpulsKit.Characteristic, valueLength: Swift.Int, maximumWriteValueLength: Swift.Int)
+  case rateLimiting(remaining: Foundation.TimeInterval)
+  case retryFailure(attempts: Swift.Int)
+  case decgError(_: CorpulsKit.DECGError)
+  case trendError(_: CorpulsKit.TrendError)
+  case commonDataError(_: CorpulsKit.CommonDataError)
+  case settingDisabled(_: Swift.String)
+  case missingEntitlement
+  case versionMismatch(function: Swift.String, version: Swift.String)
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum DECGError : Foundation.LocalizedError {
+  case missingArchive
+  case invalidArchiveData
+  case unzipFailure
+  case untarFailure
+  case invalidEntryData
+  case missingRtdFile
+  case invalidRtdData
+  case invalidCipherConfiguration
+  case decryptionFailure
+  case unarchiveRtdFailure
+  case invalidMissionId
+  case missingCreationDate
+  case unexpectedState(error: any Swift.Error)
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum VitalParameterError : Foundation.LocalizedError {
+  case unknownType
+  case unknownUnit
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public static func == (a: CorpulsKit.VitalParameterError, b: CorpulsKit.VitalParameterError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum TrendError : Foundation.LocalizedError {
+  case unzipFailure
+  case invalidJson(error: any Swift.Error)
+  case missingMissionCreationDate
+  case unexpectedState(error: any Swift.Error)
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum CommonDataError : Foundation.LocalizedError {
+  case jsonDecoding(error: any Swift.Error)
+  case typeNotSupported(_: Swift.UInt16)
+  case unexpectedState(error: any Swift.Error)
+  case custom(message: Swift.String)
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension CorpulsKit.DECGSpeed : Swift.Equatable {}
+extension CorpulsKit.DECGSpeed : Swift.Hashable {}
+extension CorpulsKit.DECGSpeed : Swift.RawRepresentable {}
+extension CorpulsKit.Characteristic : Swift.Equatable {}
+extension CorpulsKit.Characteristic : Swift.Hashable {}
+extension CorpulsKit.Characteristic : Swift.RawRepresentable {}
+extension CorpulsKit.BloodPressureType : Swift.Equatable {}
+extension CorpulsKit.BloodPressureType : Swift.Hashable {}
+extension CorpulsKit.BloodPressureType : Swift.RawRepresentable {}
+extension CorpulsKit.NIBPQualityIndicator : Swift.Equatable {}
+extension CorpulsKit.NIBPQualityIndicator : Swift.Hashable {}
+extension CorpulsKit.NIBPQualityIndicator : Swift.RawRepresentable {}
+extension CorpulsKit.VitalParameterType : Swift.Hashable {}
+extension CorpulsKit.VitalParameterType : Swift.RawRepresentable {}
+extension CorpulsKit.VitalParameterUnit : Swift.Equatable {}
+extension CorpulsKit.VitalParameterUnit : Swift.Hashable {}
+extension CorpulsKit.VitalParameterUnit : Swift.RawRepresentable {}
+extension CorpulsKit.Service : Swift.Equatable {}
+extension CorpulsKit.Service : Swift.Hashable {}
+extension CorpulsKit.Service : Swift.RawRepresentable {}
+extension CorpulsKit.Race : Swift.Equatable {}
+extension CorpulsKit.Race : Swift.Hashable {}
+extension CorpulsKit.Race : Swift.RawRepresentable {}
+extension CorpulsKit.MissionIdLength : Swift.Equatable {}
+extension CorpulsKit.MissionIdLength : Swift.Hashable {}
+extension CorpulsKit.Sex : Swift.Equatable {}
+extension CorpulsKit.Sex : Swift.Hashable {}
+extension CorpulsKit.Sex : Swift.RawRepresentable {}
+extension CorpulsKit.EventType : Swift.Hashable {}
+extension CorpulsKit.EventType : Swift.RawRepresentable {}
+extension CorpulsKit.EventGroup : Swift.Hashable {}
+extension CorpulsKit.EventGroup : Swift.RawRepresentable {}
+extension CorpulsKit.EventIdentifier : Swift.Hashable {}
+extension CorpulsKit.EventIdentifier : Swift.RawRepresentable {}
+extension CorpulsKit.VitalParameterError : Swift.Equatable {}
+extension CorpulsKit.VitalParameterError : Swift.Hashable {}

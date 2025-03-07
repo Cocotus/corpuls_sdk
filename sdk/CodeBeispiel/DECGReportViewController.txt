@@ -1,0 +1,150 @@
+//
+//  DECGReportViewController.swift
+//  CorpulsKit Reference App
+//
+//  Created by Markus Bösch on 18.11.21.
+//
+
+import UIKit
+import PDFKit
+import CorpulsKit
+
+final class DECGReportViewController: UIViewController {
+    // MARK: - Properties
+
+    lazy var pdfView: PDFView = {
+        let pdfView = PDFView(frame: view.bounds)
+        pdfView.interpolationQuality = .high
+        pdfView.displayMode = .singlePage
+        pdfView.displayDirection = .horizontal
+        pdfView.usePageViewController(true, withViewOptions: nil)
+
+        if let underlyingScrollView = pdfView.findViews(like: UIScrollView.self).first {
+            underlyingScrollView.showsHorizontalScrollIndicator = false
+            underlyingScrollView.showsVerticalScrollIndicator = false
+        }
+
+        view.addSubview(pdfView)
+        pdfView.pinConstraints(to: view, useSafeArea: false)
+
+        return pdfView
+    }()
+
+    let pageCount = 4
+
+    let decg: Data
+
+    var fileURL: URL?
+
+    private lazy var filenameDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd-HHmmss"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone.current
+
+        return dateFormatter
+    }()
+
+    // MARK: - Initialization
+
+    init(decg: Data) {
+        self.decg = decg
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - UIViewController
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = .ble.background
+
+        setupNavigationBar()
+        showPDF()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.pdfView.alpha = 0
+
+        coordinator.animate { [unowned self] _ in
+            self.pdfView.scaleFactor = self.pdfView.scaleFactorForSizeToFit
+            self.pdfView.alpha = 1
+        }
+    }
+
+    // MARK: - Setup
+
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sharePDF(_:)))
+    }
+
+    // MARK: - Private
+
+    private func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    private func showPDF() {
+        guard let document = PDFDocument(data: decg) else { return }
+
+        pdfView.document = document
+        pdfView.autoScales = true
+    }
+
+    // MARK: - Actions
+
+    @objc private func sharePDF(_ barButtonItem: UIBarButtonItem) {
+        let path = NSTemporaryDirectory().appending("DECG-DEMO.pdf")
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            try decg.write(to: url)
+        } catch {
+            return
+        }
+
+        let shareViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        shareViewController.popoverPresentationController?.barButtonItem = barButtonItem
+
+        navigationController?.present(shareViewController, animated: true, completion: nil)
+    }
+}
+
+// MARK: - UIView Extensions
+
+extension UIView {
+    func pinConstraints(to superview: UIView, useSafeArea: Bool = true) {
+        translatesAutoresizingMaskIntoConstraints = false
+
+        if useSafeArea {
+            NSLayoutConstraint.activate([
+                leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
+                trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor),
+                topAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.topAnchor),
+                bottomAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.bottomAnchor)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+                trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+                topAnchor.constraint(equalTo: superview.topAnchor),
+                bottomAnchor.constraint(equalTo: superview.bottomAnchor)
+            ])
+        }
+    }
+
+    func findViews<T: UIView>(like: T.Type) -> [T] {
+        return recursiveSubviews.compactMap { $0 as? T }
+    }
+
+    var recursiveSubviews: [UIView] {
+        return subviews + subviews.flatMap { $0.recursiveSubviews }
+    }
+}

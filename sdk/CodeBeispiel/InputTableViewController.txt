@@ -1,0 +1,240 @@
+//
+//  InputTableViewController.swift
+//  CorpulsKit Reference App
+//
+//  Created by Markus Bösch on 14.12.21.
+//
+
+import UIKit
+import CorpulsKit
+
+protocol InputTableViewControllerDelegate: AnyObject {
+    func didFinish(input: CharacteristicValue, output: CharacteristicValue)
+}
+
+final class InputTableViewController: TableViewController {
+    // MARK: - Properties
+    let value: CharacteristicValue
+
+    var fields: [String] { value.placeholders }
+
+    var textFields: [UITextField] {
+        (0..<fields.count).compactMap { cellTextField(at: $0) }
+    }
+
+    weak var delegate: InputTableViewControllerDelegate?
+
+    // MARK: - Initialization
+
+    init(value: CharacteristicValue) {
+        self.value = value
+
+        super.init(nibName: nil, bundle: nil)
+
+        tableView.rowHeight = 60
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - UIViewController
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearValues))
+
+        tableView.reloadData {
+            self.setupTextFields()
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.cellTextField(at: 0)?.becomeFirstResponder()
+    }
+
+    override func willMove(toParent parent: UIViewController?) {
+        guard parent == nil else { return }
+
+        let components = textFields.map { $0.text ?? "" }
+
+        if let output = process(components: components) {
+            delegate?.didFinish(input: value, output: output)
+        }
+    }
+
+    // MARK: - UITableViewDataSource
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fields.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = InputTableViewCell(title: fields[indexPath.row])
+
+        cell.textField.tag = indexPath.row
+        cell.textField.delegate = self
+
+        return cell
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    private func cellTextField(at row: Int) -> UITextField? {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? InputTableViewCell else {
+            return nil
+        }
+
+        return cell.textField
+    }
+
+    // MARK: - Actions
+
+    @objc private func clearValues() {
+        textFields.forEach {
+            $0.text = ""
+        }
+    }
+
+    // MARK: - Private
+
+    private func setupTextFields() {
+        let text = value.output.trimmingCharacters(in: .whitespacesAndNewlines)
+        let components = text.components(separatedBy: "|")
+
+        if components.count == fields.count {
+            for i in 0..<components.count {
+                cellTextField(at: i)?.text = components[i]
+            }
+        }
+
+        guard case .patientData = value else { return }
+
+        cellTextField(at: 2)?.addTarget(self, action: #selector(textFieldDidUpdateBirthdate(_:)), for: .editingChanged)
+        cellTextField(at: 3)?.addTarget(self, action: #selector(textFieldDidUpdateAge(_:)), for: .editingChanged)
+    }
+
+    private func process(components: [String]) -> CharacteristicValue? {
+        let output: CharacteristicValue
+        let c = components
+
+        switch value {
+        case .deviceName, .appearance, .manufacturerName, .modelNumber, .serialNumber, .firmwareRevision, .softwareRevision, .currentDisplayTime, .vitalParameters, .availableDECGs, .decgData, .vitalParameterTrend, .commonConfig, .eventData, .missionId:
+            return nil
+
+        case .patientId:
+            output = .patientId(value: c[0])
+
+        case .patientData:
+            let date = DateFormatter.birthdate.date(from: c[2])
+            let years = UInt(c[3])
+            let sex = Sex(rawValue: c[4]) ?? .unknown
+            let race = Race(rawValue: c[5]) ?? .unknown
+            let weight = UInt(c[6]) ?? 0
+            let height = UInt(c[7]) ?? 0
+            let symptomOnset = c[8]
+
+            let age: Age
+
+            if let date = date {
+               age = .birthdate(date)
+            } else if let years = years {
+                age = .years(years)
+            } else {
+                age = .unknown
+            }
+
+            output = .patientData(firstname: c[0], lastname: c[1], age: age, sex: sex, race: race, weight: weight, height: height, symptomOnset: symptomOnset)
+
+        case .patientAddress:
+            output = .patientAddress(street: c[0], postalCode: c[1], city: c[2])
+
+        case .caseNumber:
+            output = .caseNumber(value: c[0])
+
+        case .insuranceData:
+            output = .insuranceData(insuranceName: c[0], insuranceNumber: c[1], policyNumber: c[2], insuranceStatus: c[3], cardNumber: c[4])
+
+        case .medicalTeam:
+            let names = c[0].components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+            output = .medicalTeam(names: names)
+        case .organisationData:
+            output = .organisationData(emsLocation: c[0], organisationNumber: c[1], organisationName: c[2])
+        case .contactInfos:
+            output = .contactInfos(callbackNumber: c[0], radioId: c[1], transportType: c[2])
+
+        case .deviceId:
+            output = .deviceId(value: c[0])
+
+        case .requestDECG:
+            guard
+                let index = UInt(c[0]),
+                index > 0
+            else {
+                self.presentError(SyncError.invalidValueFormatForCharacteristic)
+                return nil
+            }
+
+            output = .requestDECG(value: index)
+
+        case .vitalParameterTrendConfiguration:
+            let x = ["input": c[0]]
+            output = .vitalParameterTrendConfiguration(value: x)
+
+        @unknown default:
+            fatalError("WRITE: missing cases")
+        }
+
+        return output
+    }
+
+    // MARK: - UITextField Updates
+
+    @objc private func textFieldDidUpdateBirthdate(_ textField: UITextField) {
+        let ageTextField = cellTextField(at: 3)
+
+        guard
+            let text = textField.text,
+            let birthdate = DateFormatter.birthdate.date(from: text),
+            birthdate < Date()
+        else {
+            ageTextField?.text = ""
+            return
+        }
+
+        cellTextField(at: 3)?.text = String(birthdate.yearsFromNow)
+    }
+
+    @objc private func textFieldDidUpdateAge(_ textField: UITextField) {
+        cellTextField(at: 2)?.text = ""
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension InputTableViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let row = textField.tag
+
+        if row < fields.count - 1 {
+            cellTextField(at: row + 1)?.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+            navigationController?.popViewController(animated: true)
+        }
+
+        return true
+    }
+}

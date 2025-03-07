@@ -1,0 +1,11 @@
+framework module CorpulsKit {
+  umbrella header "CorpulsKit.h"
+  export *
+
+  module * { export * }
+}
+
+module CorpulsKit.Swift {
+  header "CorpulsKit-Swift.h"
+  requires objc
+}

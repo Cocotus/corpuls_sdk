@@ -1,0 +1,283 @@
+//
+//  SyncViewController.swift
+//  CorpulsKit Reference App
+//
+//  Created by Markus Bösch on 12.02.21.
+//
+
+import UIKit
+import CoreBluetooth
+import CorpulsKit
+
+private enum State: Equatable {
+    case initial
+    case unavailable
+    case disconnected
+    case scanning
+    case selecting
+    case connecting(peripheral: CorpulsPeripheral)
+    case connected(peripheral: CBPeripheral)
+    case syncing
+    case success(viewController: VitalParameterViewController, rawData: Data)
+}
+
+final class SyncViewController: UIViewController {
+    // MARK: - Properties
+
+    private lazy var ble: CorpulsBLE = {
+        let ble = CorpulsBLE.shared
+        ble.settings = Settings(performDeviceIdentification: true,
+                                decgSpeed: .wide)
+
+        ble.didUpdateSystemState = { state in
+            // String 'state' can be used to update UI accordingly.
+            // See documentation for possible values.
+        }
+
+        ble.didUpdateConnectionState = { [unowned self] isConnected in
+            if isConnected {
+                characteristicsTableViewController.tableView.reloadData()
+            } else {
+                state = ble.isEnabled ? .disconnected : .unavailable
+            }
+
+            characteristicsTableViewController.tableView.isHidden = !isConnected
+
+            if state == .disconnected {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
+                    if !isPresentingAlert {
+                        handleDeviceScan()
+                    }
+                }
+            }
+        }
+
+        ble.didReceiveNotification = { [unowned self] (value, characteristic) in
+            self.presentNotification(for: characteristic, with: value)
+        }
+
+        ble.didUpdateAvailability = { [unowned self] isAvailable in
+            if isAvailable && !ble.isConnected {
+                handleDeviceScan()
+            }
+        }
+    
+        return ble
+    }()
+
+    private var peerIdentifier: UUID? {
+        guard let uuidString = UserDefaults.standard.string(forKey: "peerIdentifier") else {
+            return nil
+        }
+
+        return UUID(uuidString: uuidString)
+    }
+
+    private lazy var characteristicsTableViewController = CharacteristicsTableViewController(style: .insetGrouped)
+
+    private var state: State = .initial {
+        didSet {
+            guard state != oldValue else { return }
+            
+            switch oldValue {
+            case .initial, .disconnected, .syncing, .scanning, .selecting, .connecting, .connected, .unavailable:
+                break
+                
+            case .success(let vitalParameterVC, _):
+                vitalParameterVC.hide()
+            }
+
+            switch state {
+            case .initial:
+                break
+
+            case .unavailable:
+                title = "Unavailable"
+
+            case .disconnected:
+                title = "Disconnected"
+
+            case .scanning:
+                title = "Scanning ..."
+
+            case .selecting:
+                title = "Select device"
+
+            case .connecting(let peripheral):
+                let name = peripheral.peripheral.name ?? "device"
+                title = "Connecting \(name) ..."
+
+            case .connected:
+                title = "Connected"
+                characteristicsTableViewController.show(on: self)
+
+            case .syncing:
+                title = "Syncing ..."
+
+            case .success(let vitalParameterVC, _):
+                vitalParameterVC.show(on: self)
+            }
+        }
+    }
+
+    // MARK: - UIViewController
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+
+        ble.setup { isAvailable in
+           // setup done
+        }
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
+        navigationItem.backButtonTitle = "Characteristics"
+
+        view.backgroundColor = .ble.background
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(didTapDocumentationButton))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: CorpulsBLE.shared.frameworkBuild, style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        state = .disconnected
+    }
+    
+    // MARK: - Actions
+
+    @objc private func didTapDocumentationButton() {
+        guard let url = Bundle.main.url(forResource: "README", withExtension: "html") else { return }
+
+        let webViewController = WebViewController(url: url, title: "Documentation", isLocal: true)
+        navigationController?.pushViewController(webViewController, animated: true)
+    }
+
+    private func handleDeviceScan() {
+        guard
+            !ble.isSyncing,
+            state != .selecting
+        else { return }
+
+        guard ble.isEnabled else {
+            state = .unavailable
+            return
+        }
+
+        // TODO: adopt behavior of this function
+
+        /*
+        if let peerIdentifier {
+            let alert = UIAlertController(title: "Scan for devices",
+                                          message: "Do you want to use the last connected corpuls3 or look for a new one?",
+                                          preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "last connected", style: .default, handler: { _ in
+                self.scanForDevice(with: peerIdentifier)
+            }))
+
+            alert.addAction(UIAlertAction(title: "new one", style: .default, handler: { _ in
+                self.scanForDevices()
+            }))
+
+            present(alert, animated: true)
+        } else {
+            scanForDevices()
+        }
+         */
+
+        scanForDevices()
+    }
+
+    private func scanForDevices() {
+        state = .scanning
+
+        ble.scan(timeout: 2) { [unowned self] in
+            switch $0 {
+            case .success(let peripherals):
+                if peripherals.count == 1 {
+                    connect(to: peripherals[0])
+                } else {
+                    state = .selecting
+
+                    let peripheralViewController = PeripheralViewController(peripherals: peripherals)
+                    peripheralViewController.delegate = self
+
+                    let navigationPeripheralVC = UINavigationController(rootViewController: peripheralViewController)
+                    navigationPeripheralVC.modalPresentationStyle = .fullScreen
+
+                    self.present(navigationPeripheralVC, animated: true, completion: nil)
+                }
+
+            case .failure(let error):
+                if case .timeout = error {
+                    scanForDevices()
+                } else if case .unexpectedState = error {
+                    return
+                } else {
+                    handleError(error)
+                }
+            }
+        }
+    }
+
+    private func scanForDevice(with peerIdentifier: UUID) {
+        state = .scanning
+
+        ble.scan(peerIdentifier: peerIdentifier) { [unowned self] in
+            switch $0 {
+            case .success(let peripheral):
+                connect(to: peripheral)
+            case .failure(let error):
+                if case .timeout = error {
+                    scanForDevices()
+                } else if case .unexpectedState = error {
+                    return
+                } else {
+                    handleError(error)
+                }
+            }
+        }
+    }
+
+    fileprivate func connect(to peripheral: CorpulsPeripheral) {
+        state = .connecting(peripheral: peripheral)
+
+        ble.connect(to: peripheral) { [unowned self] in
+            switch $0 {
+            case .success:
+                self.state = .connected(peripheral: peripheral.peripheral)
+
+                UserDefaults.standard.set(peripheral.id.uuidString, forKey: "peerIdentifier")
+            case .failure(let error):
+                self.handleError(error)
+            }
+        }
+    }
+
+    // MARK: - Private
+    
+    private func handleError(_ error: SyncError) {
+        state = .disconnected
+        
+        presentError(error) { [unowned self] in
+            handleDeviceScan()
+        }
+    }
+}
+
+// MARK: - PeripheralViewControllerDelegate
+
+extension SyncViewController: PeripheralViewControllerDelegate {
+    func didSelectPeripheral(_ peripheral: CorpulsPeripheral?) {
+        if let peripheral = peripheral {
+            connect(to: peripheral)
+        } else {
+            state = .scanning
+            handleDeviceScan()
+        }
+    }
+}

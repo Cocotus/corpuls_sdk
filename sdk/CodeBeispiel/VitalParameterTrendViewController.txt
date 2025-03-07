@@ -1,0 +1,156 @@
+//
+//  VitalParameterTrendViewController.swift
+//  CorpulsKit Reference App
+//
+//  Created by Markus Bösch on 25.02.22.
+//
+
+import UIKit
+import CorpulsKit
+
+class VitalParameterTrendViewController: UIViewController {
+    // MARK: - Properties
+    private let emptyLabel = UILabel()
+
+    private var trend: VitalParameterTrend?
+    private var vitalParameterType: VitalParameterType = .HR_DISPLAY
+
+    private var vitalParameterViewController: VitalParameterViewController? {
+        children.first(where: { $0 is VitalParameterViewController}) as? VitalParameterViewController
+    }
+
+    // MARK: - Initialization
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - UIViewController
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = .ble.background
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Type", style: .plain, target: self, action: #selector(didTapChooseTypeButton))
+
+        setupEmptyLabel()
+        loadTrend()
+    }
+
+    // MARK: - Setup
+
+    private func setupEmptyLabel() {
+        emptyLabel.isHidden = true
+        emptyLabel.text = "No trend data available\nfor selected type"
+        emptyLabel.frame.size = CGSize(width: 260, height: 44)
+        emptyLabel.center = view.center
+        emptyLabel.textColor = .white
+        emptyLabel.numberOfLines = 2
+        emptyLabel.textAlignment = .center
+
+        view.addSubview(emptyLabel)
+    }
+
+    private func updateTableView(for trend: VitalParameterTrend, type: VitalParameterType) {
+        let vitalParameters = trend.parameters(for: type)
+
+        vitalParameterViewController?.hide()
+
+        let vitalParameterViewController = VitalParameterViewController(vitalParameterSource: .trend(trend, type: type))
+        vitalParameterViewController.refreshControl = createRefreshControl()
+
+        vitalParameterViewController.show(on: self)
+
+        vitalParameterViewController.tableView.reloadData {
+            vitalParameterViewController.scrollToBottom()
+        }
+
+        updateSubviews(for: trend.values(for: type))
+
+        if let parameter = vitalParameters.first {
+            title = "\(parameter.typeString) [\(parameter.unit.string)]"
+        } else {
+            title = "No data"
+        }
+    }
+
+    // MARK: - Actions
+
+    @objc private func loadTrend() {
+        emptyLabel.isHidden = true
+
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        title = "Loading Trend ..."
+
+        vitalParameterViewController?.refreshControl?.beginRefreshing()
+
+        CorpulsBLE.shared.requestVitalParameterTrend { [weak self] in
+            guard let self = self else { return }
+
+            switch $0 {
+            case .success(let trend):
+                self.trend = trend
+                self.updateTableView(for: trend, type: self.vitalParameterType)
+
+            case .failure(let error):
+                self.title = "No data"
+                self.presentError(error) {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+            self.vitalParameterViewController?.refreshControl?.endRefreshing()
+        }
+    }
+
+    @objc private func didTapChooseTypeButton() {
+        let typeSelectionVC = VitalParameterTypeSelectionViewController(selectedType: vitalParameterType)
+        typeSelectionVC.delegate = self
+
+        let typeSelectionNavigationVC = UINavigationController(rootViewController: typeSelectionVC)
+        typeSelectionNavigationVC.modalPresentationStyle = .fullScreen
+
+        present(typeSelectionNavigationVC, animated: true)
+    }
+
+
+    // MARK: - Private
+
+    private func updateSubviews(for values: [Double]) {
+        switch values.count {
+        case 0:
+            vitalParameterViewController?.hide()
+
+            emptyLabel.text = "No trend data available\nfor selected type"
+            emptyLabel.center = view.center
+            emptyLabel.isHidden = false
+
+        default:
+            emptyLabel.isHidden = true
+        }
+    }
+
+    private func createRefreshControl() -> UIRefreshControl {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(loadTrend), for: .valueChanged)
+
+        return refreshControl
+    }
+}
+
+// MARK: - VitalParameterTypeSelectionViewControllerDelegate
+
+extension VitalParameterTrendViewController: VitalParameterTypeSelectionViewControllerDelegate {
+    func didSelectVitalParameterType(_ vitalParameterType: VitalParameterType) {
+        self.vitalParameterType = vitalParameterType
+
+        if let trend = trend {
+            updateTableView(for: trend, type: vitalParameterType)
+        }
+    }
+}

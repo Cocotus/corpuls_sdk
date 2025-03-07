@@ -1,0 +1,309 @@
+//
+//  CharacteristicsTableViewController.swift
+//  CorpulsKit Reference App
+//
+//  Created by Markus Bösch on 19.07.21.
+//
+
+import UIKit
+import CorpulsKit
+
+final class CharacteristicsTableViewController: TableViewController {
+    // MARK: - Properties
+
+    // leave out some characteristics
+    let characteristics = Characteristic.allCases.filter { ![.vitalParameters, .availableDECGs, .requestDECG, .decgData, .trendConfig, .trendData, .commonConfig, .commonData].contains($0) }
+
+    // MARK: - UIViewController
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.register(CharacteristicTableViewCell.self, forCellReuseIdentifier: CharacteristicTableViewCell.characteristicCellReuseIdentifier)
+        tableView.register(SelectionTableViewCell.self, forCellReuseIdentifier: SelectionTableViewCell.selectionCellReuseIdentifier)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        tableView.reloadData()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        setupTableFooterView()
+    }
+
+    // MARK: - UITableViewDataSource
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 4
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0:  characteristics.count
+        case 1:  2
+        case 2:  3
+        case 3:  Environment.isDebug ? 2 : 0
+        default: 0
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SelectionTableViewCell.selectionCellReuseIdentifier, for: indexPath) as! SelectionTableViewCell
+
+            switch indexPath.row {
+            case 0:
+                cell.configure(image: UIImage(systemName: "tag"),
+                               imageColor: .systemOrange,
+                               text: "Mission ID")
+            case 1:
+                cell.configure(image: UIImage(systemName: "list.bullet.rectangle"),
+                               imageColor: .systemOrange,
+                               text: "Events")
+            default:
+                fatalError()
+            }
+
+            return cell
+        }
+
+        if indexPath.section == 3 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SelectionTableViewCell.selectionCellReuseIdentifier, for: indexPath) as! SelectionTableViewCell
+
+            switch indexPath.row {
+            case 0:
+                cell.configure(image: UIImage(systemName: "text.word.spacing"),
+                               imageColor: .systemPurple,
+                               text: "Patient data json")
+            case 1:
+                cell.configure(image: UIImage(systemName: "doc.text.below.ecg"),
+                               imageColor: .systemPurple,
+                               text: "Download D-ECG with metadata")
+            default:
+                fatalError()
+            }
+
+            return cell
+        }
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: CharacteristicTableViewCell.characteristicCellReuseIdentifier, for: indexPath) as! CharacteristicTableViewCell
+
+        let characteristic = characteristic(at: indexPath)
+        let isSubscribed = CorpulsBLE.shared.isCharacteristicSubscribed(characteristic)
+
+        cell.configure(with: characteristic, isSubscribed: isSubscribed)
+        cell.delegate = self
+
+        return cell
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        if indexPath.section == 1 {
+            guard let navigationController = parent?.navigationController else { return }
+
+            switch indexPath.row {
+            case 0:
+                let vc = MissionIdViewController()
+                navigationController.pushViewController(vc, animated: true)
+            case 1:
+                let vc = EventsTableViewController()
+                navigationController.pushViewController(vc, animated: true)
+            default:
+                fatalError()
+            }
+
+            return
+        }
+
+        if indexPath.section == 3 {
+            switch indexPath.row {
+            case 0:
+                Task {
+                    let metadata = try? await CorpulsBLE.shared.requestDECGMetadata()
+
+                    DispatchQueue.main.async {
+                        let vc = DECGMetadataViewController(with: metadata)
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            case 1:
+                let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder], asCopy: false)
+                documentPicker.delegate = self
+                documentPicker.modalPresentationStyle = .formSheet
+
+                self.present(documentPicker, animated: true)
+            default:
+                fatalError()
+            }
+
+            return
+        }
+
+        let cell = tableView.cellForRow(at: indexPath) as! CharacteristicTableViewCell
+        let characteristic = characteristic(at: indexPath)
+
+        guard let navigationController = parent?.navigationController else { return }
+
+        cell.isLoading = true
+
+        switch characteristic {
+        case .vitalParameters:
+            tableView.isHidden = true
+
+            CorpulsBLE.shared.requestVitalParameters { [weak self] in
+                guard let self = self else { return }
+
+                tableView.isHidden = false
+
+                switch $0 {
+                case .success(let vitalParameterList):
+                    let vitalParameterViewController = VitalParameterViewController(vitalParameterSource: .regular(vitalParameterList))
+                    navigationController.pushViewController(vitalParameterViewController, animated: true)
+
+                case .failure(let error):
+                    self.presentError(error)
+                }
+            }
+
+        case .trendData:
+            let vitalParameterTrendViewController = VitalParameterTrendViewController()
+
+            navigationController.pushViewController(vitalParameterTrendViewController, animated: true)
+
+        case .availableDECGs:
+            CorpulsBLE.shared.requestCharacteristic(characteristic) { [weak self] in
+                guard let self = self else { return }
+
+                switch $0 {
+                case .success(let value):
+                    if case .availableDECGs(let indices) = value {
+                        let decgOverviewViewController = DECGOverviewViewController(decgIndices: indices)
+                        navigationController.pushViewController(decgOverviewViewController, animated: true)
+                    }
+
+                case .failure(let error):
+                    self.presentError(error)
+                }
+            }
+
+        default:
+            let characteristicViewController = CharacteristicViewController(characteristic: characteristic)
+            navigationController.pushViewController(characteristicViewController, animated: true)
+        }
+    }
+
+    // MARK: - Actions
+
+    @objc fileprivate func disconnect() {
+        CorpulsBLE.shared.disconnect()
+    }
+
+    // MARK: - Private
+
+    private func characteristic(at indexPath: IndexPath) -> Characteristic {
+        switch indexPath.section {
+        case 0:
+            return characteristics[indexPath.row]
+
+        case 2:
+            switch indexPath.row {
+            case 0:
+                return .vitalParameters
+
+            case 1:
+                return .trendData
+
+            case 2:
+                return .availableDECGs
+
+            default:
+                fatalError("undefined")
+            }
+
+        default:
+            fatalError("undefined")
+        }
+    }
+
+    private func setupTableFooterView() {
+        guard tableView.tableFooterView == nil else { return }
+
+        let button = UIButton(type: .system)
+        button.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 44))
+        button.setTitle("Disconnect", for: .normal)
+        button.setTitleColor(.ble.red, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(disconnect), for: .touchUpInside)
+
+        tableView.tableFooterView = button
+    }
+}
+
+// MARK: - CharacteristicTableViewCellDelegate
+
+extension CharacteristicsTableViewController: CharacteristicTableViewCellDelegate {
+    func didReceiveLongPress(for cell: CharacteristicTableViewCell, characteristic: Characteristic) {
+        if CorpulsBLE.shared.isCharacteristicSubscribed(characteristic) {
+            CorpulsBLE.shared.unsubscribe(for: characteristic) {
+                switch $0 {
+                case .success():
+                    cell.configure(with: characteristic, isSubscribed: false)
+                    UISelectionFeedbackGenerator().selectionChanged()
+
+                case .failure(_):
+                    break
+                }
+            }
+        } else {
+            CorpulsBLE.shared.subscribe(for: characteristic) {
+                switch $0 {
+                case .success():
+                    cell.configure(with: characteristic, isSubscribed: true)
+                    UISelectionFeedbackGenerator().selectionChanged()
+
+                case .failure(let error):
+                    self.presentError(error)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - UIDocumentPickerDelegate
+
+extension CharacteristicsTableViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        Task {
+            let data = try? await CorpulsBLE.shared.requestDECGWithMetadata(by: .latest, progress: { _ in })
+
+            guard
+                let folderURL = urls.first,
+                let data
+            else {
+                return
+            }
+
+            let fileURL = folderURL.appendingPathComponent("d-ecg_test.pdf")
+
+            DispatchQueue.main.async {
+                do {
+                    if folderURL.startAccessingSecurityScopedResource() {
+                        try data.write(to: fileURL, options: .atomic)
+                    }
+
+                    folderURL.stopAccessingSecurityScopedResource()
+                } catch {
+                    print("Could not write file: \(error)")
+                }
+            }
+        }
+    }
+}

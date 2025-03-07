@@ -1,0 +1,18 @@
+//
+//  TableViewController.swift
+//  CorpulsKit Reference App
+//
+//  Created by Markus Bösch on 15.12.21.
+//
+
+import UIKit
+
+class TableViewController: UITableViewController {
+    // MARK: - UIViewController
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = .ble.background
+    }
+}

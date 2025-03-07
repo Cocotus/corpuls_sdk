@@ -1,0 +1,1520 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.428571; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; font-size-adjust: inherit; font-kerning: inherit; font-variant-alternates: inherit; font-variant-ligatures: inherit; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-feature-settings: inherit; font-optical-sizing: inherit; font-variation-settings: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; border-right-style: none; border-right-color: currentcolor; background-color: inherit; }
+.CodeMirror-linenumber { -webkit-user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: medium; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; border-bottom-style: none; border-bottom-color: currentcolor; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: medium; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.428571rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left-width: 28px; border-left-style: solid; border-left-color: transparent; border-right-width: 28px; border-right-style: solid; border-right-color: transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right-width: 8px; border-right-style: solid; border-right-color: transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left-width: 0.25em; border-left-style: solid; border-left-color: rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background: inherit; }
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right-width: 1px; border-right-style: solid; border-right-color: rgb(221, 221, 221); background: inherit; white-space: nowrap; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; outline: 0px; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: auto hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 10px; z-index: 3; overflow-y: hidden; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: medium !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right-width: 30px; border-right-style: solid; border-right-color: transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right-width: medium; border-right-style: none; border-right-color: currentcolor; width: auto; }
+.CodeMirror-linebackground { position: absolute; inset: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right-width: medium; border-right-style: none; border-right-color: currentcolor; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+span.cm-underlined { text-decoration: underline; }
+span.cm-strikethrough { text-decoration: line-through; }
+.cm-tw-syntaxerror { color: rgb(255, 255, 255); background-color: rgb(153, 0, 0); }
+.cm-tw-deleted { text-decoration: line-through; }
+.cm-tw-header5 { font-weight: 700; }
+.cm-tw-listitem:first-child { padding-left: 10px; }
+.cm-tw-box { border-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-color: inherit; border-top-width: 0px !important; }
+.cm-tw-underline { text-decoration: underline; }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+:root {
+  --mermaid-theme: night;
+}
+
+[lang='mermaid'] .label {
+  color: #333;
+}
+
+/* CSS Document */
+
+/** code highlight */
+
+.cm-s-inner .cm-variable,
+.cm-s-inner .cm-operator,
+.cm-s-inner .cm-property {
+    color: #b8bfc6;
+}
+
+.cm-s-inner .cm-keyword {
+    color: #C88FD0;
+}
+
+.cm-s-inner .cm-tag {
+    color: #7DF46A;
+}
+
+.cm-s-inner .cm-attribute {
+    color: #7575E4;
+}
+
+.CodeMirror div.CodeMirror-cursor {
+    border-left: 1px solid #b8bfc6;
+    z-index: 3;
+}
+
+.cm-s-inner .cm-string {
+    color: #D26B6B;
+}
+
+.cm-s-inner .cm-comment,
+.cm-s-inner.cm-comment {
+    color: #DA924A;
+}
+
+.cm-s-inner .cm-header,
+.cm-s-inner .cm-def,
+.cm-s-inner.cm-header,
+.cm-s-inner.cm-def {
+    color: #8d8df0;
+}
+
+.cm-s-inner .cm-quote,
+.cm-s-inner.cm-quote {
+    color: #57ac57;
+}
+
+.cm-s-inner .cm-hr {
+    color: #d8d5d5;
+}
+
+.cm-s-inner .cm-link {
+    color: #d3d3ef;
+}
+
+.cm-s-inner .cm-negative {
+    color: #d95050;
+}
+
+.cm-s-inner .cm-positive {
+    color: #50e650;
+}
+
+.cm-s-inner .cm-string-2 {
+    color: #f50;
+}
+
+.cm-s-inner .cm-meta,
+.cm-s-inner .cm-qualifier {
+    color: #b7b3b3;
+}
+
+.cm-s-inner .cm-builtin {
+    color: #f3b3f8;
+}
+
+.cm-s-inner .cm-bracket {
+    color: #997;
+}
+
+.cm-s-inner .cm-atom,
+.cm-s-inner.cm-atom {
+    color: #84B6CB;
+}
+
+.cm-s-inner .cm-number {
+    color: #64AB8F;
+}
+
+.cm-s-inner .cm-variable {
+    color: #b8bfc6;
+}
+
+.cm-s-inner .cm-variable-2 {
+    color: #9FBAD5;
+}
+
+.cm-s-inner .cm-variable-3 {
+    color: #1cc685;
+}
+
+.CodeMirror-selectedtext,
+.CodeMirror-selected {
+    background: #4a89dc;
+    color: #fff !important;
+    text-shadow: none;
+}
+
+.CodeMirror-gutters {
+    border-right: none;
+}
+
+/* CSS Document */
+
+/** markdown source **/
+.cm-s-typora-default .cm-header, 
+.cm-s-typora-default .cm-property
+{
+    color: #cebcca;
+}
+
+.CodeMirror.cm-s-typora-default div.CodeMirror-cursor{
+    border-left: 3px solid #b8bfc6;
+}
+
+.cm-s-typora-default .cm-comment {
+    color: #9FB1FF;
+}
+
+.cm-s-typora-default .cm-string {
+    color: #A7A7D9
+}
+
+.cm-s-typora-default .cm-atom, .cm-s-typora-default .cm-number {
+    color: #848695;
+    font-style: italic;
+}
+
+.cm-s-typora-default .cm-link {
+    color: #95B94B;
+}
+
+.cm-s-typora-default .CodeMirror-activeline-background {
+    background: rgba(51, 51, 51, 0.72);
+}
+
+.cm-s-typora-default .cm-comment, .cm-s-typora-default .cm-code {
+	color: #8aa1e1;
+}@import "";
+@import "";
+@import "";
+
+:root {
+    --bg-color:  #363B40;
+    --side-bar-bg-color: #2E3033;
+    --text-color: #b8bfc6;
+
+    --select-text-bg-color:#4a89dc;
+
+    --item-hover-bg-color: #0a0d16;
+    --control-text-color: #b7b7b7;
+    --control-text-hover-color: #eee;
+    --window-border: 1px solid #555;
+
+    --active-file-bg-color: rgb(34, 34, 34);
+    --active-file-border-color: #8d8df0;
+
+    --primary-color: #a3d5fe;
+
+    --active-file-text-color: white;
+    --item-hover-bg-color: #70717d;
+    --item-hover-text-color: white;
+    --primary-color: #6dc1e7;
+
+    --rawblock-edit-panel-bd: #333;
+
+    --search-select-bg-color: #428bca;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    background: #363B40;
+    background: var(--bg-color);
+    fill: currentColor;
+    line-height: 1.625rem;
+}
+
+#write {
+    max-width: 914px;
+}
+
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+div.code-tooltip-content {
+    color: #b8bfc6;
+    border-color: transparent;
+}
+
+div.code-tooltip,
+.md-hover-tip .md-arrow:after {
+    background: #333;
+}
+
+.native-window #md-notification {
+    border: 1px solid #70717d;
+}
+
+.popover.bottom > .arrow:after {
+    border-bottom-color: #333;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+}
+
+hr {
+    height: 2px;
+    border: 0;
+    margin: 24px 0 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lucida Grande", "Corbel", sans-serif;
+    font-weight: normal;
+    clear: both;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    margin: 0;
+    padding: 0;
+    color: #DEDEDE
+}
+
+h1 {
+    font-size: 2.5rem;
+    /* 36px */
+    line-height: 2.75rem;
+    /* 40px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    letter-spacing: -1.5px;
+}
+
+h2 {
+    font-size: 1.63rem;
+    /* 24px */
+    line-height: 1.875rem;
+    /* 30px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 1.17rem;
+    /* 18px */
+    line-height: 1.5rem;
+    /* 24px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 1.12rem;
+    /* 16px */
+    line-height: 1.375rem;
+    /* 22px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    color: white;
+}
+
+h5 {
+    font-size: 0.97rem;
+    /* 16px */
+    line-height: 1.25rem;
+    /* 22px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    font-weight: bold;
+}
+
+h6 {
+    font-size: 0.93rem;
+    /* 16px */
+    line-height: 1rem;
+    /* 16px */
+    margin-bottom: 0.75rem;
+    color: white;
+}
+
+@media (min-width: 980px) {
+    h3.md-focus:before,
+    h4.md-focus:before,
+    h5.md-focus:before,
+    h6.md-focus:before {
+        color: #ddd;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        position: absolute;
+        left: -1.642857143rem;
+        top: .357142857rem;
+        float: left;
+        font-size: 9px;
+        padding-left: 2px;
+        padding-right: 2px;
+        vertical-align: bottom;
+        font-weight: normal;
+        line-height: normal;
+    }
+
+    h3.md-focus:before {
+        content: 'h3';
+    }
+
+    h4.md-focus:before {
+        content: 'h4';
+    }
+
+    h5.md-focus:before {
+        content: 'h5';
+        top: 0px;
+    }
+
+    h6.md-focus:before {
+        content: 'h6';
+        top: 0px;
+    }
+}
+
+a {
+    text-decoration: none;
+    outline: 0;
+}
+
+a:hover {
+    outline: 0;
+}
+
+a:focus {
+    outline: thin dotted;
+}
+
+sup.md-footnote {
+    background-color: #555;
+    color: #ddd;
+}
+
+p {
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
+
+p,
+ul,
+dd,
+ol,
+hr,
+address,
+pre,
+table,
+iframe,
+.wp-caption,
+.wp-audio-shortcode,
+.wp-video-shortcode {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    /* 24px */
+}
+
+audio:not([controls]) {
+    display: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+::-moz-selection {
+    background: #4a89dc;
+    color: #fff;
+    text-shadow: none;
+}
+
+*.in-text-selection,
+::selection {
+    background: #4a89dc;
+    color: #fff;
+    text-shadow: none;
+}
+
+ul,
+ol {
+    padding: 0 0 0 1.875rem;
+    /* 30px */
+}
+
+ul {
+    list-style: square;
+}
+
+ol {
+    list-style: decimal;
+}
+
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+    margin: 0;
+}
+
+b,
+th,
+dt,
+strong {
+    font-weight: bold;
+}
+
+i,
+em,
+dfn,
+cite {
+    font-style: italic;
+}
+
+blockquote {
+    padding-left: 1.875rem;
+    margin: 0 0 1.875rem 1.875rem;
+    border-left: solid 2px #474d54;
+    padding-left: 30px;
+    margin-top: 35px;
+}
+
+pre,
+code,
+kbd,
+tt,
+var {
+    font-size: 0.875em;
+    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+
+code,
+tt,
+var {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+kbd {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #fff;
+    background-color: #333;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+pre.md-fences {
+    padding: 10px 10px 10px 30px;
+    margin-bottom: 20px;
+    background: #333;
+}
+
+.CodeMirror-gutters {
+    background: #333;
+    border-right: 1px solid transparent;
+}
+
+.enable-diagrams pre.md-fences[lang="sequence"] .code-tooltip,
+.enable-diagrams pre.md-fences[lang="flow"] .code-tooltip,
+.enable-diagrams pre.md-fences[lang="mermaid"] .code-tooltip {
+    bottom: -2.2em;
+    right: 4px;
+}
+
+code,
+kbd,
+tt,
+var {
+    padding: 2px 5px;
+}
+
+table {
+    max-width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+th,
+td {
+    padding: 5px 10px;
+    vertical-align: top;
+}
+
+a {
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+hr {
+    background: #474d54;
+    /* variable */
+}
+
+h1 {
+    margin-top: 2em;
+}
+
+a {
+    color: #e0e0e0;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #fff;
+}
+
+.md-inline-math script {
+    color: #81b1db;
+}
+
+b,
+th,
+dt,
+strong {
+    color: #DEDEDE;
+    /* variable */
+}
+
+mark {
+    background: #D3D40E;
+}
+
+blockquote {
+    color: #9DA2A6;
+}
+
+table a {
+    color: #DEDEDE;
+    /* variable */
+}
+
+th,
+td {
+    border: solid 1px #474d54;
+    /* variable */
+}
+
+.task-list {
+    padding-left: 0;
+}
+
+.md-task-list-item {
+    padding-left: 1.25rem;
+}
+
+.md-task-list-item > input {
+    top: auto;
+}
+
+.md-task-list-item > input:before {
+    content: "";
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #b8bfc6;
+    background-color: #363B40;
+    margin-top: -0.4rem;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before {
+    content: '\221A';
+    /*◘*/
+    font-size: 0.625rem;
+    line-height: 0.625rem;
+    color: #DEDEDE;
+}
+
+/** quick open **/
+.auto-suggest-container {
+    border: 0px;
+    background-color: #525C65;
+}
+
+#typora-quick-open {
+    background-color: #525C65;
+}
+
+#typora-quick-open input{
+    background-color: #525C65;
+    border: 0;
+    border-bottom: 1px solid grey;
+}
+
+.typora-quick-open-item {
+    background-color: inherit;
+    color: inherit;
+}
+
+.typora-quick-open-item.active,
+.typora-quick-open-item:hover {
+    background-color: #4D8BDB;
+    color: white;
+}
+
+.typora-quick-open-item:hover {
+    background-color: rgba(77, 139, 219, 0.8);
+}
+
+.typora-search-spinner > div {
+  background-color: #fff;
+}
+
+#write pre.md-meta-block {
+    border-bottom: 1px dashed #ccc;
+    background: transparent;
+    padding-bottom: 0.6em;
+    line-height: 1.6em;
+}
+
+.btn,
+.btn .btn-default {
+    background: transparent;
+    color: #b8bfc6;
+}
+
+.ty-table-edit {
+    border-top: 1px solid gray;
+    background-color: #363B40;
+}
+
+.popover-title {
+    background: transparent;
+}
+
+.md-image>.md-meta {
+    color: #BBBBBB;
+    background: transparent;
+}
+
+.md-expand.md-image>.md-meta {
+    color: #DDD;
+}
+
+#write>h3:before,
+#write>h4:before,
+#write>h5:before,
+#write>h6:before {
+    border: none;
+    border-radius: 0px;
+    color: #888;
+    text-decoration: underline;
+    left: -1.4rem;
+    top: 0.2rem;
+}
+
+#write>h3.md-focus:before {
+    top: 2px;
+}
+
+#write>h4.md-focus:before {
+    top: 2px;
+}
+
+.md-toc-item {
+    color: #A8C2DC;
+}
+
+#write div.md-toc-tooltip {
+    background-color: #363B40;
+}
+
+.dropdown-menu .btn:hover,
+.dropdown-menu .btn:focus,
+.md-toc .btn:hover,
+.md-toc .btn:focus {
+    color: white;
+    background: black;
+}
+
+#toc-dropmenu {
+    background: rgba(50, 54, 59, 0.93);
+    border: 1px solid rgba(253, 253, 253, 0.15);
+}
+
+#toc-dropmenu .divider {
+    background-color: #9b9b9b;
+}
+
+.outline-expander:before {
+    top: 2px;
+}
+
+#typora-sidebar {
+    box-shadow: none;
+    border-right: 1px dashed;
+    border-right: none;
+}
+
+.sidebar-tabs {
+    border-bottom:0;
+}
+
+#typora-sidebar:hover .outline-title-wrapper {
+    border-left: 1px dashed;
+}
+
+.outline-title-wrapper .btn {
+    color: inherit;
+}
+
+.outline-item:hover {
+    border-color: #363B40;
+    background-color: #363B40;
+    color: white;
+}
+
+h1.md-focus .md-attr,
+h2.md-focus .md-attr,
+h3.md-focus .md-attr,
+h4.md-focus .md-attr,
+h5.md-focus .md-attr,
+h6.md-focus .md-attr,
+.md-header-span .md-attr {
+    color: #8C8E92;
+    display: inline;
+}
+
+.md-comment {
+    color: #5a95e3;
+    opacity: 0.8;
+}
+
+.md-inline-math svg {
+    color: #b8bfc6;
+}
+
+#math-inline-preview .md-arrow:after {
+    background: black;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    border: 0;
+}
+
+.modal-title {
+    font-size: 1.5em;
+}
+
+.modal-content input {
+    background-color: rgba(26, 21, 21, 0.51);
+    color: white;
+}
+
+.modal-content .input-group-addon {
+    color: white;
+}
+
+.modal-backdrop {
+    background-color: rgba(174, 174, 174, 0.7);
+}
+
+.modal-content .btn-primary {
+    border-color: var(--primary-color);
+}
+
+.md-table-resize-popover {
+    background-color: #333;
+}
+
+.form-inline .input-group .input-group-addon {
+    color: white;
+}
+
+#md-searchpanel {
+    border-bottom: 1px dashed grey;
+}
+
+/** UI for electron */
+
+.context-menu,
+#spell-check-panel,
+#footer-word-count-info {
+    background-color: #42464A;
+}
+
+.context-menu.dropdown-menu .divider,
+.dropdown-menu .divider {
+    background-color: #777777;
+    opacity: 1;
+}
+
+footer {
+    color: inherit;
+}
+
+@media (max-width: 1000px) {
+    footer {
+        border-top: none;
+    }
+    footer:hover {
+        color: inherit;
+    }
+}
+
+#file-info-file-path .file-info-field-value:hover {
+    background-color: #555;
+    color: #dedede;
+}
+
+.megamenu-content,
+.megamenu-opened header {
+    background: var(--bg-color);
+}
+
+.megamenu-menu-panel h2,
+.megamenu-menu-panel h1,
+.long-btn {
+    color: inherit;
+}
+
+.megamenu-menu-panel input[type='text'] {
+    background: inherit;
+    border: 0;
+    border-bottom: 1px solid;
+}
+
+#recent-file-panel-action-btn {
+    background: inherit;
+    border: 1px grey solid;
+}
+
+.megamenu-menu-panel .dropdown-menu > li > a {
+    color: inherit;
+    background-color: #2F353A;
+    text-decoration: none;
+}
+
+.megamenu-menu-panel table td:nth-child(1) {
+    color: inherit;
+    font-weight: bold;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(1) {
+    color: white;
+}
+
+.modal-footer .btn-default, 
+.modal-footer .btn-primary,
+.modal-footer .btn-default:not(:hover) {
+    border: 1px solid;
+    border-color: transparent;
+}
+
+.btn-primary {
+    color: white;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+    color: white;
+    border: 1px solid #ddd;
+    background-color: inherit;
+}
+
+.modal-header {
+    border-bottom: 0;
+}
+
+.modal-footer {
+    border-top: 0;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+    border: 1px solid #eee;
+    background: transparent;
+}
+
+.mouse-hover .toolbar-icon.btn:hover,
+#w-full.mouse-hover,
+#w-pin.mouse-hover {
+    background-color: inherit;
+}
+
+.typora-node::-webkit-scrollbar {
+    width: 5px;
+}
+
+.typora-node::-webkit-scrollbar-thumb:vertical {
+    background: rgba(250, 250, 250, 0.3);
+}
+
+.typora-node::-webkit-scrollbar-thumb:vertical:active {
+    background: rgba(250, 250, 250, 0.5);
+}
+
+#w-unpin {
+    background-color: #4182c4;
+}
+
+#top-titlebar, #top-titlebar * {
+    color: var(--item-hover-text-color);
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+#footer-word-count:hover,
+.ty-show-word-count #footer-word-count {
+    background: #333333;
+}
+
+#toggle-sourceview-btn:hover {
+    color: #eee;
+    background: #333333;
+}
+
+/** focus mode */
+.on-focus-mode .md-end-block:not(.md-focus):not(.md-focus-container) * {
+    color: #686868 !important;
+}
+
+.on-focus-mode .md-end-block:not(.md-focus) img,
+.on-focus-mode .md-task-list-item:not(.md-focus-container)>input {
+    opacity: #686868 !important;
+}
+
+.on-focus-mode li[cid]:not(.md-focus-container){
+    color: #686868;
+}
+
+.on-focus-mode .md-fences.md-focus .CodeMirror-code>*:not(.CodeMirror-activeline) *,
+.on-focus-mode .CodeMirror.cm-s-inner:not(.CodeMirror-focused) * {
+    color: #686868 !important;
+}
+
+.on-focus-mode .md-focus,
+.on-focus-mode .md-focus-container {
+    color: #fff;
+}
+
+.on-focus-mode #typora-source .CodeMirror-code>*:not(.CodeMirror-activeline) * {
+    color: #686868 !important;
+}
+
+
+/*diagrams*/
+#write .md-focus .md-diagram-panel {
+    border: 1px solid #ddd;
+    margin-left: -1px;
+    width: calc(100% + 2px);
+}
+
+/*diagrams*/
+#write .md-focus.md-fences-with-lineno .md-diagram-panel {
+    margin-left: auto;
+}
+
+.md-diagram-panel-error {
+    color: #f1908e;
+}
+
+.active-tab-files #info-panel-tab-file,
+.active-tab-files #info-panel-tab-file:hover,
+.active-tab-outline #info-panel-tab-outline,
+.active-tab-outline #info-panel-tab-outline:hover {
+    color: #eee;
+}
+
+.sidebar-footer-item:hover,
+.footer-item:hover {
+    background: inherit;
+    color: white;
+}
+
+.ty-side-sort-btn.active,
+.ty-side-sort-btn:hover,
+.selected-folder-menu-item a:after {
+    color: white;
+}
+
+#sidebar-files-menu {
+    border:solid 1px;
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.79);
+    background-color: var(--bg-color);
+}
+
+.file-list-item {
+    border-bottom:none;
+}
+
+.file-list-item-summary {
+    opacity: 1;
+}
+
+.file-list-item.active:first-child {
+    border-top: none;
+}
+
+.file-node-background {
+    height: 32px;
+}
+
+.file-library-node.active>.file-node-content,
+.file-list-item.active {
+    color: white;
+    color: var(--active-file-text-color);
+}
+
+.file-library-node.active>.file-node-background{
+    background-color: rgb(34, 34, 34);
+    background-color: var(--active-file-bg-color);
+}
+.file-list-item.active {
+    background-color: rgb(34, 34, 34);
+    background-color: var(--active-file-bg-color);
+}
+
+#ty-tooltip {
+    background-color: black;
+    color: #eee;
+}
+
+.md-task-list-item>input {
+    margin-left: -1.3em;
+    margin-top: 0.3rem;
+    -webkit-appearance: none;
+}
+
+.md-mathjax-midline {
+    background-color: #57616b;
+    border-bottom: none;
+}
+
+footer.ty-footer {
+    border-color: #656565;
+}
+
+.ty-preferences .btn-default {
+    background: transparent;
+}
+.ty-preferences .btn-default:hover {
+    background: #57616b;
+}
+
+.ty-preferences select {
+    border: 1px solid #989698;
+    height: 21px;
+}
+
+.ty-preferences .nav-group-item.active,
+.export-item.active,
+.export-items-list-control,
+.export-detail {
+    background: var(--item-hover-bg-color);
+}
+
+.ty-preferences input[type="search"] {
+    border-color: #333;
+    background: #333;
+    line-height: 22px;
+    border-radius: 6px;
+    color: white;
+}
+
+.ty-preferences input[type="search"]:focus {
+    box-shadow: none;
+}
+
+[data-is-directory="true"] .file-node-content {
+    margin-bottom: 0;
+}
+
+.file-node-title {
+    line-height: 22px;
+}
+
+.html-for-mac .file-node-open-state, .html-for-mac .file-node-icon {
+    line-height: 26px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(230, 230, 230, 0.30);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(230, 230, 230, 0.50);
+}
+
+#typora-sidebar:hover div.sidebar-content-content::-webkit-scrollbar-thumb:horizontal {
+    background: rgba(230, 230, 230, 0.30);
+}
+
+.nav-group-item:active {
+    background-color: #474d54 !important;
+}
+
+.md-search-hit {
+    background: rgba(199, 140, 60, 0.81);
+    color: #eee;
+}
+
+.md-search-hit * {
+    color: #eee;
+}
+
+#md-searchpanel input {
+    color: white;
+}
+
+.modal-backdrop.in {
+    opacity: 1;
+    backdrop-filter: blur(1px);
+}
+
+.clear-btn-icon {
+    top: 8px;
+}
+
+/* try fix https://github.com/typora/typora-issues/issues/5253 */
+.file-node-expanded>.file-node-children {
+    display: grid;
+  }
+
+.md-alert-text-note {
+    color: rgb(47, 129, 247);
+}
+.md-alert-text-important {
+    color: rgb(163, 113, 247);
+}
+.md-alert-text-warning {
+    color:  rgb(210, 153, 34);
+}
+
+ @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
+</style><title>README</title>
+</head>
+<body class='typora-export'><div class='typora-export-content'>
+<div id='write'  class=''><p><span class='md-image'><img src="corpuls_logo.png" alt="corpuls_logo" align="right" style="zoom:30%;" /></span></p><p><span>Version: 4.4.0.1</span>
+<span>Date: 2024-10-11</span></p><p><a href='https://my.corpuls.world/download/category/corpuls-sdk-software'><span>Downloads</span></a></p><h1 id='overview'><span>Overview</span></h1><h2 id='intended-use'><span>Intended use</span></h2><p><span>The corpuls SDK is a software library to allow the exchange of information between corpuls devices and third party systems. Third party systems using the corpuls SDK can export data created and stored on corpuls devices. It also allows updating non-medical data on corpuls devices for administration purposes. The corpuls SDK and all data received from it is neither intended for medical decision making nor diagnosis and does not influence therapy.</span></p><h2 id='goal'><span>Goal</span></h2><p><span>The goal of </span><code>CorpulsKit</code><span> is to provide a simple, effective interface to communicate over BLE with a </span><em><span>corpuls3</span></em><span> device. Values can be read from and written to the device. Also, BLE notifications are supported. All technical details related to Bluetooth are encapsulated within the SDK, so no expertise with BLE is required to exchange data. The public interface of the SDK is named </span><code>CorpulsBLE</code><span>.</span></p><h2 id='versioning'><span>Versioning</span></h2><p><span>The BLE functionality of a </span><em><span>corpuls3</span></em><span> can only be used with a compatible firmware version </span><code>&gt;= 4.2.0</code><span>. Some features require newer versions. The framework versioning scheme was updated. Starting with version </span><code>4.3.0.0</code><span>, the </span><code>CorpulsKit</code><span> framework version will always be aligned with the respective software version of the </span><em><span>corpuls3</span></em><span>. As a compatibility side note, version </span><code>4.3.0.0</code><span> essentially matches version </span><code>1.2.0</code><span> in the old versioning scheme, so no breaking changes were introduced, despite the big jump in the major version.</span></p><h2 id='characteristics'><span>Characteristics</span></h2><p><span>By means of BLE all data is exhanged via so called </span><em><span>Characteristics</span></em><span>. Values can be requested by using the desired enum value of type </span><code>Characteristic</code><span>:</span></p><p><code>CorpulsBLE.shared.request(.deviceName)</code></p><p><span>This will asynchronously return a </span><code>Result&lt;CharacteristicValue, SyncError&gt;</code><span>. In case of success, the </span><code>CharacteristicValue</code><span> can be tested against the desired value type to retrieve its model data. In case of failure, a typed </span><code>SyncError</code><span> is returned, stating the reason of failure.</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift" style="break-inside: unset;"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">CorpulsBLE</span><span class="cm-property">.shared.requestCharacteristic</span><span class="cm-punctuation">(</span><span class="cm-property">.availableDECGs</span><span class="cm-punctuation">)</span> <span class="cm-punctuation">{</span> <span class="cm-punctuation">[</span><span class="cm-keyword">weak</span> <span class="cm-atom">self</span><span class="cm-punctuation">]</span> <span class="cm-keyword">in</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">guard</span> <span class="cm-keyword">let</span> <span class="cm-atom">self</span> <span class="cm-keyword">else</span> <span class="cm-punctuation">{</span> <span class="cm-keyword">return</span> <span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">value</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">if</span> <span class="cm-keyword">case</span> <span class="cm-property">.availableDECGs</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">indices</span><span class="cm-punctuation">)</span> <span class="cm-operator">=</span> <span class="cm-variable">value</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">let</span> <span class="cm-def">decgOverviewViewController</span> <span class="cm-operator">=</span> <span class="cm-variable">DECGOverviewViewController</span><span class="cm-punctuation">(</span><span class="cm-variable">decgIndices</span><span class="cm-punctuation">:</span> <span class="cm-variable">indices</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">navigationController</span><span class="cm-property">.pushViewController</span><span class="cm-punctuation">(</span><span class="cm-variable">decgOverviewViewController</span><span class="cm-punctuation">,</span> <span class="cm-variable">animated</span><span class="cm-punctuation">:</span> <span class="cm-atom">true</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">showError</span><span class="cm-punctuation">(</span><span class="cm-variable">error</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 364px;"></div><div class="CodeMirror-gutters" style="display: none; height: 364px;"></div></div></div></pre><h2 id='general-notes'><span>General notes</span></h2><p><span>Time-related variables suffixed by the term </span><code>Offset</code><span> (e.g. </span><code>missionStartOffset</code><span>) typically contain an integer value represented in </span><em><span>milliseconds</span></em><span> - unless stated otherwise.</span></p><h1 id='project-setup'><span>Project setup</span></h1><h2 id='environment'><span>Environment</span></h2><p><span>The </span><code>CorpulsKit</code><span> SDK is provided as a universal framework (</span><code>.xcframework</code><span>) and thus supports multiple architectures flexibly. The </span><em><span>Deployment Target</span></em><span> of the framework is </span><em><span>iOS 15.2</span></em><span> and typically is compiled against the most recent production </span><em><span>Base SDK</span></em><span>, currently </span><em><span>iOS 17.5</span></em><span> using </span><em><span>Xcode 15.4</span></em><span>. The SDK supports all recent iPhones and iPads.</span></p><h2 id='setup-instructions'><span>Setup instructions</span></h2><ol start='' ><li><p><span>The framework needs to be integrated into an existing Xcode project by dragging it into the section </span><em><span>Frameworks, Libraries and Embedded Content</span></em><span> on the </span><em><span>General</span></em><span> tab of the project.</span></p></li><li><p><span>After that, the option </span><em><span>Embed &amp; Sign</span></em><span> needs to be chosen so the framework gets copied over into the </span><em><span>Frameworks</span></em><span> section of your app bundle and is properly signed.</span></p></li><li><p><span>In your app&#39;s </span><code>Info.plist</code><span> you need to declare the </span><code>NSBluetoothAlwaysUsageDescription</code><span> with a proper explanation.</span></p></li><li><p><span>Finally, you can use the provided functionality by importing it into your classes with </span><code>import CorpulsKit</code><span>.</span></p></li><li><p><span>The public interface of the SDK is named </span><code>CorpulsBLE</code><span>. You can easily access it via a singleton provided by the SDK: </span><code>CorpulsBLE.shared</code><span>. For simplicity, we will assume the following local reference: </span><code>let ble = CorpulsBLE.shared</code></p></li><li><p><span>Initialize the Bluetooth environment of the SDK via </span><code>ble.setup</code><span>()</span></p></li><li><p><span>Query BLE availability with </span><code>ble.isEnabled</code></p></li><li><p><span>Scan for surrounding </span><em><span>corpuls3</span></em><span> devices with </span><code>ble.scan()</code><span>. In case of success, a list of </span><code>CorpulsPeripheral</code><span> instances is returned which will represent the </span><em><span>corpuls3</span></em><span> devices near you. The list is sorted by their signal strength (RSSI) in descending order, so the device with the best signal strength is at the beginning of the list. The SDK only scans for actual </span><em><span>corpuls3</span></em><span> devices, so other BLE devices are ignored.</span></p></li><li><p><span>Starting with version </span><code>4.3.0.0</code><span> of the </span><code>CorpulsKit</code><span> SDK a </span><code>CorpulsPeripheral</code><span> does also include a </span><code>deviceIdentifier</code><span> property. This represents the particular field on the </span><em><span>corpuls3</span></em><span> that allows for easy identification for scenarios where multiple </span><em><span>corpuls3</span></em><span> devices reside in the same area close-by. If you are interested in using this property you can do so by opting into this feature via the </span><code>Settings</code><span> model belonging to the </span><code>CorpulsBLE</code><span> instance:</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.settings</span> <span class="cm-operator">=</span> <span class="cm-variable">Settings</span><span class="cm-punctuation">(</span><span class="cm-variable">performDeviceIdentification</span><span class="cm-punctuation">:</span> <span class="cm-atom">true</span><span class="cm-punctuation">,</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">decgSpeed</span><span class="cm-punctuation">:</span> <span class="cm-property">.wide</span><span class="cm-punctuation">)</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 52px;"></div><div class="CodeMirror-gutters" style="display: none; height: 52px;"></div></div></div></pre><p><strong><span>Note:</span></strong><span> this feature also requires a corpuls3 software version </span><code>&gt;= 4.3.0</code><span>. Scanning </span><em><span>corpuls3</span></em><span> devices in order to retrieve their </span><em><span>device identifier</span></em><span> does </span><em><span>not</span></em><span> require pairing.</span></p></li><li><p><span>Starting with version </span><code>4.4.0.0</code><span> of the </span><code>CorpulsKit</code><span> SDK it is also possible to scan for a specific </span><em><span>corpuls3</span></em><span> that matches a given </span><code>deviceIdentifier</code><span>. Instead of a list of </span><em><span>corpuls3</span></em><span> devices this will return the first </span><em><span>corpuls3</span></em><span> that uses the requested </span><code>deviceIdentifier</code><span>. This is very convenient if you already are aware of a specific </span><em><span>corpuls3</span></em><span> device you are looking for.</span></p></li><li><p><span>If you have found a </span><em><span>corpuls3</span></em><span> peripheral you&#39;re interested in, you can now connect to it with </span><code>ble.connect(to: peripheral)</code></p></li></ol><h2 id='usage'><span>Usage</span></h2><ol start='' ><li><p><span>If the peripheral of the </span><em><span>corpuls3</span></em><span> was successfully connected (as described in the previous section), you can now perform </span><code>READ</code><span> and </span><code>WRITE</code><span> requests in order to exchange data.</span></p></li><li><p><span>The pairing status of the </span><em><span>corpuls3</span></em><span> peripheral is checked automatically after connecting to it. If the device is not paired, a pairing request is performed. You will need to type in the six digit code presented on the </span><em><span>corpuls3</span></em><span> peripheral into the text field shown on your mobile device. At any given time, the paring status can be queried by calling </span><code>ble.isPaired</code><span>. It will only return </span><code>true</code><span> if you are currently connected to a </span><em><span>corpuls3</span></em><span> peripheral and the pairing process has succeeded before. For as long as the pairing is not revoked on either the </span><em><span>corpuls3</span></em><span> peripheral or the mobile device you won&#39;t be asked again for authentication.</span></p></li><li><p><span>The SDK provides a simple callback mechanism to inform the app about several asynchronous events:</span></p><ol start='' ><li><p><code>didUpdateConnectionState</code><span>: Returns if a </span><em><span>corpuls3</span></em><span> is currently connected</span></p></li><li><p><code>didUpdateAvailability</code><span>: Returns if BLE is currently available, i.e. is activated and ready for scanning devices</span></p></li><li><p><code>didReceiveNotification</code><span>: Returns a notification event as tuple consisting of a </span><code>String</code><span> and its originating </span><code>Characteristic</code><span> to identify the payload.</span></p></li></ol></li><li><p><span>Regular Characteristics can be read by performing </span><code>ble.requestCharacteristic()</code><span> with the required type.</span></p></li><li><p><span>Vital Parameters can be queried the same way, but there is a convenience function provided for those, as they are very common: </span><code>ble.requestVitalParameters()</code><span> </span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.requestVitalParameters</span> <span class="cm-punctuation">{</span> <span class="cm-punctuation">[</span><span class="cm-keyword">weak</span> <span class="cm-atom">self</span><span class="cm-punctuation">]</span> <span class="cm-keyword">in</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">guard</span> <span class="cm-keyword">let</span> <span class="cm-atom">self</span> <span class="cm-keyword">else</span> <span class="cm-punctuation">{</span> <span class="cm-keyword">return</span> <span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">vitalParameterList</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">let</span> <span class="cm-def">vitalParameterViewController</span> <span class="cm-operator">=</span> <span class="cm-variable">VitalParameterViewController</span><span class="cm-punctuation">(</span><span class="cm-variable">vitalParameterList</span><span class="cm-punctuation">:</span> <span class="cm-variable">vitalParameterList</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; <span class="cm-variable">navigationController</span><span class="cm-property">.pushViewController</span><span class="cm-punctuation">(</span><span class="cm-variable">vitalParameterViewController</span><span class="cm-punctuation">,</span> <span class="cm-variable">animated</span><span class="cm-punctuation">:</span> <span class="cm-atom">true</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">showError</span><span class="cm-punctuation">(</span><span class="cm-variable">error</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 312px;"></div><div class="CodeMirror-gutters" style="display: none; height: 312px;"></div></div></div></pre></li><li><p><span>To provide a better insight into a patient&#39;s data over time, Vital Parameter trends can be queried. Calling the function below will yield a</span><code>VitalParameterTrend</code><span> instance in case of success. From there, the individual </span><code>VitalParameterTrendEntry</code><span> instances can be retrieved. For every minute since the start of a mission, one entry is created that contains the average data of available Vital Parameters within that minute. Also the </span><code>missionCreationDate</code><span> as well as the </span><code>missionStartOffset</code><span> (in milliseconds) can be retrieved and some convenience functions are provided to retrieve all numeric values of a particular </span><code>VitalParameterType</code><span> within that </span><code>VitalParameterTrend</code><span>. Please be advised that it is entirely possible that some Vital Parameters won&#39;t provide an actual value for some entries as their availability depends on the sensors you have attached to your </span><em><span>corpuls3</span></em><span> device. If a </span><code>VitalParameterTrendEntry</code><span> does not provide any values, its </span><code>parameters</code><span> field will be empty.</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.requestVitalParameterTrend</span> <span class="cm-punctuation">{</span> <span class="cm-punctuation">[</span><span class="cm-keyword">weak</span> <span class="cm-atom">self</span><span class="cm-punctuation">]</span> <span class="cm-keyword">in</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">guard</span> <span class="cm-keyword">let</span> <span class="cm-atom">self</span> <span class="cm-keyword">else</span> <span class="cm-punctuation">{</span> <span class="cm-keyword">return</span> <span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">trend</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">setupChart</span><span class="cm-punctuation">(</span><span class="cm-keyword">for</span><span class="cm-punctuation">:</span> <span class="cm-variable">trend</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">presentError</span><span class="cm-punctuation">(</span><span class="cm-variable">error</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 286px;"></div><div class="CodeMirror-gutters" style="display: none; height: 286px;"></div></div></div></pre></li><li><p><span>NIBP values over time can also be retrieved from the </span><code>VitalParameterTrend</code><span>. This object provides a reference named </span><code>nibpValues</code><span> that returns a list of </span><code>NIBPValue</code><span> objects that allows for easy filtering. Its properties are:</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-operator">-</span> <span class="cm-variable">date</span><span class="cm-punctuation">:</span> <span class="cm-variable">Date</span> <span class="cm-comment">// timestamp of corresponding VitalParameterTrendEntry</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-operator">-</span> <span class="cm-variable">entryMinute</span><span class="cm-punctuation">:</span> <span class="cm-variable">UInt</span> <span class="cm-comment">// nth minute of entry since mission creation date</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-operator">-</span> <span class="cm-variable">systolic</span><span class="cm-punctuation">:</span> <span class="cm-variable">UInt</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-operator">-</span> <span class="cm-variable">diastolic</span><span class="cm-punctuation">:</span> <span class="cm-variable">UInt</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-operator">-</span> <span class="cm-variable">mad</span><span class="cm-punctuation">:</span> <span class="cm-variable">UInt</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-operator">-</span> <span class="cm-variable">qualityIndicator</span><span class="cm-punctuation">:</span> <span class="cm-variable">NIBPQualityIndicator</span> <span class="cm-comment">// range: poor (0) - excellent (3)</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 156px;"></div><div class="CodeMirror-gutters" style="display: none; height: 156px;"></div></div></div></pre><p><span>For debugging purposes, a </span><code>VitalParameterTrend</code><span> provides a property named </span><code>formattedNibpString</code><span> to print the current state of all available NIBP values on the command line. It provides the information available by the </span><code>NIBPValue</code><span> models in a simple tabular format:</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="diff"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="diff"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-negative">-------------------------------------------------</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Mission start: 2022-03-17T14:52:14.0+01:00</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">NIBP # values: 4</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-negative">-------------------------------------------------</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">011: 2022-03-17T15:02:33.4+01:00 - 123/83(96) ***</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">013: 2022-03-17T15:04:43.3+01:00 - 122/82(95) **</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">015: 2022-03-17T15:06:53.4+01:00 - 122/82(95) ***</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">017: 2022-03-17T15:09:03.4+01:00 - 122/82(95) **</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-negative">-------------------------------------------------</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 234px;"></div><div class="CodeMirror-gutters" style="display: none; height: 234px;"></div></div></div></pre></li><li><p><em><span>DECGs</span></em><span> can be queried with the function </span><code>requestDECG()</code><span>. The first parameter is the </span><code>query</code><span>. The next is a closure that is triggered whenever the synchronization progresses (value is a discrete percentage </span><code>Double</code><span> within interval </span><code>[0;1]</code><span>). The last parameter is the completion handler. In case of success a </span><code>Data</code><span> object is returned which represents a </span><em><span>DECG</span></em><span> Report in PDF format. This </span><code>Data</code><span> object easily can be visualized with a </span><code>PDFView</code><span> or a </span><code>WKWebView</code><span>. Also, it can be persisted to the file system, like any regular </span><code>Data</code><span> object. Synchronizing </span><em><span>DECG</span></em><span> data takes some time as its payload is considerably larger than those of the other Characteristics. You can expect a total transfer time of ~ 16 seconds per DECG report.</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.requestDECG</span><span class="cm-punctuation">(</span><span class="cm-variable">by</span><span class="cm-punctuation">:</span> <span class="cm-property">.latest</span><span class="cm-punctuation">)</span> <span class="cm-punctuation">{</span> <span class="cm-variable">progress</span> <span class="cm-keyword">in</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">print</span><span class="cm-punctuation">(</span><span class="cm-variable">progress</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span> <span class="cm-variable">completion</span><span class="cm-punctuation">:</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">decgData</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// use a PDFView or similar means to show data</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// handle SyncError</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 286px;"></div><div class="CodeMirror-gutters" style="display: none; height: 286px;"></div></div></div></pre></li></ol><p><span>The </span><code>query</code><span> parameter is an </span><code>enum</code><span> type consisting of three options:</span></p><ul><li><p><code>latest</code><span>: request the most recent </span><em><span>DECG</span></em><span> that is available</span></p></li><li><p><code>earliest</code><span>: request the oldest </span><em><span>DECG</span></em><span> that is available. The BLE interface of the </span><em><span>corpuls3</span></em><span> provides access to the most recent 5 </span><em><span>DECGs</span></em><span> of a mission. So </span><code>earliest</code><span> would actually request the oldest of those five DECGs</span></p></li><li><p><code>index</code><span>: request a </span><em><span>DECG</span></em><span> by its explicit index. After mission creation, the first available index of a DECG starts with </span><code>1</code><span> and is counted upwards. Only an index specified in the DECG overview (see Characteristic </span><code>availableDECGs</code><span>) is considered valid</span></p></li></ul><ol start='9' ><li><p><span>Starting with version </span><code>4.3.0.0</code><span>, the SDK supports both </span><em><span>25 mm/s</span></em><span>  and </span><em><span>50 mm/s</span></em><span> DECG reporting speeds. By using the former, you will be able to fit the DECG curve of any particular lead on a single DIN A4 page in landscape format. The latter will provide more detail, but requires two DIN A4 pages in landscape to plot the whole standard ECG curve (10 seconds). You can define your preference via the </span><code>Settings</code><span> model. The </span><code>wide</code><span> setting is used as a default (50 mm/s).</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.settings</span> <span class="cm-operator">=</span> <span class="cm-variable">Settings</span><span class="cm-punctuation">(</span><span class="cm-variable">performDeviceIdentification</span><span class="cm-punctuation">:</span> <span class="cm-atom">true</span><span class="cm-punctuation">,</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">decgSpeed</span><span class="cm-punctuation">:</span> <span class="cm-property">.narrow</span><span class="cm-punctuation">)</span> <span class="cm-comment">// narrow = 25 mm/s, wide = 50 mm/s</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 52px;"></div><div class="CodeMirror-gutters" style="display: none; height: 52px;"></div></div></div></pre></li></ol><ol start='10' ><li><p><span>Also, the SDK now supports displaying curves more flexibly. This comes in handy for scenarios where you don&#39;t use all ECG patches on a patient. As such, not all leads will provide data. The new DECG report will only include curves that actually contain data to preserve space.</span></p></li><li><p><span>Some Characteristics also provide a </span><code>WRITE</code><span> interface. Values can easily be updated by performing the function </span><code>ble.writeValue()</code><span>, whereas the parameter is of type </span><code>CharacteristicValue</code><span> and allows for convenient, type-safe value updates.</span></p></li><li><p><span>Single patient values can be updated as well with this function:</span></p></li></ol><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.writePatientValue</span><span class="cm-punctuation">(</span><span class="cm-property">.firstname</span><span class="cm-punctuation">(</span><span class="cm-string">"Steve"</span><span class="cm-punctuation">))</span> <span class="cm-punctuation">{</span> <span class="cm-punctuation">[</span><span class="cm-keyword">weak</span> <span class="cm-atom">self</span><span class="cm-punctuation">]</span> <span class="cm-keyword">in</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">guard</span> <span class="cm-keyword">let</span> <span class="cm-atom">self</span> <span class="cm-keyword">else</span> <span class="cm-punctuation">{</span> <span class="cm-keyword">return</span> <span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">:</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// updating value finished successfully</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">showError</span><span class="cm-punctuation">(</span><span class="cm-variable">error</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 286px;"></div><div class="CodeMirror-gutters" style="display: none; height: 286px;"></div></div></div></pre><ol start='13' ><li><p><span>The </span><code>CorpulsKit</code><span> SDK internally uses a retry mechanism to minimize the occurrence of failed requests that might happen due to timeouts and interferences in the field.</span></p></li><li><p><span>Scanning for devices can be stopped manually by performing </span><code>ble.stopSync()</code><span>.</span></p></li><li><p><span>If a persistent BLE connection is not needed anymore, it can be disconnected by using the respective function </span><code>ble.disconnect().</code></p></li><li><p><span>Some Characteristics support the </span><code>notify</code><span> mechanism to propagate live updates of their values. Notifications can be enabled / disabled for a particular Characteristic by performing </span><code>ble.subscribe()</code><span> and </span><code>ble.unsubscribe()</code><span>, respectively. Also, a convenience function is provided to check if a Characteristic currently is subscribed for receiving notifications.</span></p></li><li><p><span>Starting with version </span><code>4.4.0.0</code><span> of the SDK the ID of the current mission can be requested from the corpuls3. This also requires at least </span><code>4.4.0</code><span> of the corpuls3 software. This ID exists in two variants:</span></p><ul><li><p><code>full</code><span>: Contains the numeric ID of the mission, the serial number of the </span><em><span>Patient Module</span></em><span> and an additional randomized identifier.</span>
+<span>Example: </span><code>20240822094815-DE00001AAB387401-F7C1FD4F</code></p></li><li><p><code>short</code><span>: Contains only the numeric mission ID, represented as a </span><code>String</code>
+<span>Example: </span><code>20240822094815</code></p></li></ul><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.requestMissionId</span><span class="cm-punctuation">(</span><span class="cm-variable">length</span><span class="cm-punctuation">:</span> <span class="cm-property">.full</span><span class="cm-punctuation">)</span> <span class="cm-punctuation">{</span> <span class="cm-punctuation">[</span><span class="cm-keyword">weak</span> <span class="cm-atom">self</span><span class="cm-punctuation">]</span> <span class="cm-keyword">in</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">guard</span> <span class="cm-keyword">let</span> <span class="cm-atom">self</span> <span class="cm-keyword">else</span> <span class="cm-punctuation">{</span> <span class="cm-keyword">return</span> <span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">missionID</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// process missionID</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">showError</span><span class="cm-punctuation">(</span><span class="cm-variable">error</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 286px;"></div><div class="CodeMirror-gutters" style="display: none; height: 286px;"></div></div></div></pre></li></ol><ol start='18' ><li><p><span>Starting with version </span><code>4.4.0.0</code><span> of the SDK Events can be requested from the corpuls3. This also requires at least </span><code>4.4.0</code><span> of the corpuls3 software. Events are generated for a lot of useful actions and situations. The complete list of available Events is specified in the enum type </span><code>EventIdentifier</code><span> in the SDK. For example, the corpuls3 creates events when starting a mission,  saving a new </span><code>DECG</code><span>, updating Patient data etc. Events can be retrieved either since the start of the mission (default value is </span><code>0</code><span>) or from any given offset (in milliseconds) since mission start. This makes it possible to synchronize events in batches, e.g. once every minute. The filter closure provides the capability to selectively choose events of relevance for the given use case. This provides a flexible option to filter by </span><code>identifier</code><span>, </span><code>missionStartOffset</code><span> or the event&#39;s </span><code>parameters</code><span> (array of </span><code>Int</code><span> values).</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ble</span><span class="cm-property">.requestEvents</span><span class="cm-punctuation">(</span><span class="cm-variable">missionStartOffset</span><span class="cm-punctuation">:</span> <span class="cm-number">0</span><span class="cm-punctuation">)</span> <span class="cm-punctuation">{</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">$0</span><span class="cm-property">.identifier</span> <span class="cm-operator">==</span> <span class="cm-property">.EVT_ECG_DECG_SAVED</span> <span class="cm-operator">||</span> <span class="cm-variable">$0</span><span class="cm-property">.identifier</span> <span class="cm-operator">==</span> <span class="cm-property">.EVT_OPER_PATDATA_WRITE</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span> <span class="cm-variable">completion</span><span class="cm-punctuation">:</span> <span class="cm-punctuation">{</span> <span class="cm-punctuation">[</span><span class="cm-keyword">weak</span> <span class="cm-atom">self</span><span class="cm-punctuation">]</span> <span class="cm-keyword">in</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">guard</span> <span class="cm-keyword">let</span> <span class="cm-atom">self</span> <span class="cm-keyword">else</span> <span class="cm-punctuation">{</span> <span class="cm-keyword">return</span> <span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">switch</span> <span class="cm-variable">$0</span> <span class="cm-punctuation">{</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.success</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">eventData</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;<span class="cm-comment">// process eventData.events</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="" cm-zwsp="">
+</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">case</span> <span class="cm-property">.failure</span><span class="cm-punctuation">(</span><span class="cm-keyword">let</span> <span class="cm-def">error</span><span class="cm-punctuation">):</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">showError</span><span class="cm-punctuation">(</span><span class="cm-variable">error</span><span class="cm-punctuation">)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-punctuation">}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-punctuation">}</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 338px;"></div><div class="CodeMirror-gutters" style="display: none; height: 338px;"></div></div></div></pre></li><li><p><span>Starting with version </span><code>4.4.0.0</code><span> of the SDK function calls are guarded against the software version of the </span><em><span>corpuls3</span></em><span>. This means that if a recent </span><code>CorpulsKit</code><span> version is used for querying data from an older </span><em><span>corpuls3</span></em><span> software version, this request will yield an error if the respective function is not yet available in the </span><em><span>corpuls3</span></em><span> software:</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang=""><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Function 'requestVitalParameterTrend' requires at least corpuls3 software version '4.2.1'</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 26px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><p>&nbsp;</p></li></ol><h1 id='available-characteristics'><span>Available Characteristics</span></h1><p><span>The following section provides a list of all supported Characteristics. Brackets will denote their individual capabilites:</span></p><figure class='table-figure'><table><thead><tr><th><span>Capability</span></th><th><span>Description</span></th></tr></thead><tbody><tr><td><span>r</span></td><td><span>Characteristic can be read</span></td></tr><tr><td><span>w</span></td><td><span>Characteristic can be written to</span></td></tr><tr><td><span>n</span></td><td><span>Characteristic supports sending out notifications as live events</span></td></tr></tbody></table></figure><p>&nbsp;</p><h2 id='devicename-r'><code>deviceName</code><span> [r]</span></h2><p><span>The name of the corpuls3 as a BLE peripheral, currently </span><code>corpuls3-ble</code><span>. The device can be discovered and paired by this name.</span></p><h2 id='appearance-r'><code>appearance</code><span> [r]</span></h2><p><span>The category of BLE devices. Always returns </span><code>0</code><span> for </span><em><span>unspecified device type</span></em><span>.</span></p><h2 id='manufacturername-r'><code>manufacturerName</code><span> [r]</span></h2><p><span>Manufacturer name of the </span><em><span>corpuls3</span></em><span>. Always returns </span><em><span>GS Elektromedizinische Geraete G. Stemple GmbH</span></em><span>.</span></p><h2 id='modelnumber-r'><code>modelNumber</code><span> [r]</span></h2><p><span>Model type of device. Always returns value </span><code>corpuls3</code><span>. </span></p><h2 id='serialnumber-r'><code>serialNumber</code><span> [r]</span></h2><p><span>The globally unique serial number of the </span><em><span>corpuls3</span></em><span> BLE module.</span>
+<strong><span>Note:</span></strong><span> Starting with version 4.4.0 of the corpuls3 software this serial number represents the serial number of the Patient Module (PAM).</span></p><p><span>Example: </span><code>DE000001234567890</code></p><h2 id='firmwarerevision-r'><code>firmwareRevision</code><span> [r]</span></h2><p><span>Returns the internal revision of the BLE GATT profile as an Integer.</span>
+<span>Example: </span><code>8</code></p><h2 id='softwarerevision-r'><code>softwareRevision</code><span> [r]</span></h2><p><span>The software revision of the corpuls3 itself.</span>
+<span>Example: </span><code>REL-4.4.0_C3_BP</code></p><h2 id='currentdisplaytime-r'><code>currentDisplayTime</code><span> [r]</span></h2><p><span>Current system time of the </span><em><span>corpuls3</span></em><span>, represented as an ISO 8601 encoded string.</span>
+<span>Example: </span><code>2022-03-02T14:11:01.0+01:00</code></p><h2 id='vitalparameters-r'><code>vitalParameters</code><span> [r]</span></h2><p><span>Returns a </span><code>VitalParameterList</code><span> model with an optional timestamp for </span><code>NIBP</code><span> and a list of all recent </span><code>VitalParameter</code><span> values. A </span><code>VitalParameter</code><span> has a </span><code>type</code><span>, a </span><code>unit</code><span> and an actual value, represented by a </span><code>Double</code><span>.</span></p><p><strong><span>Note:</span></strong><span> Values typically are only available when actually measured. Even when the </span><em><span>corpuls3</span></em><span> is in </span><em><span>DEMO</span></em><span> mode, the </span><em><span>NIBP</span></em><span> value needs to be requested / created explicity with the </span><em><span>corpuls3</span></em><span>. Also, Vital Parameters can only be requested once every 60 seconds due to rate limiting.</span></p><p><span>Supported types are:</span></p><figure class='table-figure'><table><thead><tr><th style='text-align:left;' ><span>Type</span></th><th><span>Unit</span></th><th><span>Example Value</span></th></tr></thead><tbody><tr><td style='text-align:left;' ><span>HR_DEFI</span></td><td><span>[1/min]</span></td><td><span>60</span></td></tr><tr><td style='text-align:left;' ><span>HR_DISPLAY</span></td><td><span>[1/min]</span></td><td><span>60</span></td></tr><tr><td style='text-align:left;' ><span>PP</span></td><td><span>[1/min]</span></td><td><span>61</span></td></tr><tr><td style='text-align:left;' ><span>SPO2</span></td><td><span>%</span></td><td><span>98.0</span></td></tr><tr><td style='text-align:left;' ><span>SPO2_PI</span></td><td><span>%</span></td><td><span>10.0</span></td></tr><tr><td style='text-align:left;' ><span>NIBP_SYS</span></td><td><span>mmHg</span></td><td><span>120</span></td></tr><tr><td style='text-align:left;' ><span>NIBP_DIA</span></td><td><span>mmHg</span></td><td><span>80</span></td></tr><tr><td style='text-align:left;' ><span>NIBP_MAD</span></td><td><span>mmHg</span></td><td><span>98</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P1_SYS</span></td><td><span>mmHg</span></td><td><span>120</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P1_DIA</span></td><td><span>mmHg</span></td><td><span>80</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P1_MAD</span></td><td><span>mmHg</span></td><td><span>98</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P2_SYS</span></td><td><span>mmHg</span></td><td><span>120</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P2_DIA</span></td><td><span>mmHg</span></td><td><span>80</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P2_MAD</span></td><td><span>mmHg</span></td><td><span>98</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P3_SYS</span></td><td><span>mmHg</span></td><td><span>120</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P3_DIA</span></td><td><span>mmHg</span></td><td><span>80</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P3_MAD</span></td><td><span>mmHg</span></td><td><span>98</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P4_SYS</span></td><td><span>mmHg</span></td><td><span>120</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P4_DIA</span></td><td><span>mmHg</span></td><td><span>80</span></td></tr><tr><td style='text-align:left;' ><span>IBP_P4_MAD</span></td><td><span>mmHg</span></td><td><span>98</span></td></tr><tr><td style='text-align:left;' ><span>CO2_ENS</span></td><td><span>mmHg</span></td><td><span>42.0</span></td></tr><tr><td style='text-align:left;' ><span>CO2_RR</span></td><td><span>1/min</span></td><td><span>14</span></td></tr><tr><td style='text-align:left;' ><span>TEMP1</span></td><td><span>°C</span></td><td><span>37.1</span></td></tr><tr><td style='text-align:left;' ><span>TEMP2</span></td><td><span>°C</span></td><td><span>37.2</span></td></tr><tr><td style='text-align:left;' ><span>SPCO</span></td><td><span>%</span></td><td><span>2</span></td></tr><tr><td style='text-align:left;' ><span>SPHB</span></td><td><span>g/dl</span></td><td><span>12.80</span></td></tr><tr><td style='text-align:left;' ><span>SPMET</span></td><td><span>%</span></td><td><span>0.1</span></td></tr><tr><td style='text-align:left;' ><span>CPR_RATE</span></td><td><span>1/min</span></td><td><span>113</span></td></tr><tr><td style='text-align:left;' ><span>NIBP_QI</span></td><td><span>*</span></td><td><code>***</code></td></tr></tbody></table></figure><h2 id='patientid-r-w-n'><code>patientId</code><span> [r, w, n]</span></h2><p><span>The patient&#39;s identifier.</span></p><h2 id='patientdata-r-w-n'><code>patientData</code><span> [r, w, n]</span></h2><p><span>A patient&#39;s main data:</span></p><ul><li><p><code>firstname</code></p></li><li><p><code>lastname</code></p></li><li><p><code>birthdate</code><span> (format: </span><code>yyyy-MM-dd</code><span>)</span></p></li><li><p><code>age</code><span> (</span><code>UInt</code><span>)</span></p></li><li><p><code>sex</code><span> (</span><code>male</code><span>, </span><code>female</code><span>, </span><code>unknown</code><span>)</span></p></li><li><p><code>race</code><span> (</span><code>none</code><span>, </span><code>african</code><span>, </span><code>caucasian</code><span>, </span><code>pacific</code><span>, </span><code>asian</code><span>, </span><code>indian</code><span>, </span><code>unknown</code><span>)</span></p></li><li><p><code>weight (UInt)</code></p></li><li><p><code>height (UInt)</code></p></li><li><p><code>symptomOnset (String)</code></p></li></ul><p><strong><span>Note:</span></strong><span> If the </span><code>birthdate</code><span> is stated explicitly, the patient&#39;s </span><code>age</code><span> is calculated implicitly. If however just a patient&#39;s </span><code>age</code><span> is known, his/her </span><code>birthdate</code><span> value is reset.</span></p><h2 id='patientaddress-r-w-n'><code>patientAddress</code><span> [r, w, n]</span></h2><p><span>The residence address of the patient:</span></p><ul><li><p><code>street</code></p></li><li><p><code>postal code</code></p></li><li><p><code>city</code></p></li></ul><h2 id='casenumber-r-w-n'><code>caseNumber</code><span> [r, w, n]</span></h2><p><span>The case number of the respective mission.</span></p><h2 id='insurancedata-r-w-n'><code>insuranceData</code><span> [r, w, n]</span></h2><p><span>Data describing the insurance of the patient:</span></p><ul><li><p><span>insurance company name</span></p></li><li><p><span>insurance company number</span></p></li><li><p><span>insurance policy number</span></p></li><li><p><span>insurance status</span></p></li><li><p><span>insurance card number</span></p></li></ul><h2 id='medicalteam-r-w-n'><code>medicalTeam</code><span> [r, w, n]</span></h2><p><span>The medical team of the patient, represented as an array of </span><code>Strings</code><span>.</span></p><h2 id='organisationdata-r-w-n'><code>organisationData</code><span> [r, w, n]</span></h2><p><span>Data describing the organization itself:</span></p><ul><li><p><span>EMS location</span></p></li><li><p><span>organisation number</span></p></li><li><p><span>organisation name</span></p></li></ul><h2 id='contactinfos-r-w-n'><code>contactInfos</code><span> [r, w, n]</span></h2><p><span>Contact information relevant to the mission:</span></p><ul><li><p><span>callback number</span></p></li><li><p><span>radio identifier</span></p></li><li><p><span>transport type</span></p></li></ul><h2 id='deviceid-r-w-n'><code>deviceId</code><span> [r, w, n]</span></h2><p><span>The device identifier of the corpuls3. </span></p><h2 id='availabledecgs-r'><code>availableDECGs</code><span> [r]</span></h2><p><span>Returns an overview of available </span><em><span>DECGs</span></em><span>. Only the most recent 5 </span><em><span>DECGs</span></em><span> of the current mission can be received from the corpuls3. Result contains an array of </span><code>DECGIndex</code><span> values whose fields are:</span></p><ul><li><p><code>index</code><span>: absolute index of the </span><em><span>DECG</span></em><span> belonging to the current mission. Starts with </span><code>1</code><span> and is counted upwards.</span></p></li><li><p><code>date</code><span>: Timestamp when the </span><em><span>DECG</span></em><span> was created, i.e. persisted to the </span><em><span>CF card</span></em><span> of the </span><em><span>corpuls3</span></em><span>.</span></p></li></ul><h2 id='requestdecg-r-w'><code>requestDECG</code><span> [r, w]</span></h2><p><span>Is used to request a </span><em><span>DECG</span></em><span> by its index.</span>
+<span>Example: if </span><em><span>DECG</span></em><span> with index </span><code>3</code><span> is to be requested, the Characteristic will be written with value </span><code>&quot;3&quot;</code><span>. After writing this index, the </span><em><span>corpuls3</span></em><span> validates the index, prepares all </span><em><span>DECG</span></em><span> data as an encrypted archive and makes it available for the next Characteristic where the data finally can be read. </span></p><h2 id='decgdata-r-n'><code>decgData</code><span> [r, n]</span></h2><p><span>Is used to read prepared </span><em><span>DECG</span></em><span> data. This wil synchronize the data via BLE and create a PDF report from it. The result is then returned as a </span><code>Data</code><span> object, representing that PDF.</span></p><h2 id='trendconfig-r-w'><code>trendConfig</code><span> [r, w]</span></h2><p><span>Is used to initiate Vital Parameter trend data. For now, the synchronization is initiated by any data that is written to this Characteristic. In future releases, this Characteristic will be extended to configure the expected data as needed. It is recommended to call the function </span><code>requestVitalParameterTrend()</code><span> instead of using this Characteristic. Requires a corpuls3 firmware with version </span><code>&gt;= 4.2.1</code><span>.</span></p><h2 id='trenddata-r-n'><code>trendData</code><span> [r, n]</span></h2><p><span>Returns Vital Parameter trend data and maps it to a </span><code>VitalParameterTrend</code><span> instance. From there, the individual </span><code>VitalParameterTrendEntry</code><span> instances can be retrieved. For every minute since the start of a mission, one entry is created that constains the average data of available Vital Parameters within that minute. Also the </span><code>missionCreationDate</code><span> as well as the </span><code>missionStartOffset</code><span> (in milliseconds) can be retrieved and some convenience functions are provided to retrieve all numeric values of a particular </span><code>VitalParameterType</code><span> within that </span><code>VitalParameterTrend</code><span>. It is recommended to call the function </span><code>requestVitalParameterTrend()</code><span> instead of using this Characteristic. Requires a corpuls3 firmware with version </span><code>&gt;= 4.2.1</code><span>.</span></p><h2 id='commonconfig-r-w-n'><code>commonConfig</code><span> [r, w, n]</span></h2><p><span>Is used to configure and initiate various data transfers (e.g. for retrieving the current ID and Events from a mission). It is recommended to call the respective convenience functions instead of using this Characteristic directly. Requires a </span><em><span>corpuls3</span></em><span> firmware with version </span><code>&gt;= 4.4.0</code><span>.</span></p><h2 id='commondata-r-n'><code>commonData</code><span> [r, n]</span></h2><p><span>Is used to receive various data transfers (e.g. for retrieving the current ID and Events from a mission) after the transfer was configured via </span><code>commonConfig</code><span>. It is recommended to call the respective convenience functions instead of using this Characteristic directly. Requires a </span><em><span>corpuls3</span></em><span> firmware with version </span><code>&gt;= 4.4.0</code><span>.</span></p><h1 id='validation'><span>Validation</span></h1><p><span>Starting with version </span><code>4.3.0.0</code><span>, the SDK validates the maximum length of data to be transmitted before sending it to the </span><em><span>corpuls3</span></em><span> peripheral. This is the case for both the maxium length of a characteristic as well as its individual components (in case of characteristics which are assembled by multiple values). If payload validation fails, you will receive a </span><code>SyncError</code><span> of these types </span><em><span>before</span></em><span> the data was sent:</span></p><pre class="md-fences md-end-block ty-contain-cm modeLoaded" spellcheck="false" lang="swift"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="swift"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: currentcolor;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: currentcolor;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">SyncError</span><span class="cm-property">.componentLengthExceeded</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">SyncError</span><span class="cm-property">.characteristicLengthExceeded</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 52px;"></div><div class="CodeMirror-gutters" style="display: none; height: 52px;"></div></div></div></pre><p><span>Also, these types will include additional information about the actually failed component as well as the exceeded number of bytes. You can access this information via the property </span><code>errorDescription</code><span>. </span></p></div></div>
+</body>
+</html>
