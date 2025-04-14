@@ -11,11 +11,8 @@ public class CorpulsSdkPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-    case "getPlatformVersion":
-      result("iOS " + UIDevice.current.systemVersion)
-      CarddataManager.shared.sendLog("getPlatformVersion called: \(platformVersion)")
-    case "connectToDevice":
-      CorpulsManager.shared.connectToDevice(result: result)
+    case "scanForDevices":
+      CorpulsManager.shared.scanForDevices(result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

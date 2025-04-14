@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+		<key>NSBluetoothAlwaysUsageDescription</key>
+        <string>Wir benötigen Bluetooth Zugriff um Kartenleser sowie medizinische Geräte auszulesen.</string>
+        <key>NSBluetoothPeripheralUsageDescription</key>
+        <string>Wir benötigen Bluetooth Zugriff um Kartenleser sowie medizinische Geräte auszulesen.</string>
 </dict>
 </plist>

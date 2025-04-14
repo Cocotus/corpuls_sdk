@@ -44,7 +44,7 @@ public class CorpulsManager {
     }
 
     public func scanForDevices(result: @escaping FlutterResult) {
-        ble.scan(timeout: 2) { [unowned self] in
+        ble.scan(timeout: 20) { [unowned self] in
             switch $0 {
             case .success(let peripherals):
                 let deviceNames = peripherals.map { $0.peripheral.name ?? "Unknown Device" }
