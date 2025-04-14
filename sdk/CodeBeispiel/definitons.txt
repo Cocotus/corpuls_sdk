@@ -1,0 +1,3578 @@
+import CoreBluetooth
+import CorpulsKit.Swift
+import DeveloperToolsSupport
+import Foundation
+import OSLog
+import PDFKit
+import QuartzCore
+import SwiftUI
+import UIKit
+import UserNotifications
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os
+import os.log
+
+//! Project version number for CorpulsKit.
+public var CorpulsKitVersionNumber: Double
+
+//! Project version string for CorpulsKit.
+public let CorpulsKitVersionString: <<error type>>
+
+public enum Age {
+
+    case birthdate(Date)
+
+    case years(UInt)
+
+    case unknown
+}
+
+public enum BloodPressureType : String {
+
+    case NIBP
+
+    case P1
+
+    case P2
+
+    case P3
+
+    case P4
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension BloodPressureType : Equatable {
+}
+
+extension BloodPressureType : Hashable {
+}
+
+extension BloodPressureType : RawRepresentable {
+}
+
+public enum Characteristic : String, CaseIterable {
+
+    case deviceName
+
+    case appearance
+
+    case manufacturerName
+
+    case modelNumber
+
+    case serialNumber
+
+    case firmwareRevision
+
+    case softwareRevision
+
+    case currentDisplayTime
+
+    case vitalParameters
+
+    case patientId
+
+    case patientData
+
+    case patientAddress
+
+    case caseNumber
+
+    case insuranceData
+
+    case medicalTeam
+
+    case organisationData
+
+    case contactInfos
+
+    case deviceId
+
+    case availableDECGs
+
+    case requestDECG
+
+    case decgData
+
+    case trendConfig
+
+    case trendData
+
+    case commonConfig
+
+    case commonData
+
+    public var uuid: CBUUID { get }
+
+    public var service: CorpulsKit.Service { get }
+
+    public var name: String { get }
+
+    public var image: UIImage? { get }
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.Characteristic]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.Characteristic] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension Characteristic : Equatable {
+}
+
+extension Characteristic : Hashable {
+}
+
+extension Characteristic : RawRepresentable {
+}
+
+public enum CharacteristicValue : Equatable {
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (lhs: CorpulsKit.CharacteristicValue, rhs: CorpulsKit.CharacteristicValue) -> Bool
+
+    case deviceName(value: String)
+
+    case appearance(value: UInt8)
+
+    case manufacturerName(value: String)
+
+    case modelNumber(value: String)
+
+    case serialNumber(value: String)
+
+    case firmwareRevision(value: UInt32)
+
+    case softwareRevision(value: String)
+
+    case currentDisplayTime(value: String)
+
+    case vitalParameters(value: CorpulsKit.VitalParameterList)
+
+    case patientId(value: String)
+
+    case patientData(firstname: String, lastname: String, age: CorpulsKit.Age, sex: CorpulsKit.Sex, race: CorpulsKit.Race, weight: UInt, height: UInt, symptomOnset: String)
+
+    case patientAddress(street: String, postalCode: String, city: String)
+
+    case caseNumber(value: String)
+
+    case insuranceData(insuranceName: String, insuranceNumber: String, policyNumber: String, insuranceStatus: String, cardNumber: String)
+
+    case medicalTeam(names: [String])
+
+    case organisationData(emsLocation: String, organisationNumber: String, organisationName: String)
+
+    case contactInfos(callbackNumber: String, radioId: String, transportType: String)
+
+    case deviceId(value: String)
+
+    case availableDECGs(indices: [CorpulsKit.DECGIndex])
+
+    case requestDECG(value: UInt)
+
+    case decgData(value: Data)
+
+    case vitalParameterTrendConfiguration(value: [String : String])
+
+    case vitalParameterTrend(value: CorpulsKit.VitalParameterTrend)
+
+    case commonConfig(value: [String : Any])
+
+    case eventData(eventData: CorpulsKit.EventData)
+
+    case missionId(value: String)
+
+    public var characteristic: CorpulsKit.Characteristic { get }
+
+    public var placeholders: [String] { get }
+
+    public var uuid: CBUUID { get }
+
+    public var output: String { get }
+
+    public var input: String { get }
+}
+
+public struct CharacteristicValueFactory {
+
+    public let characteristic: CorpulsKit.Characteristic
+
+    public let string: String
+
+    public let data: Data
+
+    public init(characteristic: CorpulsKit.Characteristic, string: String)
+
+    public init(characteristic: CorpulsKit.Characteristic, data: Data)
+
+    public func createValue() -> CorpulsKit.CharacteristicValue?
+}
+
+public enum CommonDataError : LocalizedError {
+
+    case jsonDecoding(error: any Error)
+
+    case typeNotSupported(UInt16)
+
+    case unexpectedState(error: any Error)
+
+    case custom(message: String)
+
+    /// A localized message describing what error occurred.
+    public var errorDescription: String? { get }
+}
+
+/// Represents the central manager for BLE operations related to corpuls3 devices.
+///
+/// `CorpulsBLE` is designed to manage Bluetooth Low Energy (BLE) interactions with corpuls3 devices,
+/// including scanning for devices, connecting, reading and writing characteristics, and handling notifications.
+/// This class encapsulates the logic for discovering and communicating with corpuls peripherals,
+/// providing a simplified interface for performing common BLE operations.
+///
+/// Example usage:
+/// ```swift
+/// let corpulsBLE = CorpulsBLE.shared
+///
+/// corpulsBLE.scan(timeout: 10) { result in
+///     switch result {
+///     case .success(let peripherals):
+///         print("Found peripherals: \(peripherals)")
+///     case .failure(let error):
+///         print("Scan failed: \(error)")
+///     }
+/// }
+/// ```
+///
+/// Note: Ensure that your app has the necessary permissions to use Bluetooth services and that
+/// BLE is enabled on the device. This class should be used in accordance with the corpuls device
+/// specifications and BLE best practices.
+@objc final public class CorpulsBLE : NSObject {
+
+    public static let shared: CorpulsKit.CorpulsBLE
+
+    /// The current settings used for BLE operations. These settings can be customized to alter the behavior of BLE interactions.
+    /// By default, device identification is turned off, and the DECG speed is set to wide.
+    final public var settings: CorpulsKit.Settings
+
+    /// Indicates whether the BLE is currently enabled and powered on.
+    final public var isEnabled: Bool { get }
+
+    /// Indicates whether the BLE is currently scanning for peripherals.
+    final public var isScanning: Bool { get }
+
+    /// Indicates whether there is an ongoing synchronization with a peripheral.
+    final public var isSyncing: Bool { get }
+
+    /// Indicates whether a connection with a peripheral is currently established.
+    final public var isConnected: Bool { get }
+
+    final public var isPaired: Bool { get }
+
+    final public var frameworkVersion: String { get }
+
+    final public var frameworkBuild: String { get }
+
+    /// String 'state' can be used to update UI accordingly
+    ///
+    /// Possible values are:
+    ///   - unavailable
+    ///   - disconnected
+    ///   - scanning
+    ///   - connecting
+    ///   - connected
+    ///   - requestingCharacteristic
+    ///   - updateNotify
+    ///   - writeValue
+    final public var didUpdateSystemState: ((String) -> Void)?
+
+    final public var didUpdateConnectionState: ((Bool) -> Void)?
+
+    final public var didUpdateAvailability: ((Bool) -> Void)?
+
+    final public var didReceiveNotification: ((String, CorpulsKit.Characteristic) -> Void)?
+
+    /// Initiates the setup for the BLE client.
+    ///
+    /// Prepares the BLE client for operation by setting up the central manager. If the central manager's state
+    /// is already known (not `.unknown`), it proceeds with the necessary state updates immediately.
+    ///
+    /// - Parameter completion: Optional completion handler called with `true` if setup was successful,
+    ///                         otherwise `false`. Defaults to `nil` for cases where no feedback is required.
+    ///
+    /// Example:
+    /// ```swift
+    /// setup { success in
+    ///     print(success ? "Setup successful" : "Setup failed")
+    /// }
+    /// ```
+    final public func setup(completion: ((Bool) -> Void)? = nil)
+
+    @available(*, deprecated, renamed: "scan(timeout:completion:)")
+    final public func scan(completion: @escaping (Result<CBPeripheral, CorpulsKit.SyncError>) -> Void)
+
+    /// Starts scanning for BLE peripherals matching specific criteria.
+    ///
+    /// The scan operation looks for peripherals that advertise the required service UUIDs. If the BLE client is
+    /// either disconnected or already scanning, it can proceed. Any other state will result in an immediate failure.
+    /// Scanned peripherals are returned through the completion handler.
+    ///
+    /// - Parameters:
+    ///   - timeout: The duration in seconds before the scan times out. Uses `.defaultSyncTimeout` if not specified.
+    ///   - completion: A closure called with a result containing either an array of discovered ``CorpulsPeripheral`` objects on success, or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// scan { result in
+    ///     switch result {
+    ///     case .success(let peripherals):
+    ///         print("Discovered peripherals: \(peripherals)")
+    ///     case .failure(let error):
+    ///         print("Scan failed with error: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: The function will fail immediately if the BLE client is not in a state to start scanning, indicating the current and expected states in the error.
+    final public func scan(timeout: TimeInterval = .defaultSyncTimeout, completion: @escaping (Result<[CorpulsKit.CorpulsPeripheral], CorpulsKit.SyncError>) -> Void)
+
+    /// Starts scanning for BLE peripherals matching specific criteria.
+    ///
+    /// The scan operation looks for peripherals that advertise the required service UUIDs. If the BLE client is
+    /// either disconnected or already scanning, it can proceed. Any other state will result in an immediate failure.
+    ///
+    /// - Parameters:
+    ///   - timeout: The duration in seconds before the scan times out. Uses `.defaultSyncTimeout` if not specified.
+    ///
+    /// - Returns: The discovered ``CorpulsPeripheral`` objects.
+    /// - Throws: A ``SyncError`` if the scan was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let peripherals = try await scan()
+    /// ```
+    ///
+    /// Note: The function will fail immediately if the BLE client is not in a state to start scanning, indicating the current and expected states in the error.
+    final public func scan(timeout: TimeInterval = .defaultSyncTimeout) async throws -> [CorpulsKit.CorpulsPeripheral]
+
+    /// Initiates a scan for a specific BLE peripheral using its device identifier.
+    ///
+    /// This function scans for BLE peripherals that match the given device identifier. If the `performDeviceIdentification`
+    /// setting is disabled, the scan fails immediately. Successful scans result in a single ``CorpulsPeripheral`` being returned.
+    /// If no matching peripheral is found within the specified timeout, the operation times out.
+    ///
+    /// - Parameters:
+    ///   - timeout: Duration in seconds before the scan operation times out. Defaults to `.defaultSyncTimeout`.
+    ///   - deviceIdentifier: A (not unique) identifier for the target device.
+    ///   - completion: A closure called with the result of the scan, either a ``CorpulsPeripheral`` on success, or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// scan(timeout: 15, deviceIdentifier: "12345678") { result in
+    ///     switch result {
+    ///     case .success(let peripheral):
+    ///         print("Found peripheral: \(peripheral)")
+    ///     case .failure(let error):
+    ///         print("Scan failed: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: This function relies on `settings.performDeviceIdentification` being enabled. If this setting is disabled, the function will not attempt to scan and will immediately return a `.settingDisabled` error.
+    final public func scan(timeout: TimeInterval = .defaultSyncTimeout, deviceIdentifier: String, completion: @escaping (Result<CorpulsKit.CorpulsPeripheral, CorpulsKit.SyncError>) -> Void)
+
+    /// Initiates a scan for a specific BLE peripheral using its device identifier.
+    ///
+    /// This function scans for BLE peripherals that match the given device identifier. If the `performDeviceIdentification`
+    /// setting is disabled, the scan fails immediately. Successful scans result in a single ``CorpulsPeripheral`` being returned.
+    /// If no matching peripheral is found within the specified timeout, the operation times out.
+    ///
+    /// - Parameters:
+    ///   - timeout: Duration in seconds before the scan operation times out. Defaults to `.defaultSyncTimeout`.
+    ///   - deviceIdentifier: A (not unique) identifier for the target device.
+    ///
+    /// - Returns: The discovered ``CorpulsPeripheral``
+    /// - Throws: A ``SyncError`` if the scan was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let peripheral = try await scan(timeout: 15, deviceIdentifier: "12345678")
+    /// ```
+    ///
+    /// Note: This function relies on `settings.performDeviceIdentification` being enabled. If this setting is disabled, the function will not attempt to scan and will immediately return a `.settingDisabled` error.
+    final public func scan(timeout: TimeInterval = .defaultSyncTimeout, deviceIdentifier: String) async throws -> CorpulsKit.CorpulsPeripheral
+
+    /// Initiates a scan for a BLE peripheral using a specific peer identifier.
+    ///
+    /// This function starts scanning for BLE peripherals with a given peer identifier, intended to locate a specific device.
+    /// The scan will only proceed if the current state is either `.disconnected` or `.scanning`; otherwise, it fails with
+    /// an `.unexpectedState` error. Successful completion returns the identified ``CorpulsPeripheral``, while failure results in
+    /// a ``SyncError``.
+    ///
+    /// - Parameters:
+    ///   - timeout: The time in seconds before the scan operation times out. Defaults to `.defaultSyncTimeout`.
+    ///   - peerIdentifier: The UUID of the peer to locate.
+    ///   - completion: A closure called with the scan result, either a ``CorpulsPeripheral`` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// scan(timeout: 10, peerIdentifier: UUID(uuidString: "DDEE-BBCC-AAFF")!) { result in
+    ///     switch result {
+    ///     case .success(let peripheral):
+    ///         print("Found peripheral: \(peripheral)")
+    ///     case .failure(let error):
+    ///         print("Scan failed: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: Scanning is contingent on the BLE client not being in an unexpected state. If the client's current state is not suitable for scanning, an error detailing the expected and actual states is returned immediately.
+    final public func scan(timeout: TimeInterval = .defaultSyncTimeout, peerIdentifier: UUID, completion: @escaping (Result<CorpulsKit.CorpulsPeripheral, CorpulsKit.SyncError>) -> Void)
+
+    /// Initiates a scan for a BLE peripheral using a specific peer identifier.
+    ///
+    /// This function starts scanning for BLE peripherals with a given peer identifier, intended to locate a specific device.
+    /// The scan will only proceed if the current state is either `.disconnected` or `.scanning`; otherwise, it fails with
+    /// an `.unexpectedState` error.
+    ///
+    /// - Parameters:
+    ///   - timeout: The time in seconds before the scan operation times out. Defaults to `.defaultSyncTimeout`.
+    ///   - peerIdentifier: The UUID of the peer to locate.
+    ///
+    /// - Returns: The discovered ``CorpulsPeripheral``
+    /// - Throws: A ``SyncError`` if the scan was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let peripheral = try await scan(timeout: 10, peerIdentifier: UUID(uuidString: "DDEE-BBCC-AAFF")!)
+    /// ```
+    ///
+    /// Note: Scanning is contingent on the BLE client not being in an unexpected state. If the client's current state is not suitable for scanning, an error detailing the expected and actual states is returned immediately.
+    final public func scan(timeout: TimeInterval = .defaultSyncTimeout, peerIdentifier: UUID) async throws -> CorpulsKit.CorpulsPeripheral
+
+    @available(*, deprecated, message: "parameter type has changed from 'CBPeripheral' to 'CorpulsPeripheral'. You can retrieve it by scanning for devices first.")
+    final public func connect(to peripheral: CBPeripheral, completion: @escaping (Result<Void, CorpulsKit.SyncError>) -> Void)
+
+    /// Initiates a connection to a specified corpuls3 peripheral.
+    ///
+    /// Attempts to establish a BLE connection with the provided corpulsPeripheral. If the client is already connected
+    /// to the specified peripheral, it completes successfully without taking further action. If connected to a different
+    /// peripheral, it disconnects before proceeding. The function fails immediately if the client is in an unexpected state
+    /// for initiating a connection.
+    ///
+    /// - Parameters:
+    ///   - corpulsPeripheral: The corpulsPeripheral object to connect to.
+    ///   - completion: A closure called with the result of the connection attempt, either `Void` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// connect(to: myCorpulsPeripheral) { result in
+    ///     switch result {
+    ///     case .success():
+    ///         print("Connection successful")
+    ///     case .failure(let error):
+    ///         print("Connection failed: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: This operation is state-dependent. It will only attempt to connect if the client is in the 'scanning', 'connected', or 'disconnected' state.
+    /// If the client's state does not allow for a connection to be initiated, it returns an `unexpectedState` error detailing the current and expected states.
+    final public func connect(to corpulsPeripheral: CorpulsKit.CorpulsPeripheral, completion: @escaping (Result<Void, CorpulsKit.SyncError>) -> Void)
+
+    /// Initiates a connection to a specified corpuls3 peripheral.
+    ///
+    /// Attempts to establish a BLE connection with the provided corpulsPeripheral. If the client is already connected
+    /// to the specified peripheral, it completes successfully without taking further action. If connected to a different
+    /// peripheral, it disconnects before proceeding. The function fails immediately if the client is in an unexpected state
+    /// for initiating a connection.
+    ///
+    /// - Parameters:
+    ///   - corpulsPeripheral: The corpulsPeripheral object to connect to.
+    ///
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// try await connect(to: myCorpulsPeripheral)
+    /// ```
+    ///
+    /// Note: This operation is state-dependent. It will only attempt to connect if the client is in the 'scanning', 'connected', or 'disconnected' state.
+    /// If the client's state does not allow for a connection to be initiated, it returns an `unexpectedState` error detailing the current and expected states.
+    final public func connect(to corpulsPeripheral: CorpulsKit.CorpulsPeripheral) async throws
+
+    /// Requests a specific characteristic from the connected peripheral.
+    ///
+    /// Initiates a request to retrieve a specified BLE characteristic from the currently connected peripheral.
+    /// The operation will fail immediately if the BLE client is not in a 'connected' state or if rate limiting
+    /// conditions apply. For certain characteristics, a shortcut evaluation is performed, providing immediate
+    /// results without the need to interact with the peripheral.
+    ///
+    /// - Parameters:
+    ///   - characteristic: The ``Characteristic`` enum representing the characteristic to request.
+    ///   - completion: A closure called with the result of the request, either a ``CharacteristicValue`` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestCharacteristic(.deviceName) { result in
+    ///     switch result {
+    ///     case .success(let characteristicValue):
+    ///         print("Characteristic value: \(characteristicValue)")
+    ///     case .failure(let error):
+    ///         print("Failed to request characteristic: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: Requests for the 'vitalParameters' characteristic are subject to rate limiting. If a request is made too soon after the previous one, a `.rateLimiting` error with the remaining cooldown time is returned.
+    /// Shortcut evaluations for 'deviceName' and 'appearance' characteristics provide quick access to common data without requiring a full characteristic discovery process.
+    final public func requestCharacteristic(_ characteristic: CorpulsKit.Characteristic, completion: @escaping (Result<CorpulsKit.CharacteristicValue, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests a specific characteristic from the connected peripheral.
+    ///
+    /// Initiates a request to retrieve a specified BLE characteristic from the currently connected peripheral.
+    /// The operation will fail immediately if the BLE client is not in a 'connected' state or if rate limiting
+    /// conditions apply. For certain characteristics, a shortcut evaluation is performed, providing immediate
+    /// results without the need to interact with the peripheral.
+    ///
+    /// - Parameters:
+    ///   - characteristic: The ``Characteristic`` enum representing the characteristic to request.
+    ///
+    /// - Returns: The requested ``CharacteristicValue``.
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let value = try await requestCharacteristic(.deviceName)
+    /// ```
+    ///
+    /// Note: Requests for the 'vitalParameters' characteristic are subject to rate limiting. If a request is made too soon after the previous one, a `.rateLimiting` error with the remaining cooldown time is returned.
+    /// Shortcut evaluations for 'deviceName' and 'appearance' characteristics provide quick access to common data without requiring a full characteristic discovery process.
+    final public func requestCharacteristic(_ characteristic: CorpulsKit.Characteristic) async throws -> CorpulsKit.CharacteristicValue
+
+    /// Requests the vital parameters from the connected peripheral.
+    ///
+    /// Initiates a request to retrieve the vital parameters from the currently connected peripheral. This function
+    /// internally calls `requestCharacteristic` for the `vitalParameters` characteristic. It processes the result to
+    /// extract a ``VitalParameterList`` on success, or returns an error if the retrieval fails or the data format is incorrect.
+    ///
+    /// - Parameter completion: A closure called with the result of the request, either a ``VitalParameterList`` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestVitalParameters { result in
+    ///     switch result {
+    ///     case .success(let vitalParameters):
+    ///         print("Vital parameters: \(vitalParameters)")
+    ///     case .failure(let error):
+    ///         print("Failed to request vital parameters: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: This operation relies on a successful BLE connection and proper characteristic support from the peripheral.
+    /// If the requested characteristic does not match the expected format, an `.invalidValueFormatForCharacteristic` error is returned.
+    final public func requestVitalParameters(_ completion: @escaping (Result<CorpulsKit.VitalParameterList, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests the vital parameters from the connected peripheral.
+    ///
+    /// Initiates a request to retrieve the vital parameters from the currently connected peripheral. This function
+    /// internally calls `requestCharacteristic` for the `vitalParameters` characteristic. It processes the result to
+    /// extract a ``VitalParameterList`` on success, or returns an error if the retrieval fails or the data format is incorrect.
+    ///
+    /// - Returns: The requested ``VitalParameterList``.
+    /// - Throws: A ``SyncError`` when the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let vitalParameters = try await requestVitalParameters()
+    /// ```
+    ///
+    /// Note: This operation relies on a successful BLE connection and proper characteristic support from the peripheral.
+    /// If the requested characteristic does not match the expected format, an `.invalidValueFormatForCharacteristic` error is returned.
+    final public func requestVitalParameters() async throws -> CorpulsKit.VitalParameterList
+
+    /// Requests a trend of vital parameter data from the connected peripheral.
+    ///
+    /// This function initiates a process to retrieve a trend of vital parameter data by first subscribing to trend data notifications.
+    /// Once subscribed successfully, it configures the peripheral to start sending trend data by writing a start command. The actual data transfer is then handled asynchronously through notifications.
+    ///
+    /// - Parameter completion: A closure called with the result of the operation, either a ``VitalParameterTrend`` on success once the data is fully received, or a ``SyncError`` on failure at any point in the process.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestVitalParameterTrend { result in
+    ///     switch result {
+    ///     case .success(let trend):
+    ///         print("Received vital parameter trend: \(trend)")
+    ///     case .failure(let error):
+    ///         print("Failed to request vital parameter trend: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: This operation involves multiple steps, including subscribing to notifications and writing configuration values to the peripheral. If any step fails, the operation aborts, and an error is returned.
+    /// Successful completion of this operation depends on proper support for the required characteristics and notifications by the peripheral.
+    final public func requestVitalParameterTrend(completion: @escaping (Result<CorpulsKit.VitalParameterTrend, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests a trend of vital parameter data from the connected peripheral.
+    ///
+    /// This function initiates a process to retrieve a trend of vital parameter data by first subscribing to trend data notifications.
+    /// Once subscribed successfully, it configures the peripheral to start sending trend data by writing a start command. The actual data transfer is then handled asynchronously through notifications.
+    ///
+    /// - Returns: The requested ``VitalParameterTrend`` when the data is fully received.
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let trend = try await requestVitalParameterTrend()
+    /// ```
+    ///
+    /// Note: This operation involves multiple steps, including subscribing to notifications and writing configuration values to the peripheral. If any step fails, the operation aborts, and an error is returned.
+    /// Successful completion of this operation depends on proper support for the required characteristics and notifications by the peripheral.
+    final public func requestVitalParameterTrend() async throws -> CorpulsKit.VitalParameterTrend
+
+    /// Requests DECG data from the connected peripheral based on a specified query.
+    ///
+    /// Initiates a request for DECG (Digital Electrocardiography) data by specifying a query condition (latest, earliest, or by a specific index). The function starts by subscribing to DECG data notifications.
+    /// Once subscribed, it proceeds to request the DECG data based on the provided query. Progress updates are provided through the `progress` closure, indicating the progress of the DECG data retrieval.
+    ///
+    /// - Parameters:
+    ///   - query: A ``DECGQuery`` enum value specifying the DECG data to request (latest, earliest, or a specific index).
+    ///   - progress: A closure called with a `Double` value representing the progress of the DECG data retrieval (ranging from 0.0 to 1.0).
+    ///   - completion: A closure called with the result of the request, either the requested `Data` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestDECG(by: .latest, progress: { progress in
+    ///     print("Progress: \(progress * 100)%")
+    /// }) { result in
+    ///     switch result {
+    ///     case .success(let data):
+    ///         print("Received DECG data")
+    ///     case .failure(let error):
+    ///         print("Failed to request DECG data: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: This operation requires successful subscription to DECG data notifications. Failure at any stage (subscription, DECG data request) results in an immediate error return.
+    /// The progress closure provides feedback during the data transfer, useful for updating UI elements in real-time.
+    final public func requestDECG(by query: CorpulsKit.DECGQuery, progress: @escaping ((Double) -> Void), completion: @escaping (Result<Data, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests DECG data from the connected peripheral based on a specified query.
+    ///
+    /// Initiates a request for DECG (Digital Electrocardiography) data by specifying a query condition (latest, earliest, or by a specific index). The function starts by subscribing to DECG data notifications.
+    /// Once subscribed, it proceeds to request the DECG data based on the provided query. Progress updates are provided through the `progress` closure, indicating the progress of the DECG data retrieval.
+    ///
+    /// - Parameters:
+    ///   - query: A ``DECGQuery`` enum value specifying the DECG data to request (latest, earliest, or a specific index).
+    ///   - progress: A closure called with a `Double` value representing the progress of the DECG data retrieval (ranging from 0.0 to 1.0).
+    ///
+    /// - Returns: The requested DECG data as a `Data` object when it's fully received.
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let decgData = try await requestDECG(by: .latest, progress: { progress in
+    ///     print("Progress: \(progress * 100)%")
+    /// })
+    /// ```
+    ///
+    /// Note: This operation requires successful subscription to DECG data notifications. Failure at any stage (subscription, DECG data request) results in an immediate error return.
+    /// The progress closure provides feedback during the data transfer, useful for updating UI elements in real-time.
+    final public func requestDECG(by query: CorpulsKit.DECGQuery, progress: @escaping ((Double) -> Void)) async throws -> Data
+
+    /// Requests DECG data based on a specified query, along with associated patient data.
+    ///
+    /// This function retrieves DECG (Digital Electrocardiography) data and associated patient information from the connected peripheral, based on the provided ``DECGQuery``. 
+    /// The data is returned as a dictionary, which includes both the DECG data and the patient data tied to it. Progress updates can be provided optionally through a closure, giving feedback on the retrieval process.
+    ///
+    /// - Warning: This function is not available for use in third-party applications. It is intended for use within approved systems and under specific conditions that comply with privacy and regulatory standards.
+    ///
+    /// - Parameters:
+    ///   - query: A ``DECGQuery`` value specifying the type of DECG data to request (latest, earliest, or by a specific index).
+    ///   - progress: A closure that provides progress updates as a `Double` (from 0.0 to 1.0) during the data retrieval process.
+    ///   - completion: A closure called with the result of the request, either a Data object containing the DECG and metadata on success, or a ``SyncError`` on failure.
+    ///
+    /// Example usage:
+    /// ```swift
+    /// requestDECG(by: .latest, progress: { progress in
+    ///     print("Progress: \(progress * 100)%")
+    /// }) { result in
+    ///     switch result {
+    ///     case .success(let data):
+    ///         print("Received DECG with metadata: \(data)")
+    ///     case .failure(let error):
+    ///         print("Failed to request DECG data: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: Ensure that your application has the necessary permissions and is compliant with all relevant healthcare and privacy regulations before attempting to access DECG and patient data.
+    final public func requestDECGWithMetadata(by query: CorpulsKit.DECGQuery, progress: @escaping ((Double) -> Void), completion: @escaping (Result<Data, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests DECG data based on a specified query, along with associated patient data.
+    ///
+    /// This function retrieves DECG (Digital Electrocardiography) data and associated patient information from the connected peripheral, based on the provided ``DECGQuery``.
+    /// The data is returned as a dictionary, which includes both the DECG data and the patient data tied to it. Progress updates can be provided optionally through a closure, giving feedback on the retrieval process.
+    ///
+    /// - Warning: This function is not available for use in third-party applications. It is intended for use within approved systems and under specific conditions that comply with privacy and regulatory standards.
+    ///
+    /// - Parameters:
+    ///   - query: A ``DECGQuery`` value specifying the type of DECG data to request (latest, earliest, or by a specific index).
+    ///   - progress: A closure that provides progress updates as a `Double` (from 0.0 to 1.0) during the data retrieval process.
+    ///   - completion: A closure called with the result of the request, either a Data object containing the DECG and metadata on success, or a ``SyncError`` on failure.
+    ///
+    /// - Returns: A `Data` object which contains the DECG and metadata.
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let data = try await requestDECG(by: .latest, progress: { progress in
+    ///     print("Progress: \(progress * 100)%")
+    /// })
+    /// ```
+    ///
+    /// Note: Ensure that your application has the necessary permissions and is compliant with all relevant healthcare and privacy regulations before attempting to access DECG and patient data.
+    final public func requestDECGWithMetadata(by query: CorpulsKit.DECGQuery, progress: @escaping ((Double) -> Void)) async throws -> Data
+
+    /// Requests detailed patient information for D-ECG.
+    ///
+    /// This function gathers metadata related to DECG (Digital Electrocardiography) data by requesting specific characteristics from the connected peripheral.
+    /// It compiles patient data, case information, and insurance details into a comprehensive JSON-like dictionary.
+    /// Each requested characteristic contributes to the overall metadata, capturing patient identity, address, and insurance data.
+    ///
+    /// - Warning: This function is not available for use in third-party applications. It is intended for use within approved systems and under specific conditions that comply with privacy and regulatory standards.
+    ///
+    /// - Parameters:
+    ///   - completion: A closure called with the result of the request, either a JSON dictionary containing the D-ECG metadata on success, or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestDECGMetadata() { result in
+    ///     switch result {
+    ///     case .success(let json):
+    ///         print("Received metadata: \(json)")
+    ///     case .failure(let error):
+    ///         print("Failed to request metadata: \(error)")
+    ///     }
+    /// }
+    /// ```
+    final public func requestDECGMetadata(completion: @escaping (Result<[String : Any], CorpulsKit.SyncError>) -> Void)
+
+    /// Requests detailed patient information for D-ECG.
+    ///
+    /// This function gathers metadata related to DECG (Digital Electrocardiography) data by requesting specific characteristics from the connected peripheral.
+    /// It compiles patient data, case information, and insurance details into a comprehensive JSON-like dictionary.
+    /// Each requested characteristic contributes to the overall metadata, capturing patient identity, address, and insurance data.
+    ///
+    /// - Warning: This function is not available for use in third-party applications. It is intended for use within approved systems and under specific conditions that comply with privacy and regulatory standards.
+    ///
+    /// - Returns: The requested DECG metadata as a json dictionary
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let json = try await requestDECGMetadata()
+    /// ```
+    final public func requestDECGMetadata() async throws -> [String : Any]
+
+    /// Requests events from the corpuls3 device, such as infos, warnings and errors.
+    ///
+    /// This function enables the reception of events from the corpuls3 device by sending a request to the device.
+    /// The events can be filtered by an optional time offset, and a filter can be applied to consider only specific events.
+    ///
+    /// - Parameters:
+    ///   - missionStartOffset: An optional time offset in milliseconds (aince mission start) to receive events from a specific point in time. Default is `nil`, meaning all available events are retrieved.
+    ///   - filter: An optional filter in the form of a closure that allows consideration of only specific events. Default is `nil`, meaning all events are retrieved.
+    ///   - completion: A closure that provides the result of the request. On success, ``EventData`` is returned; on failure, a ``SyncError`` is returned.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestEvents(missionStartOffset: 1000, filter: { $0.identifier.type == .warning }) { result in
+    ///     switch result {
+    ///     case .success(let eventData):
+    ///         print("Received events: \(eventData)")
+    ///     case .failure(let error):
+    ///         print("Failed to receive events: \(error)")
+    ///     }
+    /// }
+    /// ```
+    final public func requestEvents(missionStartOffset: UInt = 0, filter: ((CorpulsKit.EventData.Event) -> Bool)? = nil, completion: @escaping (Result<CorpulsKit.EventData, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests events from the corpuls3 device, such as infos, warnings and errors.
+    ///
+    /// This function enables the reception of events from the corpuls3 device by sending a request to the device.
+    /// The events can be filtered by an optional time offset, and a filter can be applied to consider only specific events.
+    ///
+    /// - Parameters:
+    ///   - missionStartOffset: An optional time offset in milliseconds (aince mission start) to receive events from a specific point in time. Default is `nil`, meaning all available events are retrieved.
+    ///   - filter: An optional filter in the form of a closure that allows consideration of only specific events. Default is `nil`, meaning all events are retrieved.
+    ///
+    /// - Returns: The requested ``EventData`` when it's fully received.
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let eventData = try await requestEvents(missionStartOffset: 1000, filter: { $0.identifier.type == .warning })
+    /// ```
+    final public func requestEvents(missionStartOffset: UInt = 0, filter: ((CorpulsKit.EventData.Event) -> Bool)? = nil) async throws -> CorpulsKit.EventData
+
+    /// Requests the mission ID from the corpuls3 device.
+    ///
+    /// - Parameters:
+    ///   - length: The length of the requested mission ID as type ``MissionIdLength``. Default is `.full`.
+    ///   - completion: A closure that provides the result of the request. On success, the mission ID (as a `String`) is returned; on failure, a ``SyncError`` is returned.
+    ///
+    /// Example:
+    /// ```swift
+    /// requestMissionId(length: .full) { result in
+    ///     switch result {
+    ///     case .success(let missionId):
+    ///         print("Received mission ID: \(missionId)")
+    ///     case .failure(let error):
+    ///         print("Failed to receive mission ID: \(error)")
+    ///     }
+    /// }
+    /// ```
+    final public func requestMissionId(length: CorpulsKit.MissionIdLength = .full, completion: @escaping (Result<String, CorpulsKit.SyncError>) -> Void)
+
+    /// Requests the mission ID from the corpuls3 device.
+    ///
+    /// - Parameters:
+    ///   - length: The length of the requested mission ID as type ``MissionIdLength``. Default is `.full`.
+    ///
+    /// - Returns: The requested mission ID as a `String`.
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// let missionID = try await requestMissionId(length: .full)
+    /// ```
+    final public func requestMissionId(length: CorpulsKit.MissionIdLength = .full) async throws -> String
+
+    /// Writes a value to a characteristic on the connected peripheral.
+    ///
+    /// Attempts to write a specified value to a characteristic of the currently connected peripheral.
+    /// The operation is only allowed when the client is in a 'connected' state. It validates the input before
+    /// proceeding with the write operation. If the specified service or characteristic cannot be found,
+    /// or if the input validation fails, the operation fails immediately.
+    ///
+    /// - Parameters:
+    ///   - value: The ``CharacteristicValue`` to be written to the peripheral's characteristic.
+    ///   - completion: A closure called with the outcome of the write operation, either `Void` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// writeValue(.deviceName(value: "New Device Name")) { result in
+    ///     switch result {
+    ///     case .success():
+    ///         print("Value written successfully")
+    ///     case .failure(let error):
+    ///         print("Failed to write value: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: Before attempting to write, this operation checks for a valid 'connected' state and the presence of the required service and characteristic.
+    /// If any of these conditions are not met, an appropriate error is returned. The function also performs input validation based on the characteristic's expected data format and requirements.
+    final public func writeValue(_ value: CorpulsKit.CharacteristicValue, completion: @escaping ((Result<Void, CorpulsKit.SyncError>) -> Void))
+
+    /// Writes a value to a characteristic on the connected peripheral.
+    ///
+    /// Attempts to write a specified value to a characteristic of the currently connected peripheral.
+    /// The operation is only allowed when the client is in a 'connected' state. It validates the input before
+    /// proceeding with the write operation. If the specified service or characteristic cannot be found,
+    /// or if the input validation fails, the operation fails immediately.
+    ///
+    /// - Parameters:
+    ///   - value: The ``CharacteristicValue`` to be written to the peripheral's characteristic.
+    ///
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// try await writeValue(.deviceName(value: "New Device Name"))
+    /// ```
+    ///
+    /// Note: Before attempting to write, this operation checks for a valid 'connected' state and the presence of the required service and characteristic.
+    /// If any of these conditions are not met, an appropriate error is returned. The function also performs input validation based on the characteristic's expected data format and requirements.
+    final public func writeValue(_ value: CorpulsKit.CharacteristicValue) async throws
+
+    /// Updates a specific patient value in the patient data characteristic of the connected peripheral.
+    ///
+    /// This function first retrieves the current patient data characteristic to ensure it is up-to-date. It then updates one or more specific fields within this data based on the provided ``PatientValue``.
+    /// The updated patient data is then written back to the peripheral. This approach ensures that only the specified fields are changed, while the rest of the patient data remains unchanged.
+    ///
+    /// - Parameters:
+    ///   - patientValue: The ``PatientValue`` enum specifying the field and new value to be updated in the patient data.
+    ///   - completion: A closure called with the outcome of the update operation, either `Void` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// writePatientValue(.firstname("John")) { result in
+    ///     switch result {
+    ///     case .success():
+    ///         print("Patient value updated successfully")
+    ///     case .failure(let error):
+    ///         print("Failed to update patient value: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: This operation is contingent on successfully reading the current patient data characteristic and validating its format.
+    /// If the read operation fails, or if the characteristic data does not match the expected format, an error is returned. This ensures data integrity by preventing partial or incorrect updates.
+    final public func writePatientValue(_ patientValue: CorpulsKit.PatientValue, completion: @escaping ((Result<Void, CorpulsKit.SyncError>) -> Void))
+
+    /// Updates a specific patient value in the patient data characteristic of the connected peripheral.
+    ///
+    /// This function first retrieves the current patient data characteristic to ensure it is up-to-date. It then updates one or more specific fields within this data based on the provided ``PatientValue``.
+    /// The updated patient data is then written back to the peripheral. This approach ensures that only the specified fields are changed, while the rest of the patient data remains unchanged.
+    ///
+    /// - Parameters:
+    ///   - patientValue: The ``PatientValue`` enum specifying the field and new value to be updated in the patient data.
+    ///
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// try await writePatientValue(.firstname("John"))
+    /// ```
+    ///
+    /// Note: This operation is contingent on successfully reading the current patient data characteristic and validating its format.
+    /// If the read operation fails, or if the characteristic data does not match the expected format, an error is returned. This ensures data integrity by preventing partial or incorrect updates.
+    final public func writePatientValue(_ patientValue: CorpulsKit.PatientValue) async throws
+
+    @available(*, deprecated, renamed: "stopScan()")
+    final public func stopSync()
+
+    /// Stops the ongoing Bluetooth scan operation and performs cleanup.
+    final public func stopScan()
+
+    /// Initiates the disconnection process from the currently connected peripheral, if any.
+    ///
+    /// This function handles the disconnection from a connected peripheral or stops the scanning process
+    /// if it's currently active. It transitions the BLE client to a 'disconnected' state from any state
+    /// that involves an active connection or connection attempt. If a disconnection completion handler
+    /// is provided, it will be called once the disconnection process is complete.
+    ///
+    /// - Parameter completion: An optional closure that is called once the disconnection process has been completed.
+    ///                         This closure has no parameters and does not return a result.
+    ///
+    /// Example:
+    /// ```swift
+    /// disconnect() {
+    ///     print("Disconnected successfully")
+    /// }
+    /// ```
+    ///
+    /// Note: This function checks the current state of the BLE client and takes the appropriate action to
+    /// ensure the device is disconnected properly. It is important to manage the state carefully to avoid
+    /// unexpected behavior. In states where disconnection or stopping the scan is not applicable, the function
+    /// will simply return without performing any action.
+    final public func disconnect(completion: (() -> Void)? = nil)
+
+    /// Initiates the disconnection process from the currently connected peripheral, if any.
+    ///
+    /// This function handles the disconnection from a connected peripheral or stops the scanning process
+    /// if it's currently active. It transitions the BLE client to a 'disconnected' state from any state
+    /// that involves an active connection or connection attempt. If a disconnection completion handler
+    /// is provided, it will be called once the disconnection process is complete.
+    ///
+    /// Usage:
+    /// ```swift
+    /// await disconnect()
+    /// ```
+    ///
+    /// Note: This function checks the current state of the BLE client and takes the appropriate action to
+    /// ensure the device is disconnected properly. It is important to manage the state carefully to avoid
+    /// unexpected behavior. In states where disconnection or stopping the scan is not applicable, the function
+    /// will simply return without performing any action.
+    final public func disconnect() async
+
+    /// Subscribes to notifications or indications for a specified characteristic of the connected peripheral.
+    ///
+    /// This function initiates the process to subscribe to a characteristic on the connected peripheral.
+    /// The operation can only proceed if the BLE client is currently connected. It verifies the presence
+    /// of the required service before attempting to discover the specified characteristic for subscription.
+    /// Upon successful subscription, notifications or indications from the characteristic are enabled, allowing
+    /// the client to receive updates automatically.
+    ///
+    /// - Parameters:
+    ///   - characteristic: The ``Characteristic`` to subscribe to for notifications or indications.
+    ///   - completion: A closure called with the outcome of the subscription attempt, either `Void` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// subscribe(for: .heartRate) { result in
+    ///     switch result {
+    ///     case .success():
+    ///         print("Subscribed to heart rate notifications")
+    ///     case .failure(let error):
+    ///         print("Failed to subscribe: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: Subscribing to a characteristic is dependent on the peripheral's support for notifications or indications on that characteristic.
+    /// If the characteristic or service cannot be found, or if the client is not in a 'connected' state, the function will fail with an appropriate error.
+    /// This ensures that subscriptions are only attempted under correct conditions and with valid configurations.
+    final public func subscribe(for characteristic: CorpulsKit.Characteristic, completion: @escaping ((Result<Void, CorpulsKit.SyncError>) -> Void))
+
+    /// Subscribes to notifications or indications for a specified characteristic of the connected peripheral.
+    ///
+    /// This function initiates the process to subscribe to a characteristic on the connected peripheral.
+    /// The operation can only proceed if the BLE client is currently connected. It verifies the presence
+    /// of the required service before attempting to discover the specified characteristic for subscription.
+    /// Upon successful subscription, notifications or indications from the characteristic are enabled, allowing
+    /// the client to receive updates automatically.
+    ///
+    /// - Parameters:
+    ///   - characteristic: The ``Characteristic`` to subscribe to for notifications or indications.
+    ///
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// try await subscribe(for: .heartRate)
+    /// ```
+    ///
+    /// Note: Subscribing to a characteristic is dependent on the peripheral's support for notifications or indications on that characteristic.
+    /// If the characteristic or service cannot be found, or if the client is not in a 'connected' state, the function will fail with an appropriate error.
+    /// This ensures that subscriptions are only attempted under correct conditions and with valid configurations.
+    final public func subscribe(for characteristic: CorpulsKit.Characteristic) async throws
+
+    /// Unsubscribes from notifications or indications for a specified characteristic of the connected peripheral.
+    ///
+    /// This function initiates the process to unsubscribe from a characteristic on the connected peripheral.
+    /// The operation proceeds only if the BLE client is in a 'connected' state and the required service is present.
+    /// It attempts to discover the specified characteristic to disable notifications or indications, effectively
+    /// stopping automatic updates from that characteristic.
+    ///
+    /// - Parameters:
+    ///   - characteristic: The ``Characteristic`` to unsubscribe from.
+    ///   - completion: A closure called with the outcome of the unsubscribe attempt, either `Void` on success or a ``SyncError`` on failure.
+    ///
+    /// Example:
+    /// ```swift
+    /// unsubscribe(for: .heartRate) { result in
+    ///     switch result {
+    ///     case .success():
+    ///         print("Unsubscribed from heart rate notifications")
+    ///     case .failure(let error):
+    ///         print("Failed to unsubscribe: \(error)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Note: Unsubscribing from a characteristic requires that the peripheral supports disabling notifications or indications for that characteristic.
+    /// If the characteristic or service cannot be found, or if the client is not in the appropriate state, the function will return a success to avoid misleading the user into thinking they are subscribed when they are not, or it will fail with an appropriate error if the service is missing.
+    /// This approach ensures that unsubscribing is only attempted under correct conditions.
+    final public func unsubscribe(for characteristic: CorpulsKit.Characteristic, completion: @escaping ((Result<Void, CorpulsKit.SyncError>) -> Void))
+
+    /// Unsubscribes from notifications or indications for a specified characteristic of the connected peripheral.
+    ///
+    /// This function initiates the process to unsubscribe from a characteristic on the connected peripheral.
+    /// The operation proceeds only if the BLE client is in a 'connected' state and the required service is present.
+    /// It attempts to discover the specified characteristic to disable notifications or indications, effectively
+    /// stopping automatic updates from that characteristic.
+    ///
+    /// - Parameters:
+    ///   - characteristic: The ``Characteristic`` to unsubscribe from.
+    ///
+    /// - Throws: A ``SyncError`` if the operation was not successful.
+    ///
+    /// Usage:
+    /// ```swift
+    /// try await unsubscribe(for: .heartRate)
+    /// ```
+    ///
+    /// Note: Unsubscribing from a characteristic requires that the peripheral supports disabling notifications or indications for that characteristic.
+    /// If the characteristic or service cannot be found, or if the client is not in the appropriate state, the function will return a success to avoid misleading the user into thinking they are subscribed when they are not, or it will fail with an appropriate error if the service is missing.
+    /// This approach ensures that unsubscribing is only attempted under correct conditions.
+    final public func unsubscribe(for characteristic: CorpulsKit.Characteristic) async throws
+
+    /// Checks if the client is currently subscribed to notifications or indications for a specified characteristic.
+    ///
+    /// This function determines whether the BLE client has an active subscription for notifications or indications
+    /// on a given characteristic. It checks if the specified characteristic exists within the connected peripheral's
+    /// services and whether notifications or indications are currently enabled for that characteristic.
+    ///
+    /// - Parameter characteristic: The ``Characteristic`` to check for an active subscription.
+    /// - Returns: `true` if the client is currently subscribed to the characteristic; otherwise, `false`.
+    ///
+    /// Example:
+    /// ```swift
+    /// let isSubscribed = isCharacteristicSubscribed(.trendData)
+    /// print(isSubscribed ? "Subscribed to trend data" : "Not subscribed to trend data")
+    /// ```
+    ///
+    /// Note: This operation requires that the BLE client is connected to a peripheral that offers the specified characteristic
+    /// as part of its services. It accurately reflects the subscription state by checking the `isNotifying` property of the
+    /// characteristic, ensuring that the client's subscription status is up-to-date.
+    final public func isCharacteristicSubscribed(_ characteristic: CorpulsKit.Characteristic) -> Bool
+
+    /// Determines if a service for the specified characteristic is available on the connected peripheral.
+    ///
+    /// This function checks if the connected peripheral provides a service that includes the specified characteristic.
+    /// It's a straightforward way to verify if the peripheral supports the characteristic of interest before attempting
+    /// operations like reading, writing, or subscribing to that characteristic.
+    ///
+    /// - Parameter characteristic: The ``Characteristic` for which to check the availability of a corresponding service.
+    /// - Returns: `true` if a service for the specified characteristic is available; otherwise, `false`.
+    ///
+    /// Example:
+    /// ```swift
+    /// let serviceAvailable = providesService(for: .patientAddress)
+    /// print(serviceAvailable ? "Service for patient address is available" : "Service for patient address is not available")
+    /// ```
+    ///
+    /// Note: This function can be particularly useful for ensuring that the peripheral is capable of performing the
+    /// desired operations with the specified characteristic. It helps in avoiding unnecessary operations on characteristics
+    /// that are not supported by the peripheral.
+    final public func providesService(for characteristic: CorpulsKit.Characteristic) -> Bool
+}
+
+extension CorpulsBLE : CBCentralManagerDelegate {
+
+    final public func centralManagerDidUpdateState(_ central: CBCentralManager)
+
+    final public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber)
+
+    final public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral)
+
+    final public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: (any Error)?)
+}
+
+extension CorpulsBLE : CBPeripheralDelegate {
+
+    final public func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: (any Error)?)
+
+    final public func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: (any Error)?)
+
+    final public func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: (any Error)?)
+
+    final public func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: (any Error)?)
+
+    final public func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: (any Error)?)
+}
+
+public struct CorpulsPeripheral {
+
+    public let peripheral: CBPeripheral
+
+    public let rssi: NSNumber
+
+    public let discoveryDate: Date
+
+    public let advertisementData: [String : Any]
+
+    public var deviceIdentifier: String { get }
+
+    public var id: UUID { get }
+
+    public var name: String { get }
+
+    public var formattedRSSI: String { get }
+
+    public var formattedDiscoveryDate: String { get }
+}
+
+extension CorpulsPeripheral : CustomDebugStringConvertible {
+
+    /// A textual representation of this instance, suitable for debugging.
+    ///
+    /// Calling this property directly is discouraged. Instead, convert an
+    /// instance of any type to a string by using the `String(reflecting:)`
+    /// initializer. This initializer works with any type, and uses the custom
+    /// `debugDescription` property for types that conform to
+    /// `CustomDebugStringConvertible`:
+    ///
+    ///     struct Point: CustomDebugStringConvertible {
+    ///         let x: Int, y: Int
+    ///
+    ///         var debugDescription: String {
+    ///             return "(\(x), \(y))"
+    ///         }
+    ///     }
+    ///
+    ///     let p = Point(x: 21, y: 30)
+    ///     let s = String(reflecting: p)
+    ///     print(s)
+    ///     // Prints "(21, 30)"
+    ///
+    /// The conversion of `p` to a string in the assignment to `s` uses the
+    /// `Point` type's `debugDescription` property.
+    public var debugDescription: String { get }
+}
+
+extension CorpulsPeripheral : Equatable {
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (lhs: CorpulsKit.CorpulsPeripheral, rhs: CorpulsKit.CorpulsPeripheral) -> Bool
+}
+
+public enum DECGError : LocalizedError {
+
+    case missingArchive
+
+    case invalidArchiveData
+
+    case unzipFailure
+
+    case untarFailure
+
+    case invalidEntryData
+
+    case missingRtdFile
+
+    case invalidRtdData
+
+    case invalidCipherConfiguration
+
+    case decryptionFailure
+
+    case unarchiveRtdFailure
+
+    case invalidMissionId
+
+    case missingCreationDate
+
+    case unexpectedState(error: any Error)
+
+    /// A localized message describing what error occurred.
+    public var errorDescription: String? { get }
+}
+
+public struct DECGIndex : Codable {
+
+    public let index: UInt
+
+    public let date: Date
+
+    public static func decode(from data: Data) throws -> [CorpulsKit.DECGIndex]
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
+
+extension DECGIndex : CustomStringConvertible {
+
+    /// A textual representation of this instance.
+    ///
+    /// Calling this property directly is discouraged. Instead, convert an
+    /// instance of any type to a string by using the `String(describing:)`
+    /// initializer. This initializer works with any type, and uses the custom
+    /// `description` property for types that conform to
+    /// `CustomStringConvertible`:
+    ///
+    ///     struct Point: CustomStringConvertible {
+    ///         let x: Int, y: Int
+    ///
+    ///         var description: String {
+    ///             return "(\(x), \(y))"
+    ///         }
+    ///     }
+    ///
+    ///     let p = Point(x: 21, y: 30)
+    ///     let s = String(describing: p)
+    ///     print(s)
+    ///     // Prints "(21, 30)"
+    ///
+    /// The conversion of `p` to a string in the assignment to `s` uses the
+    /// `Point` type's `description` property.
+    public var description: String { get }
+}
+
+/// Defines the query types for requesting DECG data from a connected peripheral.
+///
+/// This enumeration allows for specifying the type of DECG data query, supporting requests for the latest data,
+/// the earliest data, or data at a specific index. It facilitates flexible access to DECG data stored on or streamed
+/// by the peripheral, enabling applications to retrieve the most relevant data for their needs.
+///
+/// - `latest`: Requests the most recent DECG data available from the peripheral.
+/// - `earliest`: Requests the earliest DECG data stored on the peripheral.
+/// - `index`: Requests DECG data at a specific index, allowing for targeted access to the data set.
+///
+/// Example usage:
+/// ```swift
+/// requestDECG(by: .latest, progress: { progress in
+///     print("Progress: \(progress * 100)%")
+/// }) { result in
+///     switch result {
+///     case .success(let data):
+///         print("Received DECG data")
+///     case .failure(let error):
+///         print("Failed to request DECG data: \(error)")
+///     }
+/// }
+/// ```
+///
+/// This enumeration provides a clear and simple way to define the scope of DECG data requests, making it easier
+/// to interact with the peripheral's data offerings.
+public enum DECGQuery {
+
+    case latest
+
+    case earliest
+
+    case index(UInt)
+}
+
+/// Defines the speeds for DECG (Digital Electrocardiography) data transmission.
+///
+/// This enumeration provides options for configuring the speed of DECG data transmission,
+/// affecting how quickly data is sent from corpuls3 devices.
+///
+/// - `narrow`: A transmission speed of 25 millimetres per second.
+/// - `wide`: A transmission speed of 50 millimetres per second.
+public enum DECGSpeed : Float {
+
+    case narrow
+
+    case wide
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: Float)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = Float
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: Float { get }
+}
+
+extension DECGSpeed : Equatable {
+}
+
+extension DECGSpeed : Hashable {
+}
+
+extension DECGSpeed : RawRepresentable {
+}
+
+public struct EventData : Decodable {
+
+    public var events: [CorpulsKit.EventData.Event] { get }
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+
+    public struct Event : Equatable {
+
+        public let identifier: CorpulsKit.EventIdentifier
+
+        /// Time in milliseconds since mission start
+        public let missionStartOffset: UInt
+
+        /// Parameters for the event [p1, p2, p3, p4]\
+        /// (not every event can have parameters)
+        public let parameters: [Int]
+
+        /// Returns a Boolean value indicating whether two values are equal.
+        ///
+        /// Equality is the inverse of inequality. For any values `a` and `b`,
+        /// `a == b` implies that `a != b` is `false`.
+        ///
+        /// - Parameters:
+        ///   - lhs: A value to compare.
+        ///   - rhs: Another value to compare.
+        public static func == (a: CorpulsKit.EventData.Event, b: CorpulsKit.EventData.Event) -> Bool
+    }
+}
+
+public enum EventGroup : Int, Equatable, CaseIterable {
+
+    case EDC
+
+    case SNDREC
+
+    case OPER
+
+    case PIF
+
+    case ALM
+
+    case CO2
+
+    case PAC
+
+    case NIBP
+
+    case INPUT
+
+    case IBP
+
+    case CLK
+
+    case MON
+
+    case SYS
+
+    case CM
+
+    case LAN
+
+    case ECG
+
+    case ERR
+
+    case INBOX
+
+    case CPR
+
+    case HC
+
+    case PRN
+
+    case RDEP
+
+    case SPO2
+
+    case DEFI
+
+    case GSM
+
+    case GUI
+
+    case LOAD
+
+    case NET
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: Int)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.EventGroup]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = Int
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.EventGroup] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: Int { get }
+}
+
+extension EventGroup : Hashable {
+}
+
+extension EventGroup : RawRepresentable {
+}
+
+public enum EventIdentifier : Int, Equatable, CaseIterable {
+
+    /// Inidicates healthcard operating errors\
+    /// Type: warning
+    case EVT_HC_KVK_SERVICE
+
+    /// D-ECG %decg_nr has been saved to Compact Flash\
+    /// Type: info
+    case EVT_ECG_DECG_SAVED
+
+    /// HES related to decg_nr has been saved to Compact Flash\
+    /// Type: info
+    case EVT_ECG_HES_SAVED
+
+    /// D-ECG could not be saved\
+    /// Type: info
+    case EVT_ECG_DECG_NOT_SAVED
+
+    /// The software version of the ECG library in that module.\
+    /// Type: info
+    case EVT_ECG_LIBECG_VERSION
+
+    /// User enabled or disabled 20Hz filter\
+    /// Type: info
+    case EVT_ECG_20HZ_FILTER
+
+    /// GRI related to decg_nr has been saved to Compact Flash\
+    /// Type: info
+    case EVT_ECG_GRI_SAVED
+
+    /// any exception in man-ecg or sen-ecg\
+    /// Type: info
+    case EVT_ECG_EXCEPTION
+
+    /// The configuration item %parid of type %partype was change to value %value\
+    /// Type: info
+    case EVT_GUI_PAR_INT_EVT
+
+    /// The configuration item %parid of type %partype was change to value %value\
+    /// Type: info
+    case EVT_GUI_PAR_DATA_EVT
+
+    /// A telemetry connection has been prepared. No backend has been started yet. No service connection has been started yet.\
+    /// Type: info
+    case EVT_CM_CREATE_CONNECTION
+
+    /// A telemetry connection has been destroyed. Is not the same as "disconnecting service"!\
+    /// Type: info
+    case EVT_CM_DESTROY_CONNECTION
+
+    /// A telemetry backend (e.g. LAN or GSM) is connecting now.\
+    /// Type: info
+    case EVT_CM_CONNECTING_BACKEND
+
+    /// A telemetry backend (e.g. LAN or GSM) was selected for a connection and is now activated.\
+    /// Type: info
+    case EVT_CM_ACTIVATING_BACKEND
+
+    /// A telemetry backend (e.g. LAN or GSM) is disconnecting after the given number of seconds with a specific reason.\
+    /// Type: info
+    case EVT_CM_DISCONNECTING_BACKEND
+
+    /// A telemetry service connection (e.g. CWEB or FaxS) is connecting now. The connection attempt for automatic reconnect is given also.\
+    /// Type: info
+    case EVT_CM_CONNECTING_SERVICE
+
+    /// A telemetry service connection (e.g. CWEB or FaxS) is disconnecting now. The value in parantheses means 0 for not reconnecting, 1 for reconnecting.\
+    /// Type: info
+    case EVT_CM_DISCONNECTING_SERVICE
+
+    /// CO2 hyperbaric pressure value has been set to a new value\
+    /// Type: info
+    case EVT_CO2_HYPERBARIC_VALUE
+
+    /// Either PIF indicates a HW error or electrode type has been changed\
+    /// Type: warning
+    case EVT_PIF_INFO
+
+    /// Keyboard has been locked/unlocked\
+    /// Type: info
+    case EVT_INPUT_LOCK_KEYS
+
+    /// An key-event has occurred (pressed short/long, ... by user).\
+    /// Type: info
+    case EVT_INPUT_KEYEVT
+
+    /// State of the paddle buttons has changed to the new state.\
+    /// Type: info
+    case EVT_INPUT_PADDLE_KEYEVT
+
+    /// The module restarted due to software error\
+    /// Type: error
+    case EVT_ERR_MODULE_PANIC
+
+    /// The current mission has been started\
+    /// Type: info
+    case EVT_OPER_MISSION_START
+
+    /// The current mission has been terminated\
+    /// Type: info
+    case EVT_OPER_MISSION_END
+
+    /// Recording of B-ECG has been started\
+    /// Type: info
+    case EVT_OPER_DATA_REC_START
+
+    /// Recording of B-ECG has been stopped\
+    /// Type: info
+    case EVT_OPER_DATA_REC_STOP
+
+    /// Formatting cf-card\
+    /// Type: info
+    case EVT_OPER_FORMAT_CF
+
+    /// The patient data have been changed from a specific source\
+    /// Type: info
+    case EVT_OPER_PATDATA_WRITE
+
+    /// A manual event (specified by operator) was recorded.\
+    /// Type: info
+    case EVT_OPER_MANUAL_EVT_SET
+
+    /// The last not generic manual event (i.e. with ID 0x1606) is invalid.\
+    /// Type: info
+    case EVT_OPER_MANUAL_EVT_CANCEL_LAST
+
+    /// NIBP measurement result\
+    /// Type: info
+    case EVT_NIBP_RESULT
+
+    /// Event signals that a NIBP measurement has been successfully completed.\
+    /// Type: info
+    case EVT_NIBP_END
+
+    /// Event signals that a NIBP measurement has been successfully completed.\
+    /// Type: info
+    case EVT_NIBP_END2
+
+    /// Event signals that RWAVE-Gating has been switched on or off\
+    /// Type: info
+    case EVT_NIBP_RWAVE_GATING_CHANGED
+
+    /// Calibration of IBP channel started\
+    /// Type: info
+    case EVT_IBP_CALIB_STARTED
+
+    /// Event is generated when each module detects a new working network connection with another module.\
+    /// Type: info
+    case EVT_NET_CONNECTION
+
+    /// SpO2 sensor has been connected to the rainbow module\
+    /// Type: info
+    case EVT_SPO2_SENSOR_TYPE
+
+    /// Upgrade of MX-3 module\
+    /// Type: info
+    case EVT_SPO2_UPGRADE
+
+    /// PAM has booted\
+    /// Type: info
+    case EVT_SPO2_MODULE_INFO
+
+    /// SpO2 module detected a diagnostic or board failure\
+    /// Type: info
+    case EVT_SPO2_FAILURE
+
+    /// SpO2 module detected low confidence for SPO2 measurement\
+    /// Type: info
+    case EVT_SPO2_LOW_CONFIDENCE
+
+    /// MX-3 module detected low confidence for PR measurement\
+    /// Type: info
+    case EVT_PR_LOW_CONFIDENCE
+
+    /// MX-3 module detected low confidence for PI measurement\
+    /// Type: info
+    case EVT_PI_LOW_CONFIDENCE
+
+    /// MX-3 module detected low confidence for SPCO measurement\
+    /// Type: info
+    case EVT_SPCO_LOW_CONFIDENCE
+
+    /// MX-3 module detected low confidence for SPMET measurement\
+    /// Type: info
+    case EVT_SPMET_LOW_CONFIDENCE
+
+    /// MX-3 module detected low confidence for SPHB measurement\
+    /// Type: info
+    case EVT_SPHB_LOW_CONFIDENCE
+
+    /// Start receiving webMessage %msgid from %source\
+    /// Type: info
+    case EVT_INBOX_MESSAGE_START
+
+    /// A webMessage has been received.\
+    /// Type: info
+    case EVT_INBOX_MESSAGE_RECEIVED
+
+    /// A webMessage has been shown on the display.\
+    /// Type: info
+    case EVT_INBOX_MESSAGE_SHOWN
+
+    /// A webMessage has been received.\
+    /// Type: info
+    case EVT_INBOX_MESSAGE_PRINTED
+
+    /// The real time (UTC) when printout has been started\
+    /// Type: info
+    case EVT_PRN_RTCV
+
+    /// D-ECG is going to be printed\
+    /// Type: info
+    case EVT_PRN_DECG
+
+    /// Protocol is going to be printed\
+    /// Type: info
+    case EVT_PRN_PROT
+
+    /// Protocol is going to be printed\
+    /// Type: info
+    case EVT_PRN_POST_SHOCK
+
+    /// A screenshot has been made and possibly saved on CF card\
+    /// Type: info
+    case EVT_PRN_SCREEN_COPY
+
+    /// on_off=1: The module (either DIM, PAM or DEM) has been powered on\
+    /// on_off=0: The module has been powered off\
+    /// Type: info
+    case EVT_POWER
+
+    /// Mechanical connection change (GPIO detected)\
+    /// Type: info
+    case EVT_MECH_NET
+
+    /// Pairing has been completed successfully\
+    /// Type: info
+    case EVT_PAIRING
+
+    /// successful login of user %user\
+    /// Type: info
+    case EVT_USER_LOGIN
+
+    /// Battery state \
+    /// Type: info
+    case EVT_BATT_VOLTAGE
+
+    /// A new ad-hoc connection with <peer_module> has been detected\
+    /// Type: info
+    case EVT_ADHOC_CONN
+
+    /// A software conflict with <peer_module> has been detected\
+    /// Type: info
+    case EVT_SW_CONFLICT
+
+    /// A hardware conflict with <peer_module> has been detected\
+    /// Type: info
+    case EVT_HW_CONFLICT
+
+    /// Auto-Power down timer elapsed\
+    /// Type: info
+    case EVT_AUTO_POW_DOWN
+
+    /// Power down trigger by battery low\
+    /// Type: info
+    case EVT_BATT_POW_DOWN
+
+    /// The demo mode has been activated or deactivated\
+    /// Type: info
+    case EVT_DEMO_MODE
+
+    /// A user has been logged in additionally to the default user.\
+    /// Type: info
+    case EVT_FEATURE_LOGIN
+
+    /// The system mode has changed to %new from %old.\
+    /// Type: info
+    case EVT_SYS_MODE_CHANGE
+
+    /// Battery state and information\
+    /// Type: info
+    case EVT_BATT_DEVICE_INFO
+
+    /// Generic sensor state event:\
+    /// Sensor state (%option,%module-type)[ %firmwarename][;Ch1(%conn[,%cable,%sensor])[ Ch2(%conn[,%cable,%sensor])[;Ch3(%conn[,%cable,%sensor])[ Ch4(%conn[,%cable,%sensor])]]]]\
+    /// Type: info
+    case EVT_SENSOR_STATE
+
+    /// WLAN module detected\
+    /// Type: info
+    case EVT_LAN_WLAN_DETECTED
+
+    /// WLAN searching for networks\
+    /// Type: info
+    case EVT_LAN_WLAN_SEARCHING
+
+    /// WLAN connected;%d dB snr,  %s\
+    /// Type: info
+    case EVT_LAN_WLAN_CONNECTED
+
+    /// WLAN disconnected\
+    /// Type: info
+    case EVT_LAN_WLAN_DISCONNECTED
+
+    /// (W)LAN got IP %s\
+    /// Type: info
+    case EVT_LAN_GOT_IP
+
+    /// WLAN searching for networks timed out\
+    /// Type: info
+    case EVT_LAN_WLAN_SEARCHING_TMO
+
+    /// (W)LAN DHCP request timed out\
+    /// Type: info
+    case EVT_LAN_DHCP_TMO
+
+    /// (W)LAN configuration error\
+    /// Type: info
+    case EVT_LAN_CONFIGURATION_ERROR
+
+    /// WLAN module error detected: %d\
+    /// Type: info
+    case EVT_LAN_WLAN_HW_PROBLEM
+
+    /// User changed system clock\
+    /// Type: info
+    case EVT_CLK_TIMEDATE_CHANGED
+
+    /// User changed UTC offset or Auto DST flag\
+    /// Type: info
+    case EVT_CLK_USER_TZ_CHANGED
+
+    /// Connected with unknown bluetooth device\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_UNKNOWN
+
+    /// unknown bluetooth device disconnected\
+    /// Type: info
+    case EVT_EDCOMM_BT_DISCONN_UNKNOWN
+
+    /// Connected with defibrillator bluetooth device\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_CORPULS1
+
+    /// defibrillator bluetooth device disconnected\
+    /// Type: info
+    case EVT_EDCOMM_BT_DISCONN_CORPULS1
+
+    /// Connected with cpr bluetooth device\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_CPR
+
+    /// cpr bluetooth device disconnected\
+    /// Type: info
+    case EVT_EDCOMM_BT_DISCONN_CPR
+
+    /// Connected with ventilator bluetooth device\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_VENTILATOR
+
+    /// ventilator bluetooth device disconnected\
+    /// Type: info
+    case EVT_EDCOMM_BT_DISCONN_VENTILATOR
+
+    /// Connected with input bluetooth device\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_INPUT
+
+    /// input bluetooth device disconnected\
+    /// Type: info
+    case EVT_EDCOMM_BT_DISCONN_INPUT
+
+    /// Connected with bga bluetooth device\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_BGA
+
+    /// bga bluetooth device disconnected\
+    /// Type: info
+    case EVT_EDCOMM_BT_DISCONN_BGA
+
+    /// Ventilator parameter recording started\
+    /// Type: info
+    case EVT_EDCOMM_VENTILATOR_REC_START
+
+    /// Ventilator parameter recording stopped\
+    /// Type: info
+    case EVT_EDCOMM_VENTILATOR_REC_STOP
+
+    /// Connection attempt to bluetooth device failed\
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_FALED
+
+    /// \
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_NEW
+
+    /// \
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_WHO
+
+    /// \
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_DEVID
+
+    /// \
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_MISSIONID
+
+    /// \
+    /// Type: info
+    case EVT_EDCOMM_BT_CONN_MISSIONUID
+
+    /// mode=0: Demand Mode has been selected \
+    /// mode=1: Fix Mode has been selected\
+    /// Type: info
+    case EVT_PAC_MODE_SEL
+
+    /// The Pacer frequency %freq has been selected\
+    /// Type: info
+    case EVT_PAC_FREQ_SEL
+
+    /// The Pacer intensity %intens has been selected\
+    /// Type: info
+    case EVT_PAC_INTENS_SEL
+
+    /// on_off=1: The Pacer makes a pause and stops stimulating\
+    /// on_off=0: The Pacer terminates the pause and continues stimulating\
+    /// Type: info
+    case EVT_PAC_PAUSE
+
+    /// The Pacer has been deactivated\
+    /// Type: info
+    case EVT_PAC_OFF
+
+    /// User entered/left Pacer Mode (on_off = 1: mode activated; on_off = 0: mode deactivated)\
+    /// Type: info
+    case EVT_PAC_MODE_ACTIVE
+
+    /// man-load has detected an unexpected process termination.\
+    /// Type: warning
+    case EVT_LOAD_PROCESS_TERMINATED
+
+    /// It indicates one technical alarm has been raised\
+    /// Type: warning
+    case EVT_ALM_TECH_START
+
+    /// It indicates one technical alarm is no more active\
+    /// Type: warning
+    case EVT_ALM_TECH_END
+
+    /// It indicates that one technical alarm has been confirmed\
+    /// Type: warning
+    case EVT_ALM_TECH_CONF
+
+    /// It indicates one physical alarm has been raised\
+    /// Type: warning
+    case EVT_ALM_PHYS_START
+
+    /// It indicates one physical alarm is no more active\
+    /// Type: warning
+    case EVT_ALM_PHYS_END
+
+    /// It indicates that one physical alarm has been confirmed\
+    /// Type: warning
+    case EVT_ALM_PHYS_CONF
+
+    /// It indicates activation of alarm suspension by user\
+    /// Type: info
+    case EVT_ALM_START_SUSP
+
+    /// It indicates deactivation of alarm suspension by user\
+    /// Type: info
+    case EVT_ALM_STOP_SUSP
+
+    /// A generic manual event was recorded and an AUDIO file recorded (or not)\
+    /// Type: info
+    case EVT_MON_MANUAL_EVT
+
+    /// An IBP curve can be identified as "AP", "IBP", "ICP" or "VP" in third field (from top) of it's context menu.\
+    /// Identification can be removed by selecting "--" (in context menu)\
+    /// Type: info
+    case EVT_MON_IBP_ALIAS
+
+    /// Sound recording has been started (either by saving an event or by changing to (or between) defi mode\
+    /// Type: info
+    case EVT_SOUND_RECORDING_STARTED
+
+    /// Good compression was spoken\
+    /// Type: info
+    case EVT_CPR_GOOD_COMP
+
+    /// Push harder was spoken\
+    /// Type: info
+    case EVT_CPR_PUSH_HARDER
+
+    /// User changed depth alarm limits (centimeters)\
+    /// Type: info
+    case EVT_CPR_DEPTH_CHANGE_CM
+
+    /// Use changed unit to display to centimeters\
+    /// Type: info
+    case EVT_CPR_UNIT_CHANGE_CM
+
+    /// User changed depth alarm limits (inches)\
+    /// Type: info
+    case EVT_CPR_DEPTH_CHANGE_IN
+
+    /// Use changed unit to display to inches\
+    /// Type: info
+    case EVT_CPR_UNIT_CHANGE_IN
+
+    /// CPR statistics\
+    /// Type: info
+    case EVT_CPR_STATISTICS
+
+    /// User performed cpr self test successfully\
+    /// Type: info
+    case EVT_CPR_SELFTEST_SUCCESS
+
+    /// Cpr self test failed\
+    /// Type: info
+    case EVT_CPR_SELFTEST_FAILURE
+
+    /// Fully release was spoken\
+    /// Type: info
+    case EVT_CPR_FULLY_RELEASE
+
+    /// Server connection request\
+    /// Type: info
+    case EVT_RDEP_SERVER_CONNECTION_REQUEST_ID
+
+    /// Server not found\
+    /// Type: info
+    case EVT_RDEP_SERVER_NOT_FOUND
+
+    /// Server access denied\
+    /// Type: info
+    case EVT_RDEP_SERVER_ACCESS_DENIED
+
+    /// Server connection error\
+    /// Type: info
+    case EVT_RDEP_SERVER_CONNECTION_ERROR
+
+    /// D-ECG transmission error\
+    /// Type: info
+    case EVT_RDEP_DECG_ERROR
+
+    /// D-ECG transmission started\
+    /// Type: info
+    case EVT_RDEP_DECG_STARTED
+
+    /// D-ECG transmission finished\
+    /// Type: info
+    case EVT_RDEP_DECG_FINISHED
+
+    /// Server disconnected\
+    /// Type: info
+    case EVT_RDEP_DISCONNECT
+
+    /// CEB value %ceb for DECG %decg_nr received\
+    /// Type: info
+    case EVT_RDEP_GOT_CEB_VALUE
+
+    /// 22-chanel ECG for DECG %decg_nr received\
+    /// Type: info
+    case EVT_RDEP_GOT_22C_ECG
+
+    /// Server connection established\
+    /// Type: info
+    case EVT_RDEP_SERVER_FOUND
+
+    /// User entered Defi Mode (mode 1 = AED, mode 2 = Manual mode)\
+    /// Type: info
+    case EVT_DEFI_MODE
+
+    /// User start defibrillator analysis\
+    /// Type: info
+    case EVT_DEFI_ANALYSIS_STARTED
+
+    /// VF analysis terminated with (result) due to (reason)\
+    /// Type: info
+    case EVT_DEFI_ANALYSIS_RESULT
+
+    /// Shock has been released under the provided (parameters) conditions\
+    /// Type: info
+    case EVT_DEFI_SHOCK_RELEASED
+
+    /// Defi alarm (of type alarm) occurs in BIM src (Master or Slave) \
+    /// Type: warning
+    case EVT_DEFI_BIM_ALARM
+
+    /// Synd alarm condition detected\
+    /// Type: warning
+    case EVT_DEFI_SYND_ALARM
+
+    /// Paddle Interface alarm condition detected\
+    /// Type: warning
+    case EVT_DEFI_PIF_ERROR
+
+    /// Defi cable type detected. \
+    /// Type: warning
+    case EVT_DEFI_CABLE_TYPE
+
+    /// Paddle interface temperature info\
+    /// Type: warning
+    case EVT_DEFI_PIF_TEMP
+
+    /// Shock interrupted by hardware \
+    /// Type: info
+    case EVT_DEFI_SHOCK_ABORTED
+
+    /// Common defi information\
+    /// Type: warning
+    case EVT_DEFI_COMMON_INFO
+
+    /// Error in the SYND clock sub-system (only for manufacturer)\
+    /// Type: warning
+    case EVT_DEFI_SYND_CLK_ERR
+
+    /// Indicates that "VT/VF possible" alarm has been enabled or disabled\
+    /// Type: info
+    case EVT_DEFI_VT_VF_ALARM_CHANGED
+
+    /// Metronome has been switched on or off or metronome mode has been changed\
+    /// Type: info
+    case EVT_DEFI_METRONOME
+
+    /// Defi synd mode setting\
+    /// Type: info
+    case EVT_DEFI_BIM_SYND_SETTING
+
+    /// Beginn of defi charging\
+    /// Type: info
+    case EVT_DEFI_START_CHARGING
+
+    /// Defi charging successfully finished (defi gets read ready)\
+    /// Type: info
+    case EVT_DEFI_GETTING_READY
+
+    /// Defi charging interrupted, e. g. by changing selected energy or defi mode during charging\
+    /// Type: info
+    case EVT_DEFI_STOP_CHARGING
+
+    /// Defi ready state left, e. g. by increasing selected energy or defi mode while ready\
+    /// Type: info
+    case EVT_DEFI_LEAVE_READY
+
+    /// The capacity of the high voltage capacitor in the HV module can have different values. The actual valid capacity is stored in this event once per mission:\
+    /// 0: 34 µF\
+    /// 1: 40 µF\
+    /// 2: 65 µF\
+    /// 3: 37 µF\
+    /// 4: 100 µF\
+    /// other: unknown\
+    /// Type: info
+    case EVT_DEFI_HV_CAPACITOR
+
+    /// Defi has (partially or totally) been charged. User pressed softkey CANCEL (in manual defi menu) in order to stop charging and to discharge internally.\
+    /// Type: info
+    case EVT_DEFI_MANUAL_DISCHARGE
+
+    /// GSM modem at %d baud is a %s\
+    /// Type: info
+    case EVT_GSMBACKEND_MODEM_FOUND
+
+    /// GSM got IP connection\
+    /// Type: info
+    case EVT_GSMBACKEND_IP_CONNECTION
+
+    /// GSM init successful\
+    /// Type: info
+    case EVT_GSMBACKEND_INITED
+
+    /// GSM link detected\
+    /// Type: info
+    case EVT_GSMBACKEND_GOT_LINK
+
+    /// GSM modem IP connecting:;plmn %x, lac %d, cellid %d, rssi %d\
+    /// Type: info
+    case EVT_GSMBACKEND_IP_CONNECT
+
+    /// GSM disconnecting\
+    /// Type: info
+    case EVT_GSMBACKEND_DISCONNECTING
+
+    /// GSM modem disabled\
+    /// Type: info
+    case EVT_GSMBACKEND_MODEM_DISABLED
+
+    /// Error GSM module\
+    /// Type: info
+    case EVT_GSMBACKEND_MODEM_ERROR
+
+    /// No GSM PIN configured\
+    /// Type: info
+    case EVT_GSMBACKEND_SIM_NO_PIN
+
+    /// No SIM card\
+    /// Type: info
+    case EVT_GSMBACKEND_SIM_NO_CARD
+
+    /// Wrong GSM PIN\
+    /// Type: info
+    case EVT_GSMBACKEND_SIM_WRONG_PIN
+
+    /// SIM card locked\
+    /// Type: info
+    case EVT_GSMBACKEND_SIM_LOCKED
+
+    /// SIM card error\
+    /// Type: info
+    case EVT_GSMBACKEND_SIM_ERROR
+
+    /// GPRS link error\
+    /// Type: info
+    case EVT_GSMBACKEND_GPRS_ERROR
+
+    /// GPRS authorisation failed\
+    /// Type: info
+    case EVT_GSMBACKEND_APN_AUTH_ERROR
+
+    /// No APN entered\
+    /// Type: info
+    case EVT_GSMBACKEND_GPRS_NO_APN
+
+    /// GSM network not avail.\
+    /// Type: info
+    case EVT_GSMBACKEND_GSM_NO_LINK
+
+    public var id: Int { get }
+
+    public var type: CorpulsKit.EventType { get }
+
+    public var group: CorpulsKit.EventGroup? { get }
+
+    public var name: String { get }
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: Int)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.EventIdentifier]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = Int
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.EventIdentifier] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: Int { get }
+}
+
+extension EventIdentifier : Hashable {
+}
+
+extension EventIdentifier : RawRepresentable {
+}
+
+public enum EventType : String, Equatable, CaseIterable {
+
+    case info
+
+    case warning
+
+    case error
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.EventType]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.EventType] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension EventType : Hashable {
+}
+
+extension EventType : RawRepresentable {
+}
+
+/// The length of the requested mission ID.
+public enum MissionIdLength {
+
+    /// Contains the ID of the mission, the serial number of the Patient Module and an additional randomized identifier.\
+    /// Format: "\<mission ID>-\<serial number>-\<identifier>"
+    case full
+
+    /// Contains only the mission ID
+    case short
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: CorpulsKit.MissionIdLength, b: CorpulsKit.MissionIdLength) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
+    public var hashValue: Int { get }
+}
+
+extension MissionIdLength : Equatable {
+}
+
+extension MissionIdLength : Hashable {
+}
+
+public enum NIBPQualityIndicator : Int {
+
+    case poor
+
+    case marginal
+
+    case fair
+
+    case excellent
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: Int)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = Int
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: Int { get }
+}
+
+extension NIBPQualityIndicator : Equatable {
+}
+
+extension NIBPQualityIndicator : Hashable {
+}
+
+extension NIBPQualityIndicator : RawRepresentable {
+}
+
+public struct NIBPValue {
+}
+
+extension NIBPValue : CustomStringConvertible {
+
+    /// A textual representation of this instance.
+    ///
+    /// Calling this property directly is discouraged. Instead, convert an
+    /// instance of any type to a string by using the `String(describing:)`
+    /// initializer. This initializer works with any type, and uses the custom
+    /// `description` property for types that conform to
+    /// `CustomStringConvertible`:
+    ///
+    ///     struct Point: CustomStringConvertible {
+    ///         let x: Int, y: Int
+    ///
+    ///         var description: String {
+    ///             return "(\(x), \(y))"
+    ///         }
+    ///     }
+    ///
+    ///     let p = Point(x: 21, y: 30)
+    ///     let s = String(describing: p)
+    ///     print(s)
+    ///     // Prints "(21, 30)"
+    ///
+    /// The conversion of `p` to a string in the assignment to `s` uses the
+    /// `Point` type's `description` property.
+    public var description: String { get }
+}
+
+extension NIBPValue : CustomDebugStringConvertible {
+
+    /// A textual representation of this instance, suitable for debugging.
+    ///
+    /// Calling this property directly is discouraged. Instead, convert an
+    /// instance of any type to a string by using the `String(reflecting:)`
+    /// initializer. This initializer works with any type, and uses the custom
+    /// `debugDescription` property for types that conform to
+    /// `CustomDebugStringConvertible`:
+    ///
+    ///     struct Point: CustomDebugStringConvertible {
+    ///         let x: Int, y: Int
+    ///
+    ///         var debugDescription: String {
+    ///             return "(\(x), \(y))"
+    ///         }
+    ///     }
+    ///
+    ///     let p = Point(x: 21, y: 30)
+    ///     let s = String(reflecting: p)
+    ///     print(s)
+    ///     // Prints "(21, 30)"
+    ///
+    /// The conversion of `p` to a string in the assignment to `s` uses the
+    /// `Point` type's `debugDescription` property.
+    public var debugDescription: String { get }
+}
+
+public class ParameterList<T> : Codable where T : CorpulsKit.VitalParameter {
+
+    final public let nibpTimestamp: Int?
+
+    final public let parameters: [T]
+
+    public init()
+
+    public init(parameters: [T])
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    required public init(from decoder: any Decoder) throws
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    public func containsParameter(for type: CorpulsKit.VitalParameterType) -> Bool
+
+    public func parameter(for type: CorpulsKit.VitalParameterType) -> CorpulsKit.VitalParameter?
+
+    public func formattedBloodPressure(for type: CorpulsKit.BloodPressureType) -> String
+}
+
+public enum PatientValue {
+
+    case firstname(String)
+
+    case lastname(String)
+
+    case age(CorpulsKit.Age)
+
+    case sex(CorpulsKit.Sex)
+
+    case race(CorpulsKit.Race)
+
+    case weight(UInt)
+
+    case height(UInt)
+
+    case symptomOnset(String)
+}
+
+public enum Race : String, CaseIterable {
+
+    case none
+
+    case african
+
+    case caucasian
+
+    case pacific
+
+    case asian
+
+    case indian
+
+    case unknown
+
+    public var string: String { get }
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.Race]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.Race] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension Race : Equatable {
+}
+
+extension Race : Hashable {
+}
+
+extension Race : RawRepresentable {
+}
+
+public enum Service : String, CaseIterable {
+
+    case genericAccess
+
+    case deviceInformation
+
+    case parameters
+
+    public var uuid: CBUUID { get }
+
+    public var characteristics: [CorpulsKit.Characteristic] { get }
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.Service]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.Service] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension Service : Equatable {
+}
+
+extension Service : Hashable {
+}
+
+extension Service : RawRepresentable {
+}
+
+/// Encapsulates configuration settings for BLE operations.
+///
+/// This struct holds settings that configure how BLE operations should be performed,
+/// particularly focusing on device identification and DECG (Digital Electrocardiography) data speed.
+/// The settings can be customized per operation or set globally as defaults.
+///
+/// The struct provides a default configuration which disables device identification and sets
+/// DECG speed to `.wide`, suitable for broad applications.
+///
+/// Example usage:
+/// ```swift
+/// let customSettings = Settings(performDeviceIdentification: true, decgSpeed: .wide)
+/// ```
+///
+/// These settings can then be passed to BLE operations to tailor the behavior of the BLE client
+/// based on specific needs or preferences.
+public struct Settings {
+
+    /// A boolean indicating whether the device identification process should be performed during BLE operations.
+    /// This can be useful for filtering devices during scanning.
+    public let performDeviceIdentification: Bool
+
+    /// An enum value of type `DECGSpeed` that determines the speed at which DECG data should be read.
+    /// Different speeds may be preferred based on the specific application requirements.
+    public let decgSpeed: CorpulsKit.DECGSpeed
+
+    /// Default settings for BLE operations.
+    public static let `default`: CorpulsKit.Settings
+
+    /// Initializes a new ``Settings`` instance with specified configuration.
+    /// - Parameters:
+    ///   - performDeviceIdentification: Flag indicating if device identification should be executed.
+    ///   - decgSpeed: Desired speed for DECG data transmission.
+    public init(performDeviceIdentification: Bool, decgSpeed: CorpulsKit.DECGSpeed)
+}
+
+public enum Sex : String, CaseIterable {
+
+    case male
+
+    case female
+
+    case unknown
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.Sex]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [CorpulsKit.Sex] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension Sex : Equatable {
+}
+
+extension Sex : Hashable {
+}
+
+extension Sex : RawRepresentable {
+}
+
+public enum SyncError : LocalizedError {
+
+    case bluetoothDisabled
+
+    case pairingFailure
+
+    case unexpectedState(description: String)
+
+    case missingService
+
+    case missingCharacteristic
+
+    case emptyValueForCharacteristic
+
+    case unknownSoftwareRevision
+
+    case couldNotPrepareData
+
+    case failedToPrepareDataForWriting(characteristic: CorpulsKit.Characteristic)
+
+    case invalidValueFormatForCharacteristic
+
+    case invalidIndexForCharacteristic
+
+    case componentLengthExceeded(characteristic: CorpulsKit.Characteristic, component: String, limit: CorpulsKit.ValueLimit, actual: CorpulsKit.ValueLimit)
+
+    case characteristicLengthExceeded(characteristic: CorpulsKit.Characteristic, limit: CorpulsKit.ValueLimit, actual: CorpulsKit.ValueLimit)
+
+    case jsonParsing
+
+    case emptyJson
+
+    case fileWrite
+
+    case timeout
+
+    case notImplemented
+
+    case notificationFailure(characteristic: CorpulsKit.Characteristic)
+
+    case writeFailure(characteristic: CorpulsKit.Characteristic, error: any Error)
+
+    case writeTransferLengthExceeded(characteristic: CorpulsKit.Characteristic, valueLength: Int, maximumWriteValueLength: Int)
+
+    case rateLimiting(remaining: TimeInterval)
+
+    case retryFailure(attempts: Int)
+
+    case decgError(CorpulsKit.DECGError)
+
+    case trendError(CorpulsKit.TrendError)
+
+    case commonDataError(CorpulsKit.CommonDataError)
+
+    case settingDisabled(String)
+
+    case missingEntitlement
+
+    case versionMismatch(function: String, version: String)
+
+    /// A localized message describing what error occurred.
+    public var errorDescription: String? { get }
+}
+
+public enum TrendError : LocalizedError {
+
+    case unzipFailure
+
+    case invalidJson(error: any Error)
+
+    case missingMissionCreationDate
+
+    case unexpectedState(error: any Error)
+
+    /// A localized message describing what error occurred.
+    public var errorDescription: String? { get }
+}
+
+public class TrendVitalParameter : CorpulsKit.VitalParameter {
+
+    public var hasLowConfidenceSpO2: Bool { get }
+
+    required public init(from decoder: any Decoder) throws
+
+    override public var text: String { get }
+}
+
+public struct ValueComponent {
+}
+
+public enum ValueLimit {
+
+    case characters(Int)
+
+    case bytes(Int)
+
+    case unrestricted
+}
+
+public class VitalParameter : Codable {
+
+    final public let type: CorpulsKit.VitalParameterType
+
+    final public let value: Double
+
+    final public let unit: CorpulsKit.VitalParameterUnit
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    required public init(from decoder: any Decoder) throws
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    public var typeString: String { get }
+
+    public var valueText: String { get }
+
+    public var text: String { get }
+
+    public var fractionalDigitCount: Int { get }
+}
+
+extension VitalParameter : CustomDebugStringConvertible {
+
+    /// A textual representation of this instance, suitable for debugging.
+    ///
+    /// Calling this property directly is discouraged. Instead, convert an
+    /// instance of any type to a string by using the `String(reflecting:)`
+    /// initializer. This initializer works with any type, and uses the custom
+    /// `debugDescription` property for types that conform to
+    /// `CustomDebugStringConvertible`:
+    ///
+    ///     struct Point: CustomDebugStringConvertible {
+    ///         let x: Int, y: Int
+    ///
+    ///         var debugDescription: String {
+    ///             return "(\(x), \(y))"
+    ///         }
+    ///     }
+    ///
+    ///     let p = Point(x: 21, y: 30)
+    ///     let s = String(reflecting: p)
+    ///     print(s)
+    ///     // Prints "(21, 30)"
+    ///
+    /// The conversion of `p` to a string in the assignment to `s` uses the
+    /// `Point` type's `debugDescription` property.
+    public var debugDescription: String { get }
+}
+
+public enum VitalParameterError : LocalizedError {
+
+    case unknownType
+
+    case unknownUnit
+
+    /// A localized message describing what error occurred.
+    public var errorDescription: String? { get }
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: CorpulsKit.VitalParameterError, b: CorpulsKit.VitalParameterError) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
+    public var hashValue: Int { get }
+}
+
+extension VitalParameterError : Equatable {
+}
+
+extension VitalParameterError : Hashable {
+}
+
+public typealias VitalParameterList = CorpulsKit.ParameterList<CorpulsKit.VitalParameter>
+
+public class VitalParameterTrend : Codable {
+
+    final public let missionCreationDate: Date
+
+    public var entries: [CorpulsKit.VitalParameterTrendEntry] { get }
+
+    public var nibpValues: [CorpulsKit.NIBPValue] { get }
+
+    public var formattedNibpString: NSString { get }
+
+    public var mostRecentEntryDate: Date { get }
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    required public init(from decoder: any Decoder) throws
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    public func entries(for type: CorpulsKit.VitalParameterType) -> [CorpulsKit.VitalParameterTrendEntry]
+
+    public func parameters(for type: CorpulsKit.VitalParameterType) -> [CorpulsKit.TrendVitalParameter]
+
+    public func values(for type: CorpulsKit.VitalParameterType) -> [Double]
+
+    public func encodeData(offset mostRecentEntryDate: Date = .distantPast) throws -> CorpulsKit.VitalParameterTrendData
+
+    public func unit(for type: CorpulsKit.VitalParameterType) -> CorpulsKit.VitalParameterUnit?
+}
+
+public struct VitalParameterTrendData {
+
+    public let jsonData: Data
+
+    public let mostRecentEntryDate: Date
+
+    public var jsonString: String? { get }
+
+    public func writeToFileSystem(destination: URL? = nil) throws
+}
+
+extension VitalParameterTrendData : CustomStringConvertible {
+
+    /// A textual representation of this instance.
+    ///
+    /// Calling this property directly is discouraged. Instead, convert an
+    /// instance of any type to a string by using the `String(describing:)`
+    /// initializer. This initializer works with any type, and uses the custom
+    /// `description` property for types that conform to
+    /// `CustomStringConvertible`:
+    ///
+    ///     struct Point: CustomStringConvertible {
+    ///         let x: Int, y: Int
+    ///
+    ///         var description: String {
+    ///             return "(\(x), \(y))"
+    ///         }
+    ///     }
+    ///
+    ///     let p = Point(x: 21, y: 30)
+    ///     let s = String(describing: p)
+    ///     print(s)
+    ///     // Prints "(21, 30)"
+    ///
+    /// The conversion of `p` to a string in the assignment to `s` uses the
+    /// `Point` type's `description` property.
+    public var description: String { get }
+}
+
+public class VitalParameterTrendEntry : CorpulsKit.ParameterList<CorpulsKit.TrendVitalParameter> {
+
+    final public let missionStartOffset: UInt
+
+    public var entryDate: Date { get }
+
+    public var entryMinute: UInt { get }
+
+    public var nibpValue: CorpulsKit.NIBPValue?
+
+    public var hasNibpValue: Bool { get }
+
+    required public init(from decoder: any Decoder) throws
+
+    override public func encode(to encoder: any Encoder) throws
+}
+
+public enum VitalParameterType : Int, Comparable, Equatable, CaseIterable {
+
+    /// A collection of all values of this type.
+    public static var allCases: [CorpulsKit.VitalParameterType]
+
+    case HR_DEFI
+
+    case HR_DISPLAY
+
+    case PP
+
+    case SPO2
+
+    case SPO2_PI
+
+    case NIBP_SYS
+
+    case NIBP_DIA
+
+    case NIBP_MAD
+
+    case IBP_P1_SYS
+
+    case IBP_P1_DIA
+
+    case IBP_P1_MAD
+
+    case IBP_P2_SYS
+
+    case IBP_P2_DIA
+
+    case IBP_P2_MAD
+
+    case IBP_P3_SYS
+
+    case IBP_P3_DIA
+
+    case IBP_P3_MAD
+
+    case IBP_P4_SYS
+
+    case IBP_P4_DIA
+
+    case IBP_P4_MAD
+
+    case CO2_ENS
+
+    @available(*, deprecated, message: "field is not in use and will be removed in a future release.")
+    case CO2_INS
+
+    case CO2_RR
+
+    case TEMP1
+
+    case TEMP2
+
+    case SPCO
+
+    case SPHB
+
+    case SPMET
+
+    case CPR_RATE
+
+    case NIBP_QI
+
+    /// Returns a Boolean value indicating whether the value of the first
+    /// argument is less than that of the second argument.
+    ///
+    /// This function is the only requirement of the `Comparable` protocol. The
+    /// remainder of the relational operator functions are implemented by the
+    /// standard library for any type that conforms to `Comparable`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func < (lhs: CorpulsKit.VitalParameterType, rhs: CorpulsKit.VitalParameterType) -> Bool
+
+    public var string: String { get }
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: Int)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [CorpulsKit.VitalParameterType]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = Int
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: Int { get }
+}
+
+extension VitalParameterType : Hashable {
+}
+
+extension VitalParameterType : RawRepresentable {
+}
+
+public enum VitalParameterUnit : Int {
+
+    case PER_MIN
+
+    case PERCENT
+
+    case MMHG
+
+    case CELSIUS
+
+    case G_PER_DL
+
+    case STARS
+
+    public var string: String { get }
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: Int)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = Int
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: Int { get }
+}
+
+extension VitalParameterUnit : Equatable {
+}
+
+extension VitalParameterUnit : Hashable {
+}
+
+extension VitalParameterUnit : RawRepresentable {
+}
+
+extension String {
+
+    public var normalizedVersion: String? { get }
+}
+
+extension NumberFormatter {
+
+    public static func formatter(for digits: Int) -> NumberFormatter
+}
+
+extension Double {
+
+    public static let defaultSyncTimeout: Double
+
+    public static let rateLimit: Double
+}
+
+extension DateFormatter {
+
+    public static let birthdate: DateFormatter
+
+    public static let iso: DateFormatter
+
+    public static let shortTime: DateFormatter
+
+    public static let filename: DateFormatter
+
+    public static let local: DateFormatter
+
+    public static let reportMissionDate: DateFormatter
+
+    public static let reportBirthdate: DateFormatter
+}
+
+extension CGFloat {
+
+    public func millimetresToPoints() -> CGFloat
+
+    public func pointsToMillimetres() -> CGFloat
+}
+
+extension Double {
+
+    public func millimetresToPoints() -> CGFloat
+
+    public func pointsToMillimetres() -> CGFloat
+}
+
+extension Int {
+
+    public func millimetresToPoints() -> CGFloat
+
+    public func pointsToMillimetres() -> CGFloat
+}
+
+extension NSNotification.Name {
+
+    public static let didReceiveNotification: NSNotification.Name
+}
+
+extension Date {
+
+    public var yearsFromNow: Int { get }
+
+    public var milliseconds: Int { get }
+}
+
