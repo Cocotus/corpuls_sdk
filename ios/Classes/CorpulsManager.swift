@@ -5,15 +5,17 @@ import Flutter
 public class CorpulsManager {
     static let shared = CorpulsManager()
     private var channel: FlutterMethodChannel?
-
+    private var deviceID = ""
+    
     private init() {}
 
     public func initialize(channel: FlutterMethodChannel) {
         self.channel = channel
         self.sendLog("Initialisiere Corpuls Plugin.")
+
     }
 
-    // Enum to represent the state, inspired by SyncViewController
+    // Enum des Corpuls State aus DemoApp SyncViewController.swift Klasse
     private enum State: Equatable {
         case initial
         case unavailable
@@ -25,12 +27,9 @@ public class CorpulsManager {
         case syncing
         case success
     }
-
-    // State property
     private var state: State = .initial {
         didSet {
             guard state != oldValue else { return }
-            // Handle state changes here if necessary
         }
     }
 
@@ -41,33 +40,46 @@ public class CorpulsManager {
         ble.didUpdateSystemState = { [unowned self] state in
             switch state {
             case "unavailable":
-                self.sendLog("BLE module is unavailable.")
+                self.sendLog("BLE Modul: unavailable")
             case "disconnected":
-                self.sendLog("BLE module is disconnected.")
+                self.sendLog("BLE Modul: disconnected")
             case "scanning":
-                self.sendLog("BLE module is scanning for devices.")
+                self.sendLog("BLE Modul: scanning")
             case "selecting":
-                self.sendLog("BLE module is in selecting state.")
+                self.sendLog("BLE Modul: selecting")
             case "connecting":
-                self.sendLog("BLE module is connecting to a device.")
+                self.sendLog("BLE Modul: connecting")
             case "connected":
-                self.sendLog("BLE module is connected to a device.")
+                self.sendLog("BLE Modul: connected")
             case "syncing":
-                self.sendLog("BLE module is syncing data.")
+                self.sendLog("BLE Modul: syncing")
             case "success":
-                self.sendLog("BLE module operation succeeded.")
+                self.sendLog("BLE Modul: success")
             default:
-                self.sendLog("Unknown BLE state: \(state)")
+                self.sendLog("BLE Modul: Unbekannter State: \(state)")
             }
         }
 
         ble.didUpdateConnectionState = { [unowned self] isConnected in
             if isConnected {
-                self.sendLog("Device connected successfully.")
+                self.sendLog("Corpuls verbunden!")
             } else {
-                self.sendLog("Device disconnected.")
+                self.sendLog("Corpuls NICHT verbunden/verfügbar!")
+                self.state = ble.isEnabled ? .disconnected : .unavailable
+                 // Automatically restart scanning if disconnected
+                if self.state == .disconnected {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
+                                if self.state == .disconnected {
+                                    self.sendLog("Scanne erneut nach Corpuls...")
+                                    self.scanForDevices { result in
+                                        self.sendLog("Scan Ergebnis: \(String(describing: result))")
+                                    }
+                                }
+                            }
+                  }
             }
-        }
+}
+
 
         ble.didReceiveNotification = { [unowned self] (value, characteristic) in
             self.sendLog("Received notification from \(characteristic): \(value)")
@@ -76,6 +88,9 @@ public class CorpulsManager {
         ble.didUpdateAvailability = { [unowned self] isAvailable in
             if isAvailable && !ble.isConnected {
                 self.sendLog("BLE module is available and not connected. Ready to scan.")
+                self.scanForDevices { result in
+                    self.sendLog("Scan Ergebnis: \(String(describing: result))")
+                }
             }
         }
 
@@ -83,43 +98,59 @@ public class CorpulsManager {
     }()
 
 
-
-public func scanForDevices(result: @escaping FlutterResult) {
-    guard ble.isEnabled else {
-        let message = "BLE module is unavailable."
-        sendLog(message)
-        result(message) // Return a string
-        return
-    }
-
-    ble.scan(timeout: 2) { [unowned self] in
-        switch $0 {
-        case .success(let peripherals):
-            if let firstPeripheral = peripherals.first {
-                ble.connect(to: firstPeripheral) { connectionResult in
-                    switch connectionResult {
-                    case .success:
-                        let message = "Connected to device: \(firstPeripheral.peripheral.name ?? "Unknown Device")"
-                        self.sendLog(message)
-                        result(message) // Return a string
-                    case .failure(let connectionError):
-                        let errorMessage = "Failed to connect: \(connectionError.localizedDescription)"
-                        self.sendLog(errorMessage)
-                        result(errorMessage) // Return a string
-                    }
-                }
-            } else {
-                let message = "No devices found during scan."
-                self.sendLog(message)
-                result(message) // Return a string
+    public func scanForDevices(result: @escaping FlutterResult) {
+        
+        // Init des C3 Bluetooth Moduls
+        DispatchQueue.main.async {
+            self.ble.setup { isAvailable in
             }
-        case .failure(let error):
-            let errorMessage = "Scan failed with error: \(error.localizedDescription)"
-            self.sendLog(errorMessage)
-            result(errorMessage) // Return a string
+        }
+
+        
+        if ble.isConnected {
+            // Wenn ein Gerät bereits verbunden ist, gib das verbundene Gerät zurück
+            let message = "Corpuls bereits verbunden! Gerät: " + self.deviceID
+            self.sendLog(message)
+            result(message)
+            return
+        }
+
+        guard ble.isEnabled else {
+            let message = "Bluetooth Modul noch nicht bereit."
+            sendLog(message)
+            result(message)
+            return
+        }
+
+        ble.scan(timeout: 2) { [unowned self] in
+            switch $0 {
+            case .success(let peripherals):
+                if let firstPeripheral = peripherals.first {
+                    ble.connect(to: firstPeripheral) { connectionResult in
+                        switch connectionResult {
+                        case .success:
+                            self.deviceID = firstPeripheral.peripheral.name ?? ""
+                            let message = "Mit Corpuls verbunden: \(firstPeripheral.peripheral.name ?? "Unknown Device")"
+                            self.sendLog(message)
+                            result(message) // Rückgabe des verbundenen Geräts
+                        case .failure(let connectionError):
+                            let errorMessage = "Fehler beim Verbinden: \(connectionError.localizedDescription)"
+                            self.sendLog(errorMessage)
+                            result(errorMessage) // Rückgabe eines Fehlers
+                        }
+                    }
+                } else {
+                    let message = "Keine Corpuls Geräte gefunden!"
+                    self.sendLog(message)
+                    result(message) // Rückgabe eines Fehlers
+                }
+            case .failure(let error):
+                let errorMessage = "Suche mit Fehlern beendet: \(error.localizedDescription)"
+                self.sendLog(errorMessage)
+                result(errorMessage) // Rückgabe eines Fehlers
+            }
         }
     }
-}
 
     private func handleError(_ error: Error) {
         self.state = .disconnected // Update state to disconnected on error
