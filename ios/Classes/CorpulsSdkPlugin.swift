@@ -11,6 +11,10 @@ public class CorpulsSdkPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
+    case "getPlatformVersion":
+       let platformVersion = "iOS " + UIDevice.current.systemVersion
+       CorpulsManager.shared.sendLog("getPlatformVersion called: \(platformVersion)")
+       result(platformVersion)
     case "scanForDevices":
       CorpulsManager.shared.scanForDevices(result: result)
     default:
