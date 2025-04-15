@@ -27,20 +27,20 @@ class CorpulsDeviceList extends StatefulWidget {
 }
 
 class _CorpulsDeviceListState extends State<CorpulsDeviceList> {
-  List<String> devices = [];
+  String? devices = '';
   bool isLoading = false;
 
   Future<void> scanForDevices() async {
     setState(() {
       isLoading = true;
-      devices.clear();
+      devices = "";
     });
 
     try {
       final sdk = CorpulsSdk();
       final result = await sdk.scanForDevices();
       setState(() {
-        devices = result ?? [];
+        devices = result ?? "";
       });
     } catch (e) {
       print('Error scanning for devices: $e');
@@ -59,15 +59,15 @@ class _CorpulsDeviceListState extends State<CorpulsDeviceList> {
         children: [
           if (isLoading)
             CircularProgressIndicator()
-          else if (devices.isEmpty)
+          else if (devices != null)
             Text('No devices found')
           else
             Expanded(
               child: ListView.builder(
-                itemCount: devices.length,
+                itemCount: 1,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(devices[index]),
+                    title: Text(devices ?? ""),
                   );
                 },
               ),

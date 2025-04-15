@@ -24,5 +24,5 @@ abstract class CorpulsSdkPlatform extends PlatformInterface {
   }
 
   Future<String?> getPlatformVersion();
-  Future<List<String>?> scanForDevices();
+  Future<String?> scanForDevices();
 }

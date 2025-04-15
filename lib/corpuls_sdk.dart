@@ -5,7 +5,7 @@ class CorpulsSdk {
     return CorpulsSdkPlatform.instance.getPlatformVersion();
   }
 
-  Future<List<String>?> scanForDevices() {
+  Future<String?> scanForDevices() {
     return CorpulsSdkPlatform.instance.scanForDevices();
   }
 }
