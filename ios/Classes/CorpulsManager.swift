@@ -6,7 +6,8 @@ public class CorpulsManager {
     static let shared = CorpulsManager()
     private var channel: FlutterMethodChannel?
     private var deviceID = ""
-    
+    private var deviceUUID = ""
+
     private init() {}
 
     public func initialize(channel: FlutterMethodChannel) {
@@ -97,14 +98,21 @@ public class CorpulsManager {
         return ble
     }()
 
+public func connectCorpuls(result: @escaping FlutterResult) {
+    // Überprüfen, ob BLE bereits eingerichtet ist
+    if ble.isConnected {
+        // Wenn ein Gerät bereits verbunden ist, gib das verbundene Gerät zurück
+        let message = "Corpuls bereits verbunden! Gerät: " + self.deviceID
+        self.sendLog(message)
+        result(message)
+        return
+    }
+    ble.setup() // Initialisiert BLE
+    self.sendLog("Corpuls Bluetooth Modul initalisiert.")
+    result("Corpuls Bluetooth Modul initalisiert.")
+}
 
     public func scanForDevices(result: @escaping FlutterResult) {
-        
-        // Init des C3 Bluetooth Moduls
-        DispatchQueue.main.async {
-            self.ble.setup { isAvailable in
-            }
-        }
 
         
         if ble.isConnected {
@@ -130,7 +138,8 @@ public class CorpulsManager {
                         switch connectionResult {
                         case .success:
                             self.deviceID = firstPeripheral.peripheral.name ?? ""
-                            let message = "Mit Corpuls verbunden: \(firstPeripheral.peripheral.name ?? "Unknown Device")"
+                            self.deviceUUID = firstPeripheral.id.uuidString
+                            let message = "Mit Corpuls verbunden! UUID: \( firstPeripheral.id.uuidString ?? "Unknown Device")"
                             self.sendLog(message)
                             result(message) // Rückgabe des verbundenen Geräts
                         case .failure(let connectionError):
