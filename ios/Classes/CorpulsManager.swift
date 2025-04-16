@@ -13,20 +13,11 @@ public class CorpulsManager {
     public func initialize(channel: FlutterMethodChannel) {
         self.channel = channel
         self.sendLog("Initialisiere Corpuls Plugin.")
-        
     }
     
-    // Enum des Corpuls State aus DemoApp SyncViewController.swift Klasse
+    // Enum, das den Corpuls-Status repräsentiert
     private enum State: Equatable {
-        case initial
-        case unavailable
-        case disconnected
-        case scanning
-        case selecting
-        case connecting(peripheral: CorpulsPeripheral)
-        case connected(peripheral: CBPeripheral)
-        case syncing
-        case success
+        case initial, unavailable, disconnected, scanning, selecting, connecting(peripheral: CorpulsPeripheral), connected(peripheral: CBPeripheral), syncing, success
     }
     private var state: State = .initial {
         didSet {
@@ -34,157 +25,151 @@ public class CorpulsManager {
         }
     }
     
+    // Lazy-Initialisierung des BLE-Managers
     private lazy var ble: CorpulsBLE = {
         let ble = CorpulsBLE.shared
         ble.settings = Settings(performDeviceIdentification: true, decgSpeed: .wide)
         
-        ble.didUpdateSystemState = { [unowned self] state in
-            
-        }
+        ble.didUpdateSystemState = { [unowned self] state in }
         
         ble.didUpdateConnectionState = { [unowned self] isConnected in
-            if isConnected {
-                self.sendLog("Corpuls verbunden!")
-            } else {
-                self.sendLog("Corpuls NICHT verbunden/verfügbar!")
-                self.state = ble.isEnabled ? .disconnected : .unavailable
-                // Automatically restart scanning if disconnected
-                if self.state == .disconnected {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
-                        if self.state == .disconnected {
-                            self.sendLog("Scanne erneut nach Corpuls...")
-                            self.scanForDevices { result in
-                                self.sendLog("Scan Ergebnis: \(String(describing: result))")
-                            }
-                        }
-                    }
-                }
-            }
+            handleConnectionStateChange(isConnected)
         }
         
-        
         ble.didReceiveNotification = { [unowned self] (value, characteristic) in
-            self.sendLog("Nachricht von Corpuls empfangen: \(value)")
+            self.sendLog("Benachrichtigung von Corpuls empfangen: \(value)")
         }
         
         ble.didUpdateAvailability = { [unowned self] isAvailable in
             if isAvailable && !ble.isConnected {
-                self.sendLog("Bluetooth Modul initialisiert. Starte Suche nach Corpuls...")
-                if self.deviceUUID?.uuidString.isEmpty == false
-                {
-                    self.scanForDevice(self.deviceUUID!) { result in
-                        self.sendLog("Scan Ergebnis: \(String(describing: result))")
-                    }
-                }
-                else
-                {
-                    self.scanForDevices { result in
-                        self.sendLog("Scan Ergebnis: \(String(describing: result))")
-                    }
-                }
+                self.sendLog("Bluetooth-Modul initialisiert. Starte Gerätesuche...")
+                self.startDeviceScan()
             }
         }
         
         return ble
     }()
-    
     public func connectCorpuls(uuid: String, result: @escaping FlutterResult) {
-        // Überprüfen, ob BLE bereits eingerichtet ist
+        // Prüfen, ob BLE bereits verbunden ist
         if ble.isConnected {
-            // Wenn ein Gerät bereits verbunden ist, gib das verbundene Gerät zurück
-            let message = "Corpuls bereits verbunden! UUID: " + (self.deviceUUID?.uuidString ?? "")
+            let message = "Corpuls bereits verbunden! UUID: \(self.deviceUUID?.uuidString ?? "")"
             self.sendLog(message)
             result(message)
             return
         }
-        if self.state == .initial {
-            self.deviceUUID = UUID(uuidString: uuid)
-            self.state = .disconnected
-            ble.setup() // Initialisiert BLE
-            self.sendLog("Corpuls Bluetooth Modul initialisiert.")
-            result("Corpuls Bluetooth Modul initialisiert.")
+        
+        if uuid.isEmpty {
+            self.deviceUUID = nil
+            self.sendLog("Keine UUID übergeben. Es werden Corpuls Geräte gesucht...")
+        } else {
+            // Versuche, eine UUID aus dem String zu erstellen
+            let  uuidObject =  UUID(uuidString: uuid)
+            self.deviceUUID = uuidObject
         }
         
+        
+        
+        // Falls der Status initial ist, initialisiere die Verbindung
+        if self.state == .initial {
+            self.state = .disconnected
+            ble.setup()
+            self.sendLog("Corpuls Bluetooth-Modul initialisiert.")
+            result("Corpuls Bluetooth-Modul initialisiert.")
+        }
+    }
+    
+    private func startDeviceScan() {
+        if self.deviceUUID != nil {
+            self.scanForDevice(with: self.deviceUUID!)
+        } else {
+            self.scanForDevices()
+        }
     }
     
     private func scanForDevice(with peerIdentifier: UUID) {
+        guard ble.isEnabled else {
+            self.sendLog("Bluetooth-Modul noch nicht bereit.")
+            return
+        }
         state = .scanning
         ble.scan(peerIdentifier: peerIdentifier) { [unowned self] result in
+            handleScanResult(result)
+        }
+    }
+    
+    private func scanForDevices() {
+        guard ble.isEnabled else {
+            self.sendLog("Bluetooth-Modul noch nicht bereit.")
+            return
+        }
+        
+        state = .scanning
+        ble.scan(timeout: 2) { [unowned self] result in
             switch result {
-            case .success(let peripheral):
-                state = .connecting(peripheral: peripheral)
-                ble.connect(to: peripheral) { connectionResult in
-                    switch connectionResult {
-                    case .success:
-                        self.deviceID = peripheral.peripheral.name ?? ""
-                        self.deviceUUID = peripheral.id
-                        let message = "Mit Corpuls verbunden! UUID: \( peripheral.id.uuidString)"
-                        self.sendLog(message)
-                    case .failure(let connectionError):
-                        self.disconnect()
-                        let errorMessage = "Fehler beim Verbinden des Corpuls: \(connectionError.localizedDescription)"
-                        self.sendLog(errorMessage)
-                    }
+            case .success(let peripherals):
+                if let firstPeripheral = peripherals.first {
+                    connectToPeripheral(firstPeripheral)
+                } else {
+                    self.sendLog("Keine Corpuls Geräte gefunden!")
+                    self.state = .disconnected
                 }
             case .failure(let error):
                 self.disconnect()
-                let errorMessage = "Kein Corpuls gefunden!"
-                self.sendLog(errorMessage)
+                self.sendLog("Gerätesuche fehlgeschlagen: \(error.localizedDescription)")
             }
         }
     }
     
+    private func handleScanResult(_ result: Result<CorpulsPeripheral, SyncError>) {
+        switch result {
+        case .success(let peripheral):
+            connectToPeripheral(peripheral)
+        case .failure(let error):
+            self.disconnect()
+            self.sendLog("Gerätesuche fehlgeschlagen: \(error.localizedDescription)")
+        }
+    }
     
-    private func scanForDevices(result: @escaping FlutterResult) {
-        if ble.isConnected {
-            // Wenn ein Gerät bereits verbunden ist, gib das verbundene Gerät zurück
-            let message = "Corpuls bereits verbunden! ID: " + self.deviceUUID!.uuidString
-            self.sendLog(message)
-            return
-        }
-        
-        guard ble.isEnabled else {
-            let message = "Bluetooth Modul noch nicht bereit."
-            sendLog(message)
-            return
-        }
-        self.state = .scanning
-        ble.scan(timeout: 2) { [unowned self] in
-            switch $0 {
-            case .success(let peripherals):
-                if let firstPeripheral = peripherals.first {
-                    state = .connecting(peripheral: firstPeripheral)
-                    ble.connect(to: firstPeripheral) { connectionResult in
-                        switch connectionResult {
-                        case .success:
-                            self.deviceID = firstPeripheral.peripheral.name ?? ""
-                            self.deviceUUID = firstPeripheral.id
-                            let message = "Mit Corpuls verbunden! UUID: \( firstPeripheral.id.uuidString)"
-                            self.sendLog(message)
-                        case .failure(let connectionError):
-                            self.disconnect()
-                            let errorMessage = "Fehler beim Verbinden des Corpuls: \(connectionError.localizedDescription)"
-                            self.sendLog(errorMessage)
-                        }
-                    }
-                } else {
-                    let message = "Keine Corpuls Geräte gefunden!"
-                    self.sendLog(message)
-                }
+    private func connectToPeripheral(_ peripheral: CorpulsPeripheral) {
+        state = .connecting(peripheral: peripheral)
+        ble.connect(to: peripheral) { [unowned self] connectionResult in
+            switch connectionResult {
+            case .success:
+                self.deviceID = peripheral.peripheral.name ?? ""
+                self.deviceUUID = peripheral.id
+                self.sendLog("Erfolgreich mit Corpuls verbunden! UUID: \(peripheral.id.uuidString)")
             case .failure(let error):
                 self.disconnect()
-                let errorMessage = "Kein Corpuls gefunden!"
-                self.sendLog(errorMessage)
+                self.sendLog("Fehler beim Verbinden mit Corpuls: \(error.localizedDescription)")
             }
         }
     }
     
     private func disconnect() {
+        self.sendLog("Schließe Bluetooth Modul")
         ble.disconnect()
+        self.deviceUUID = nil
         self.state = .initial
     }
     
-    // MARK: - Flutter Communication Methods
+    private func handleConnectionStateChange(_ isConnected: Bool) {
+        if isConnected {
+            self.sendLog("Corpuls verbunden!")
+        } else {
+            self.sendLog("Corpuls nicht verbunden/verfügbar!")
+            self.state = ble.isEnabled ? .disconnected : .unavailable
+            if self.state == .disconnected {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    if self.state == .disconnected {
+                        self.sendLog("Erneuter Scan nach Corpuls...")
+                        self.scanForDevices()
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Flutter-Kommunikationsmethoden
     
     func sendLog(_ message: String) {
 #if DEBUG
@@ -203,8 +188,10 @@ public class CorpulsManager {
     
     func notifyNoDataMobileMode() {
         DispatchQueue.main.async {
-            self.sendLog("No Corpuls device found!")
+            self.sendLog("Kein Corpuls Gerät gefunden!")
             self.channel?.invokeMethod("noCorpuls", arguments: nil)
         }
     }
+    
+    
 }
