@@ -193,8 +193,7 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () {
                   _clearLogsAndData();
                   _updateFeedback('Connect to Device', () async {
-                    const uuid =
-                        'YOUR_DEVICE_UUID_HERE'; // Replace with the actual UUID
+                    const uuid = ''; // Replace with the actual UUID
                     final result = await _Plugin.connectCorpuls(uuid);
                     return result ?? 'No result';
                   });
