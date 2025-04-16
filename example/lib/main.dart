@@ -168,33 +168,50 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () {
                   _clearLogsAndData();
-                  _updateFeedback('Load VSD', () async {
-                    final result = await _Plugin.scanForDevices();
+                  _updateFeedback('Connect to Device', () async {
+                    const uuid =
+                        'YOUR_DEVICE_UUID_HERE'; // Replace with the actual UUID
+                    final result = await _Plugin.connectCorpuls(uuid);
                     return result ?? 'No result';
                   });
                 },
-                child: const Text('Load VSD'),
+                child: const Text('Connect to Device'),
               ),
               ElevatedButton(
-                onPressed: () => _updateFeedback('Load NFD', () async {
-                  final result = await _Plugin.scanForDevices();
-                  return result ?? 'No result';
-                }),
-                child: const Text('Load NFD'),
+                onPressed: () {
+                  _clearLogsAndData();
+                  _updateFeedback('Connect to Device', () async {
+                    const uuid =
+                        'YOUR_DEVICE_UUID_HERE'; // Replace with the actual UUID
+                    final result = await _Plugin.connectCorpuls(uuid);
+                    return result ?? 'No result';
+                  });
+                },
+                child: const Text('Connect to Device'),
               ),
               ElevatedButton(
-                onPressed: () => _updateFeedback('Load DPE', () async {
-                  final result = await _Plugin.scanForDevices();
-                  return result ?? 'No result';
-                }),
-                child: const Text('Load DPE'),
+                onPressed: () {
+                  _clearLogsAndData();
+                  _updateFeedback('Connect to Device', () async {
+                    const uuid =
+                        'YOUR_DEVICE_UUID_HERE'; // Replace with the actual UUID
+                    final result = await _Plugin.connectCorpuls(uuid);
+                    return result ?? 'No result';
+                  });
+                },
+                child: const Text('Connect to Device'),
               ),
               ElevatedButton(
-                onPressed: () => _updateFeedback('Load AMTS', () async {
-                  final result = await _Plugin.scanForDevices();
-                  return result ?? 'No result';
-                }),
-                child: const Text('Load AMTS'),
+                onPressed: () {
+                  _clearLogsAndData();
+                  _updateFeedback('Connect to Device', () async {
+                    const uuid =
+                        'YOUR_DEVICE_UUID_HERE'; // Replace with the actual UUID
+                    final result = await _Plugin.connectCorpuls(uuid);
+                    return result ?? 'No result';
+                  });
+                },
+                child: const Text('Connect to Device'),
               ),
               Expanded(
                 child: ListView.builder(

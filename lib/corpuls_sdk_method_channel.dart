@@ -16,9 +16,13 @@ class MethodChannelCorpulsSdk extends CorpulsSdkPlatform {
     return version;
   }
 
+  /// New method to connect to a Corpuls device by UUID
   @override
-  Future<String?> scanForDevices() async {
-    final devices = await methodChannel.invokeMethod<String>('scanForDevices');
-    return devices;
+  Future<String?> connectCorpuls(String uuid) async {
+    final result = await methodChannel.invokeMethod<String>(
+      'connectCorpuls',
+      {'uuid': uuid}, // Pass the UUID as a parameter
+    );
+    return result;
   }
 }

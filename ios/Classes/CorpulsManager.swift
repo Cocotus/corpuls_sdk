@@ -98,35 +98,32 @@ public class CorpulsManager {
         return ble
     }()
     
-    public func connectCorpuls(result: @escaping FlutterResult) {
+    public func connectCorpuls(uuid: String, result: @escaping FlutterResult) {
         // Überprüfen, ob BLE bereits eingerichtet ist
         if ble.isConnected {
             // Wenn ein Gerät bereits verbunden ist, gib das verbundene Gerät zurück
-            let message = "Corpuls bereits verbunden! Gerät: " + self.deviceID
+            let message = "Corpuls bereits verbunden! UUID: " + self.deviceUUID
             self.sendLog(message)
             result(message)
             return
         }
+        self.deviceUUID = uuid
         ble.setup() // Initialisiert BLE
-        self.sendLog("Corpuls Bluetooth Modul initalisiert.")
-        result("Corpuls Bluetooth Modul initalisiert.")
+        self.sendLog("Corpuls Bluetooth Modul initialisiert.")
+        result("Corpuls Bluetooth Modul initialisiert.")
     }
     
-    public func scanForDevices(result: @escaping FlutterResult) {
-        
-        
+    private func scanForDevices(result: @escaping FlutterResult) {
         if ble.isConnected {
             // Wenn ein Gerät bereits verbunden ist, gib das verbundene Gerät zurück
-            let message = "Corpuls bereits verbunden! Gerät: " + self.deviceID
+            let message = "Corpuls bereits verbunden! ID: " + self.deviceUUID
             self.sendLog(message)
-            result(message)
             return
         }
         
         guard ble.isEnabled else {
             let message = "Bluetooth Modul noch nicht bereit."
             sendLog(message)
-            result(message)
             return
         }
         self.state = .scanning
@@ -142,24 +139,20 @@ public class CorpulsManager {
                             self.deviceUUID = firstPeripheral.id.uuidString
                             let message = "Mit Corpuls verbunden! UUID: \( firstPeripheral.id.uuidString ?? "Unbekanntes Modell!")"
                             self.sendLog(message)
-                            result(message)
                         case .failure(let connectionError):
                             self.handleError(connectionError)
-                            let errorMessage = "Fehler beim Verbinden: \(connectionError.localizedDescription)"
+                            let errorMessage = "Fehler beim Verbinden des Corpuls: \(connectionError.localizedDescription)"
                             self.sendLog(errorMessage)
-                            result(errorMessage)
                         }
                     }
                 } else {
                     let message = "Keine Corpuls Geräte gefunden!"
                     self.sendLog(message)
-                    result(message)
                 }
             case .failure(let error):
                 self.handleError(error)
                 let errorMessage = "Suche mit Fehlern beendet: \(error.localizedDescription)"
                 self.sendLog(errorMessage)
-                result(errorMessage)
             }
         }
     }

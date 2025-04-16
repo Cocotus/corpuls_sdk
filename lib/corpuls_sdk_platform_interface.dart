@@ -27,5 +27,8 @@ abstract class CorpulsSdkPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> scanForDevices();
+  /// New method to connect to a Corpuls device by UUID
+  Future<String?> connectCorpuls(String uuid) {
+    throw UnimplementedError('connectCorpuls() has not been implemented.');
+  }
 }

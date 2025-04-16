@@ -5,7 +5,8 @@ class CorpulsSdk {
     return CorpulsSdkPlatform.instance.getPlatformVersion();
   }
 
-  Future<String?> scanForDevices() {
-    return CorpulsSdkPlatform.instance.scanForDevices();
+  /// New method to connect to a Corpuls device by UUID
+  Future<String?> connectCorpuls(String uuid) {
+    return CorpulsSdkPlatform.instance.connectCorpuls(uuid);
   }
 }

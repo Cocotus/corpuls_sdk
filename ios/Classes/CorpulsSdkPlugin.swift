@@ -15,8 +15,13 @@ public class CorpulsSdkPlugin: NSObject, FlutterPlugin {
        let platformVersion = "iOS " + UIDevice.current.systemVersion
        CorpulsManager.shared.sendLog("getPlatformVersion called: \(platformVersion)")
        result(platformVersion)
-    case "scanForDevices":
-      CorpulsManager.shared.scanForDevices(result: result)
+    case "connectCorpuls":
+            guard let args = call.arguments as? [String: Any],
+                  let uuid = args["uuid"] as? String else {
+                result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing or invalid UUID.", details: nil))
+                return
+            }
+            connectCorpuls(uuid: uuid, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }
