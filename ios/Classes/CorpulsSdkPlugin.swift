@@ -21,7 +21,7 @@ public class CorpulsSdkPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing or invalid UUID.", details: nil))
                 return
             }
-            connectCorpuls(uuid: uuid, result: result)
+        CorpulsManager.shared.connectCorpuls(uuid: uuid, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

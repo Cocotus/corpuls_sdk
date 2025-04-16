@@ -39,26 +39,7 @@ public class CorpulsManager {
         ble.settings = Settings(performDeviceIdentification: true, decgSpeed: .wide)
         
         ble.didUpdateSystemState = { [unowned self] state in
-            switch state {
-            case "unavailable":
-                self.sendLog("BLE Modul: unavailable")
-            case "disconnected":
-                self.sendLog("BLE Modul: disconnected")
-            case "scanning":
-                self.sendLog("BLE Modul: scanning")
-            case "selecting":
-                self.sendLog("BLE Modul: selecting")
-            case "connecting":
-                self.sendLog("BLE Modul: connecting")
-            case "connected":
-                self.sendLog("BLE Modul: connected")
-            case "syncing":
-                self.sendLog("BLE Modul: syncing")
-            case "success":
-                self.sendLog("BLE Modul: success")
-            default:
-                self.sendLog("BLE Modul: Unbekannter State: \(state)")
-            }
+  
         }
         
         ble.didUpdateConnectionState = { [unowned self] isConnected in
@@ -83,12 +64,12 @@ public class CorpulsManager {
         
         
         ble.didReceiveNotification = { [unowned self] (value, characteristic) in
-            self.sendLog("Received notification from \(characteristic): \(value)")
+            self.sendLog("Nachricht von Corpuls empfangen: \(value)")
         }
         
         ble.didUpdateAvailability = { [unowned self] isAvailable in
             if isAvailable && !ble.isConnected {
-                self.sendLog("BLE module is available and not connected. Ready to scan.")
+                self.sendLog("Bluetooth Modul initialisiert. Starte Suche nach Corpuls...")
                 self.scanForDevices { result in
                     self.sendLog("Scan Ergebnis: \(String(describing: result))")
                 }
@@ -105,12 +86,16 @@ public class CorpulsManager {
             let message = "Corpuls bereits verbunden! UUID: " + self.deviceUUID
             self.sendLog(message)
             result(message)
-            return
+            return                                                                                                                                                                                                              
         }
-        self.deviceUUID = uuid
-        ble.setup() // Initialisiert BLE
-        self.sendLog("Corpuls Bluetooth Modul initialisiert.")
-        result("Corpuls Bluetooth Modul initialisiert.")
+        if self.state == .initial {
+            self.deviceUUID = uuid
+            self.state = .disconnected
+            ble.setup() // Initialisiert BLE
+            self.sendLog("Corpuls Bluetooth Modul initialisiert.")
+            result("Corpuls Bluetooth Modul initialisiert.")
+        }
+     
     }
     
     private func scanForDevices(result: @escaping FlutterResult) {
@@ -140,7 +125,7 @@ public class CorpulsManager {
                             let message = "Mit Corpuls verbunden! UUID: \( firstPeripheral.id.uuidString ?? "Unbekanntes Modell!")"
                             self.sendLog(message)
                         case .failure(let connectionError):
-                            self.handleError(connectionError)
+                            self.disconnect()
                             let errorMessage = "Fehler beim Verbinden des Corpuls: \(connectionError.localizedDescription)"
                             self.sendLog(errorMessage)
                         }
@@ -150,16 +135,16 @@ public class CorpulsManager {
                     self.sendLog(message)
                 }
             case .failure(let error):
-                self.handleError(error)
-                let errorMessage = "Suche mit Fehlern beendet: \(error.localizedDescription)"
+                self.disconnect()
+                let errorMessage = "Kein Corpuls gefunden!"
                 self.sendLog(errorMessage)
             }
         }
     }
     
-    private func handleError(_ error: Error) {
-        self.state = .disconnected // Update state to disconnected on error
-        self.sendLog("Error occurred: \(error.localizedDescription)")
+    private func disconnect() {
+        ble.disconnect()
+        self.state = .initial
     }
     
     // MARK: - Flutter Communication Methods
