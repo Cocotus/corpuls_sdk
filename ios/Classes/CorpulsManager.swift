@@ -1,12 +1,63 @@
 import CoreBluetooth
 import CorpulsKit
 import Flutter
+import Foundation
+
+class MedicalData: Codable {
+    var mdeid: String = ""
+    var einsatzstart: String = ""
+    var einsatznummer: String = ""
+    var medicaldeviceid: String = ""
+    var caseid: String = ""
+    
+    struct PatientData: Codable {
+        var id: String = ""
+        var vorname: String = ""
+        var nachname: String = ""
+        var kassennummer: String = ""
+        var kassenname: String = ""
+        var versichertennummer: String = ""
+        var versichertenstatus: String = ""
+        var strasse: String = ""
+        var plz: String = ""
+        var stadt: String = ""
+        var geburtsdatum: String = ""
+        var alter: Int = 0
+        var geschlecht: String = ""
+        var gewicht: Int = 0
+        var symptombeginn: String = ""
+        var groesse: Int = 0
+    }
+    
+    var patientdata: PatientData = PatientData()
+    
+    struct Data: Codable {
+        var typ: String = ""
+        var name: String = ""
+        var data: String = ""
+        var zeitpunkt: String = ""
+    }
+    
+    var dataList: [Data] = []
+    
+    struct VitalData: Codable {
+        var typ: String = ""
+        var zeitpunkt: String = ""
+        var value: Double = 0.0
+    }
+    
+    var vitalDataList: [VitalData] = []
+}
+
+
 
 public class CorpulsManager {
     static let shared = CorpulsManager()
     private var channel: FlutterMethodChannel?
     private var deviceID = ""
     private var deviceUUID: UUID?
+    private var trend: VitalParameterTrend?
+    private var medicalData = MedicalData()
     
     private init() {}
     
@@ -49,6 +100,7 @@ public class CorpulsManager {
         
         return ble
     }()
+    
     public func connectCorpuls(uuid: String, result: @escaping FlutterResult) {
         // Prüfen, ob BLE bereits verbunden ist
         if ble.isConnected {
@@ -75,6 +127,48 @@ public class CorpulsManager {
             ble.setup()
             self.sendLog("Corpuls Bluetooth-Modul initialisiert.")
             result("Corpuls Bluetooth-Modul initialisiert.")
+        }
+    }
+    
+    private func getTrenddata(completion: @escaping (String) -> Void) {
+        CorpulsBLE.shared.requestVitalParameterTrend { result in
+            switch result {
+            case .success(let trend):
+                self.trend = trend
+                var validEntries: [CorpulsKit.VitalParameterTrendEntry] = [] // Define a separate list for valid entries
+                
+                // Process entries
+                validEntries = trend.entries.filter { $0.parameters.count > 0 }
+                
+                var vitalDataList: [MedicalData.VitalData] = [] // Neue Liste für VitalData erstellen
+                
+                for entry in validEntries {
+                    let time = DateFormatter.shortTime.string(from: entry.entryDate)
+                    for vitalParameter in entry.parameters {
+                        let typeString = vitalParameter.typeString
+                        let value = vitalParameter.value // Direkt auf den Wert zugreifen
+                        // VitalData-Instanz erstellen
+                        let vitalData = MedicalData.VitalData(typ: typeString, zeitpunkt: time, value: value)
+                        // VitalData zur Liste hinzufügen
+                        vitalDataList.append(vitalData)
+                    }
+                }
+                
+                // vitalDataList dem MedicalData-Objekt zuweisen
+                self.medicalData.vitalDataList = vitalDataList
+                
+                do {
+                    let jsonData = try JSONEncoder().encode(self.medicalData)
+                    if let jsonString = String(data: jsonData, encoding: .utf8) {
+                        print(jsonString)
+                    }
+                } catch {
+                    print("Fehler beim Exportieren der Daten in JSON: \(error)")
+                }
+            case .failure(let error):
+                self.sendLog("Failed to fetch trend data: \(error.localizedDescription)")
+                completion("Error: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -138,6 +232,12 @@ public class CorpulsManager {
                 self.deviceID = peripheral.peripheral.name ?? ""
                 self.deviceUUID = peripheral.id
                 self.sendLog("Erfolgreich mit Corpuls verbunden! UUID: \(peripheral.id.uuidString)")
+                
+                // Automatically fetch trend data
+                self.getTrenddata { trendDataString in
+                    self.sendLog(trendDataString)
+                }
+                
             case .failure(let error):
                 self.disconnect()
                 self.sendLog("Fehler beim Verbinden mit Corpuls: \(error.localizedDescription)")
